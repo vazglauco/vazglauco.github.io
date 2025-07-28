@@ -38,7 +38,7 @@ export function Header() {
     { href: "#perfil", label: "Perfil" },
     { href: "#experiencia", label: "Experiência" },
     { href: "#formacao", label: "Formação" },
-    { href: "#idiomas", label: "Inglês" },
+    { href: "#idiomas", label: "Idiomas" },
     { href: "#contato", label: "Contato" },
   ]
 

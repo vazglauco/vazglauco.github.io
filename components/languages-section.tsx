@@ -12,7 +12,7 @@ export function LanguagesSection() {
       language: "Inglês",
       level: "Intermediário",
       percentage: 60,
-      description: "Leitura, escrita e escuta, porém dificuldades na fala",
+      description: "Compreende bem, escreve bem, lê bem e fala razoavelmente",
     },
   ]
 

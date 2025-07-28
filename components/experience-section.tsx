@@ -8,7 +8,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Full Stack Sênior",
       seniority: "Sênior",
       description:
-        "Responsável pela manutenção e evolução de produtos digitais voltados à contratação de seguros, atuando em diferentes frentes da stack.",
+        "Desenvolvimento e manutenção de produtos digitais voltados à contratação de seguros, atuando em diferentes frentes da stack tecnológica.",
       achievements: [
         "Manutenção de aplicações legadas em React.js",
         "Criação de SPA com Angular para novos fluxos do produto",
@@ -31,7 +31,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Front-End Sênior",
       seniority: "Sênior",
       description:
-        "Atuação na modernização de sistema legado de fundos de investimento, entregando melhorias estruturais e visuais em arquitetura baseada em micro frontends.",
+        "Modernização de sistema legado de fundos de investimento, entregando melhorias estruturais e visuais em arquitetura baseada em micro frontends.",
       achievements: [
         "Criação de novos layouts e interfaces de usuário",
         "Desenvolvimento de micro frontends com Webpack e Module Federation",
@@ -55,7 +55,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Front-End Angular",
       seniority: "Sênior",
       description:
-        "Atuação no desenvolvimento de aplicações bancárias de missão crítica, com foco em performance, escalabilidade e experiência do usuário.",
+        "Desenvolvimento de aplicações bancárias de missão crítica, com foco em performance, escalabilidade e experiência do usuário.",
       achievements: [
         "Implementação de SPAs e micro frontends em Angular 12",
         "Colaboração no desenvolvimento de BFFs (Back-end for Front-end)",
@@ -80,7 +80,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Front-End",
       seniority: "Pleno",
       description:
-        "Responsável pela evolução e manutenção dos sistemas da empresa, atuando no desenvolvimento de novas funcionalidades e melhorias na interface.",
+        "Evolução e manutenção dos sistemas da empresa, desenvolvendo novas funcionalidades e melhorias na interface do usuário.",
       achievements: [
         "Implementação de componentes e funcionalidades com React.js",
         "Correções e aprimoramentos contínuos da experiência do usuário",
@@ -93,7 +93,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Full Stack",
       seniority: "Pleno",
       description:
-        "Desenvolvimento de soluções para o sistema de back office da corretora, com entregas técnicas e funcionais de alto impacto.",
+        "Desenvolvimento de soluções para o sistema de back office da corretora, entregando funcionalidades técnicas de alto impacto.",
       achievements: [
         "Implementação de funcionalidades em SPA Angular 8",
         "Desenvolvimento de APIs REST em Ruby on Rails",
@@ -107,7 +107,7 @@ export function ExperienceSection() {
       position: "Engenheiro de Software – Front-End",
       seniority: "Pleno",
       description:
-        "Responsável pela criação de dashboard para controle de dados internos, com desenvolvimento completo do WebApp.",
+        "Criação de dashboard para controle de dados internos, desenvolvendo WebApp completo com foco em usabilidade.",
       achievements: ["Utilização de Angular 7 e boas práticas de desenvolvimento front-end"],
       skills: ["Angular 7", "JavaScript", "HTML", "CSS", "Git", "UX"],
     },
@@ -117,7 +117,7 @@ export function ExperienceSection() {
       position: "Desenvolvedor Front-End",
       seniority: "Júnior",
       description:
-        "Atuação em squad ágil no projeto Polis, contribuindo para o desenvolvimento de funcionalidades e componentes em plataforma de insights georreferenciados.",
+        "Desenvolvimento em squad ágil no projeto Polis, contribuindo para funcionalidades e componentes em plataforma de insights georreferenciados.",
       achievements: ["Desenvolvimento em AngularJS de dashboards interativos"],
       skills: ["AngularJS", "JavaScript", "HTML", "CSS", "Git", "Agile", "MVVM"],
     },
@@ -127,7 +127,7 @@ export function ExperienceSection() {
       position: "Analista de Sistemas Full Stack (JavaScript e PHP)",
       seniority: "Júnior",
       description:
-        "Responsável pelo desenvolvimento da segunda versão do front-end da plataforma de crédito consignado e manutenção de APIs.",
+        "Desenvolvimento da segunda versão do front-end da plataforma de crédito consignado e manutenção de APIs back-end.",
       achievements: [
         "Criação do front-end em Angular 4",
         "Desenvolvimento e sustentação de APIs em Laravel",

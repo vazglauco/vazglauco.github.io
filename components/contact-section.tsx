@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, MessageCircle } from "lucide-react"
+import { Mail, Phone, MapPin, MessageCircle, Download, FileText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function ContactSection() {
@@ -63,28 +63,55 @@ export function ContactSection() {
               </div>
             </div>
 
-            {/* WhatsApp Button */}
-            <div className="space-y-6">
-              <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-2xl flex items-center justify-center mx-auto">
-                <MessageCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
+            {/* WhatsApp and Download Section */}
+            <div className="space-y-8">
+              {/* WhatsApp */}
+              <div className="space-y-6">
+                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/20 rounded-2xl flex items-center justify-center mx-auto">
+                  <MessageCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-medium text-foreground mb-3">Vamos conversar?</h4>
+                </div>
+
+                <Button
+                  asChild
+                  className="rounded-full px-12 py-6 bg-green-600 hover:bg-green-700 text-white text-lg font-light"
+                >
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
+                    <MessageCircle className="h-5 w-5" />
+                    Conversar no WhatsApp
+                  </a>
+                </Button>
               </div>
 
-              <div>
-                <h4 className="text-xl font-medium text-foreground mb-3">Vamos conversar?</h4>
-                <p className="text-muted-foreground font-light mb-8 max-w-md mx-auto">
-                  Entre em contato comigo pelo WhatsApp para discutirmos sobre oportunidades e projetos interessantes.
-                </p>
-              </div>
+              {/* Download Currículo */}
+              <div className="space-y-6 pt-8 border-t border-border/50">
+                <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto">
+                  <FileText className="h-10 w-10 text-primary" />
+                </div>
 
-              <Button
-                asChild
-                className="rounded-full px-12 py-6 bg-green-600 hover:bg-green-700 text-white text-lg font-light"
-              >
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
-                  <MessageCircle className="h-5 w-5" />
-                  Conversar no WhatsApp
-                </a>
-              </Button>
+                <div>
+                  <h4 className="text-xl font-medium text-foreground mb-3">Baixe meu Currículo</h4>
+                  <p className="text-muted-foreground font-light">Acesse meu currículo completo em formato PDF</p>
+                </div>
+
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full px-12 py-6 border-border hover:bg-muted/50 text-lg font-light bg-transparent"
+                >
+                  <a
+                    href="/curriculo-glauco-vaz.pdf"
+                    download="Curriculo-Glauco-Vaz.pdf"
+                    className="flex items-center gap-3"
+                  >
+                    <Download className="h-5 w-5" />
+                    Download Currículo
+                  </a>
+                </Button>
+              </div>
             </div>
 
             <div className="mt-12 pt-8 border-t border-border/50">
