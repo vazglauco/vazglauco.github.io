@@ -77,14 +77,6 @@ export function HeroSection() {
                 </a>
               </Button>
 
-<<<<<<< HEAD
-          {/* Photo */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative">
-              <div className="w-80 h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden bg-muted">
-                <img src="/card.png" alt="Glauco Vaz"  />
-              </div>
-=======
               <Button
                 asChild
                 variant="outline"
@@ -100,7 +92,6 @@ export function HeroSection() {
                   GitHub
                 </a>
               </Button>
->>>>>>> 5860007d2a559b8ae8c7b85323bc7ac95c5bd874
             </div>
           </div>
         </div>
