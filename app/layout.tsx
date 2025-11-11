@@ -1,10 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Fira_Code } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/contexts/theme-context"
 
-const inter = Inter({ subsets: ["latin"] })
+const firaCode = Fira_Code({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Glauco Vaz - Desenvolvedor Full Stack",
@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
-      <body className={inter.className}>
+      <body className={firaCode.className}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

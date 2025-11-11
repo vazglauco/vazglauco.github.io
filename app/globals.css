@@ -23,6 +23,7 @@
     --border: 0 0% 90%;
     --input: 0 0% 90%;
     --ring: 0 0% 15%;
+    --highlight: 0 100% 50%;
     --radius: 0.75rem;
   }
 
@@ -46,6 +47,7 @@
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 0 0% 83%;
+    --highlight: 0 100% 60%;
   }
 }
 
@@ -79,4 +81,18 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Image rotation animation */
+@keyframes rotate-180 {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+.animate-rotate-image {
+  animation: rotate-180 5s ease-in-out infinite;
 }

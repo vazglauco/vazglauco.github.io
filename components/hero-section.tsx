@@ -1,99 +1,163 @@
-import { Mail, Linkedin, MapPin, Calendar, Phone, Github } from "lucide-react"
+"use client"
+
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
 import { Button } from "@/components/ui/button"
 
 export function HeroSection() {
+  const imageRef = useRef<HTMLImageElement>(null)
+
+  useEffect(() => {
+    if (!imageRef.current) return
+
+    const tl = gsap.timeline({ repeat: -1 })
+
+    // Antecipação + Rotação 180° (de cabeça pra baixo)
+    tl.to(imageRef.current, {
+      rotate: -15,
+      scale: 1.05,
+      duration: 0.5,
+      ease: "power2.out"
+    })
+      .to(imageRef.current, {
+        rotate: 180,
+        scale: 1,
+        duration: 2.5,
+        ease: "elastic.out(1, 0.5)"
+      })
+      // Pausa
+      .to(imageRef.current, {
+        duration: 1
+      })
+      // Antecipação + Flip 3D no eixo Y
+      .to(imageRef.current, {
+        rotateY: -20,
+        scale: 1.05,
+        duration: 0.5,
+        ease: "power2.out"
+      })
+      .to(imageRef.current, {
+        rotateY: 180,
+        scale: 1,
+        duration: 2.5,
+        ease: "back.out(1.4)"
+      })
+      // Pausa
+      .to(imageRef.current, {
+        duration: 1
+      })
+      // Antecipação + Volta ao normal (de cabeça pra cima)
+      .to(imageRef.current, {
+        rotate: 195,
+        scale: 1.05,
+        duration: 0.5,
+        ease: "power2.out"
+      })
+      .to(imageRef.current, {
+        rotate: 0,
+        scale: 1,
+        duration: 2.5,
+        ease: "elastic.out(1, 0.5)"
+      })
+      // Pausa
+      .to(imageRef.current, {
+        duration: 1
+      })
+      // Antecipação + Desfaz o flip 3D
+      .to(imageRef.current, {
+        rotateY: 200,
+        scale: 1.05,
+        duration: 0.5,
+        ease: "power2.out"
+      })
+      .to(imageRef.current, {
+        rotateY: 0,
+        scale: 1,
+        duration: 2.5,
+        ease: "back.out(1.4)"
+      })
+      // Pausa final antes de repetir
+      .to(imageRef.current, {
+        duration: 1.5
+      })
+
+    return () => {
+      tl.kill()
+    }
+  }, [])
+
   return (
-    <section id="sobre" className="pt-32 pb-24 bg-background">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto text-center">
-          {/* Content */}
-          <div className="space-y-8">
-            <div className="space-y-6">
-              <h1 className="text-4xl lg:text-6xl font-light tracking-tight text-foreground">Glauco Vaz</h1>
+    <section id="sobre" className="h-screen flex items-center bg-background relative snap-start snap-always">
+      <div className="w-full flex items-center justify-between gap-12 pl-20 md:pl-32 lg:pl-48 pr-6">
+        {/* Left content */}
+        <div className="flex-1">
+          {/* Main content */}
+          <div className="space-y-6">
+            {/* Name with code-like styling */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light tracking-tight">
+              <span className="text-foreground">glauco</span>
+              <span className="text-highlight">.</span>
+              <span className="text-highlight">vaz</span>
+              <span className="text-highlight">{"();"}</span>
+            </h1>
 
-              <div className="flex items-center justify-center gap-6 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span className="font-light">27 anos</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span className="font-light">São Paulo, SP</span>
-                </div>
-              </div>
-            </div>
+            {/* Subtitle in highlight color */}
+            <p className="text-xl md:text-2xl font-normal text-highlight">
+              Software Engineer
+            </p>
 
-            <div className="space-y-6 max-w-4xl mx-auto">
-              <p className="text-lg font-light text-muted-foreground leading-relaxed">
-                Sou desenvolvedor com 9 anos de experiência na construção de sistemas web. Atuo principalmente como
-                Front-end, com foco na criação de interfaces escaláveis e de alta performance, e também tenho
-                experiência no Back-end, com desenvolvimento de APIs.
+            {/* Description */}
+            <div className="space-y-2 text-muted-foreground max-w-2xl">
+              <p className="text-base md:text-lg font-light">
+                Desenvolvedor Full Stack Sr. apaixonado por tecnologia, negócios e criação de produtos digitais. Acredito que código é mais do que lógica, é a arte que transforma ideias em realidade.
               </p>
-
-              <p className="text-lg font-light text-muted-foreground leading-relaxed">
-                Trabalho com JavaScript e TypeScript, explorando seu ecossistema de frameworks e bibliotecas. Tenho
-                experiência com automação de deploys e com ambientes em nuvem, especialmente na AWS. Atuo em equipes
-                ágeis, com foco na entrega de soluções eficientes e alinhadas aos objetivos do negócio.
+              <p className="text-base md:text-lg font-light">
+                Construo sites, sistemas e apps; do planejamento ao deploy.
               </p>
             </div>
 
-            {/* Contact Links */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 asChild
-                variant="outline"
-                className="rounded-full px-8 py-6 font-light border-border hover:bg-muted/50 bg-transparent"
+                size="lg"
+                className="bg-highlight hover:bg-highlight/90 text-white font-normal"
               >
-                <a href="mailto:vazz.glauco@gmail.com" className="flex items-center gap-3">
-                  <Mail className="h-4 w-4" />
-                  vazz.glauco@gmail.com
-                </a>
+                <a href="#skills">Conheça minhas Habilidades</a>
               </Button>
+              
+              <Button
+                asChild
+                size="lg"
+                className="bg-white hover:bg-gray-50 text-foreground border border-border font-normal dark:bg-white dark:text-black dark:hover:bg-gray-100"
+              >
+                <a href="#contact">Entre em contato</a>
+              </Button>
+            </div>
 
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full px-8 py-6 font-light border-border hover:bg-muted/50 bg-transparent"
+            {/* PDF Link */}
+            <div className="pt-2">
+              <a 
+                href="/curriculo-glauco-vaz.pdf" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
               >
-                <a href="tel:+5511983701618" className="flex items-center gap-3">
-                  <Phone className="h-4 w-4" />
-                  (11) 98370-1618
-                </a>
-              </Button>
-
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full px-8 py-6 font-light border-border hover:bg-muted/50 bg-transparent"
-              >
-                <a
-                  href="https://linkedin.com/in/glaucovaz"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3"
-                >
-                  <Linkedin className="h-4 w-4" />
-                  LinkedIn
-                </a>
-              </Button>
-
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full px-8 py-6 font-light border-border hover:bg-muted/50 bg-transparent"
-              >
-                <a
-                  href="https://github.com/vazglauco"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3"
-                >
-                  <Github className="h-4 w-4" />
-                  GitHub
-                </a>
-              </Button>
+                Veja meu currículo em PDF
+              </a>
             </div>
           </div>
+        </div>
+
+        {/* Right image */}
+        <div className="hidden lg:flex flex-1 justify-center items-center pr-36">
+          <img 
+            ref={imageRef}
+            src="/FINAL_CARTA GLAUCO.png" 
+            alt="Glauco Vaz" 
+            className="w-full max-w-xs h-auto"
+            style={{ transformStyle: "preserve-3d" }}
+          />
         </div>
       </div>
     </section>

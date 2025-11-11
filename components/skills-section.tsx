@@ -1,5 +1,8 @@
+"use client"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Code, Cloud, Server, Globe, Database, GitBranch, Zap, Layers, Monitor, Smartphone } from "lucide-react"
+import Image from "next/image"
 
 export function SkillsSection() {
   const skillCategories = {
@@ -46,16 +49,15 @@ export function SkillsSection() {
 
     return (
       <div className="group relative bg-card border border-border rounded-2xl p-6 hover:bg-muted/50 transition-all duration-300 cursor-pointer">
-        <div className="flex items-center gap-4">
-          <div className="flex-shrink-0">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-muted group-hover:bg-muted-foreground/10">
-              <IconComponent className="h-5 w-5 text-muted-foreground" />
-            </div>
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium transition-colors text-foreground group-hover:text-foreground">
+        <div className="flex flex-col items-start gap-4">
+          <div className="flex items-center gap-2 w-full">
+            <span className="text-highlight text-lg font-light">$</span>
+            <h3 className="text-sm font-light text-foreground group-hover:text-foreground">
               {skill.name}
             </h3>
+          </div>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center transition-colors bg-muted/50 group-hover:bg-muted">
+            <IconComponent className="h-5 w-5 text-muted-foreground" />
           </div>
         </div>
       </div>
@@ -63,35 +65,45 @@ export function SkillsSection() {
   }
 
   return (
-    <section id="skills" className="py-24 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section id="skills" className="relative h-screen py-24 bg-muted/30 snap-start snap-always overflow-y-auto">
+      {/* Imagem na borda esquerda */}
+      <div className="absolute left-0 top-1/2 -translate-y-1/2 z-0 w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96">
+        <Image
+          src="/FINAL_CARTA GLAUCO.png"
+          alt="Glauco Vaz"
+          width={384}
+          height={384}
+          className="object-contain opacity-30 hover:opacity-50 transition-opacity duration-500"
+        />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pl-20 md:pl-32 lg:pl-48">
         <div className="mb-16">
-          <h2 className="text-3xl lg:text-4xl font-light tracking-tight text-foreground mb-4">Skills</h2>
+          <h2 className="text-3xl lg:text-4xl font-light tracking-tight text-foreground mb-4">
+            <span className="text-highlight">.</span>skills<span className="text-highlight">()</span>
+          </h2>
         </div>
 
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl">
           <Tabs defaultValue="frontend" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-12 bg-muted/50 border border-border rounded-2xl p-1">
+            <TabsList className="flex gap-6 mb-12 bg-transparent border-0 p-0 h-auto">
               <TabsTrigger
                 value="frontend"
-                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-light"
+                className="bg-card border border-border px-6 py-3 rounded-xl font-light text-base text-muted-foreground data-[state=active]:text-black data-[state=active]:bg-white data-[state=active]:border-highlight/50 hover:text-foreground hover:bg-muted/30 hover:border-border/80 transition-all cursor-pointer dark:data-[state=active]:text-black"
               >
-                <Monitor className="h-4 w-4" />
-                Front-end
+                <span className="text-highlight">.</span>frontend<span className="text-highlight">()</span>
               </TabsTrigger>
               <TabsTrigger
                 value="backend"
-                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-light"
+                className="bg-card border border-border px-6 py-3 rounded-xl font-light text-base text-muted-foreground data-[state=active]:text-black data-[state=active]:bg-white data-[state=active]:border-highlight/50 hover:text-foreground hover:bg-muted/30 hover:border-border/80 transition-all cursor-pointer dark:data-[state=active]:text-black"
               >
-                <Server className="h-4 w-4" />
-                Back-end
+                <span className="text-highlight">.</span>backend<span className="text-highlight">()</span>
               </TabsTrigger>
               <TabsTrigger
                 value="devops"
-                className="flex items-center gap-2 rounded-xl data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm font-light"
+                className="bg-card border border-border px-6 py-3 rounded-xl font-light text-base text-muted-foreground data-[state=active]:text-black data-[state=active]:bg-white data-[state=active]:border-highlight/50 hover:text-foreground hover:bg-muted/30 hover:border-border/80 transition-all cursor-pointer dark:data-[state=active]:text-black"
               >
-                <Cloud className="h-4 w-4" />
-                DevOps
+                <span className="text-highlight">.</span>devops<span className="text-highlight">()</span>
               </TabsTrigger>
             </TabsList>
 
