@@ -138,39 +138,37 @@ export function ExperienceSection() {
   ]
 
   return (
-    <section id="experiencia" className="py-24 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="mb-16">
-          <h2 className="text-3xl lg:text-4xl font-light tracking-tight text-foreground mb-4">
-            Experiência Profissional
+    <section id="experiencia" className="relative w-screen h-screen overflow-y-auto bg-muted/30 snap-start snap-always py-24">
+      <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
+        <div className="mb-12">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight text-foreground mb-8">
+            experiência<span className="text-highlight">.</span>profissional<span className="text-highlight">()</span>
           </h2>
         </div>
 
-        <div className="relative max-w-6xl mx-auto">
+        <div className="relative max-w-5xl mx-auto">
           {/* Timeline line */}
           <div className="absolute left-4 md:left-1/2 transform md:-translate-x-px top-0 bottom-0 w-0.5 bg-border"></div>
 
-          <div className="space-y-16">
+          <div className="flex flex-col gap-6">
             {experiences.map((exp, index) => (
               <div
                 key={index}
-                className={`relative flex items-start ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
+                className={`relative flex items-start ${index !== 0 ? 'md:-mt-32' : ''} ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}
               >
                 {/* Timeline dot */}
-                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-3 h-3 bg-foreground rounded-full border-4 border-background shadow-sm"></div>
+                <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 w-3 h-3 bg-highlight rounded-full border-2 border-background shadow-sm z-10"></div>
 
                 {/* Content */}
-                <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-12" : "md:pl-12"}`}>
-                  <div className="bg-card border border-border rounded-2xl p-8 hover:bg-muted/20 transition-all duration-300">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                      <Calendar className="h-4 w-4" />
-                      {exp.period}
-                    </div>
-
-                    <h3 className="text-xl font-medium text-foreground mb-2 flex items-center gap-3 flex-wrap">
-                      {exp.position}
+                <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? "md:pr-8" : "md:pl-8"}`}>
+                  <div className="p-4 h-[280px] flex flex-col justify-center gap-3">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Calendar className="h-3.5 w-3.5" />
+                        {exp.period}
+                      </div>
                       <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-light ${
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-light ${
                           exp.seniority === "Sênior"
                             ? "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
                             : exp.seniority === "Pleno"
@@ -180,26 +178,24 @@ export function ExperienceSection() {
                       >
                         {exp.seniority}
                       </span>
-                    </h3>
-
-                    <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                      <MapPin className="h-4 w-4" />
-                      <span className="font-light">{exp.company}</span>
                     </div>
 
-                    <p className="text-muted-foreground font-light leading-relaxed mb-6">{exp.description}</p>
+                    <h3 className="text-sm font-medium text-foreground">
+                      {exp.position}
+                    </h3>
 
-                    <ul className="list-disc list-inside text-sm text-muted-foreground mb-6 space-y-2 font-light">
-                      {exp.achievements.map((achievement, i) => (
-                        <li key={i}>{achievement}</li>
-                      ))}
-                    </ul>
+                    <div className="flex items-center gap-2 text-muted-foreground">
+                      <MapPin className="h-3.5 w-3.5" />
+                      <span className="font-light text-xs">{exp.company}</span>
+                    </div>
 
-                    <div className="flex flex-wrap gap-2">
+                    <p className="text-muted-foreground font-light leading-relaxed text-xs line-clamp-3">{exp.description}</p>
+
+                    <div className="flex flex-wrap gap-1">
                       {exp.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="inline-block bg-muted text-muted-foreground text-xs px-3 py-1 rounded-full font-light"
+                          className="inline-block bg-muted text-muted-foreground text-xs px-2 py-0.5 rounded-full font-light"
                         >
                           {skill}
                         </span>

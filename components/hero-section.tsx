@@ -6,84 +6,110 @@ import { Button } from "@/components/ui/button"
 
 export function HeroSection() {
   const imageRef = useRef<HTMLImageElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!imageRef.current) return
+    if (!imageRef.current || !containerRef.current) return
 
-    const tl = gsap.timeline({ repeat: -1 })
-
-    // Antecipação + Rotação 180° (de cabeça pra baixo)
-    tl.to(imageRef.current, {
-      rotate: -15,
-      scale: 1.05,
-      duration: 0.5,
-      ease: "power2.out"
+    // === Flutuar + Inclinação 3D + Flip Vertical ===
+    
+    // Flutuação suave para cima e para baixo (constante)
+    gsap.to(containerRef.current, {
+      y: -15,
+      duration: 2.5,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true
     })
-      .to(imageRef.current, {
-        rotate: 180,
-        scale: 1,
-        duration: 2.5,
-        ease: "elastic.out(1, 0.5)"
+
+    // Sombra dinâmica que pulsa
+    gsap.to(containerRef.current, {
+      filter: "drop-shadow(0px 30px 25px rgba(0,0,0,0.35))",
+      duration: 2.5,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true
+    })
+
+    // Timeline principal: LOOP INFINITO PERFEITO E HIPNOTIZANTE
+    function createAnimation() {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(imageRef.current, { rotateX: 0, rotateY: 0, rotate: 0 })
+          createAnimation()
+        }
       })
-      // Pausa
-      .to(imageRef.current, {
-        duration: 1
-      })
-      // Antecipação + Flip 3D no eixo Y
-      .to(imageRef.current, {
-        rotateY: -20,
-        scale: 1.05,
-        duration: 0.5,
-        ease: "power2.out"
-      })
-      .to(imageRef.current, {
-        rotateY: 180,
-        scale: 1,
-        duration: 2.5,
-        ease: "back.out(1.4)"
-      })
-      // Pausa
-      .to(imageRef.current, {
-        duration: 1
-      })
-      // Antecipação + Volta ao normal (de cabeça pra cima)
-      .to(imageRef.current, {
-        rotate: 195,
-        scale: 1.05,
-        duration: 0.5,
-        ease: "power2.out"
+      
+      const duration = 3
+      const ease = "power1.inOut"
+      
+      tl.to(imageRef.current, {
+        rotateX: 20,
+        rotateY: -25,
+        rotate: -5,
+        duration,
+        ease
       })
       .to(imageRef.current, {
-        rotate: 0,
-        scale: 1,
-        duration: 2.5,
-        ease: "elastic.out(1, 0.5)"
-      })
-      // Pausa
-      .to(imageRef.current, {
-        duration: 1
-      })
-      // Antecipação + Desfaz o flip 3D
-      .to(imageRef.current, {
-        rotateY: 200,
-        scale: 1.05,
-        duration: 0.5,
-        ease: "power2.out"
+        rotateX: -15,
+        rotateY: 25,
+        rotate: 5,
+        duration,
+        ease
       })
       .to(imageRef.current, {
+        rotateX: 180,
+        rotateY: -22,
+        rotate: -5,
+        duration,
+        ease
+      })
+      .to(imageRef.current, {
+        rotateX: 165,
+        rotateY: 25,
+        rotate: 6,
+        duration,
+        ease
+      })
+      .to(imageRef.current, {
+        rotateX: 200,
+        rotateY: -25,
+        rotate: -5,
+        duration,
+        ease
+      })
+      .to(imageRef.current, {
+        rotateX: 360,
+        rotateY: 25,
+        rotate: 5,
+        duration,
+        ease
+      })
+      .to(imageRef.current, {
+        rotateX: 380,
+        rotateY: -25,
+        rotate: -5,
+        duration,
+        ease
+      })
+      .to(imageRef.current, {
+        rotateX: 360,
         rotateY: 0,
-        scale: 1,
-        duration: 2.5,
-        ease: "back.out(1.4)"
+        rotate: 0,
+        duration,
+        ease
       })
-      // Pausa final antes de repetir
-      .to(imageRef.current, {
-        duration: 1.5
-      })
+      
+      return tl
+    }
+    
+    const mainTimeline = createAnimation()
 
     return () => {
-      tl.kill()
+      gsap.killTweensOf(imageRef.current)
+      gsap.killTweensOf(containerRef.current)
     }
+    
   }, [])
 
   return (
@@ -151,13 +177,23 @@ export function HeroSection() {
 
         {/* Right image */}
         <div className="hidden lg:flex flex-1 justify-center items-center pr-36">
-          <img 
-            ref={imageRef}
-            src="/FINAL_CARTA GLAUCO.png" 
-            alt="Glauco Vaz" 
-            className="w-full max-w-xs h-auto"
-            style={{ transformStyle: "preserve-3d" }}
-          />
+          <div 
+            ref={containerRef}
+            className="relative"
+            style={{ perspective: "1000px" }}
+          >
+            {/* Glow de fundo pulsante */}
+            <div className="absolute -inset-8 blur-3xl opacity-40 bg-gradient-radial from-yellow-500/50 via-red-500/30 to-transparent rounded-full animate-pulse" />
+            
+            {/* Carta */}
+            <img 
+              ref={imageRef}
+              src="/FINAL_CARTA GLAUCO.png" 
+              alt="Glauco Vaz" 
+              className="w-full max-w-xs h-auto relative z-10 card-shine"
+              style={{ transformStyle: "preserve-3d" }}
+            />
+          </div>
         </div>
       </div>
     </section>

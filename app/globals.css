@@ -65,6 +65,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Smooth snap scroll */
+main {
+  scroll-snap-type: y mandatory;
+  scroll-padding: 0;
+  overscroll-behavior-y: none;
+}
+
+/* Suaviza o scroll do mouse */
+@media (hover: hover) and (pointer: fine) {
+  main {
+    scroll-snap-type: y proximity;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -95,4 +109,41 @@ html {
 
 .animate-rotate-image {
   animation: rotate-180 5s ease-in-out infinite;
+}
+
+/* Card shine effect - brilho que passa pela carta */
+@keyframes card-shine {
+  0% {
+    background-position: -200% 0;
+  }
+  15% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.card-shine {
+  position: relative;
+  background: 
+    linear-gradient(
+      105deg,
+      transparent 20%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.3) 45%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.3) 55%,
+      transparent 60%,
+      transparent 100%
+    );
+  background-size: 200% 100%;
+  background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  animation: card-shine 8s ease-in-out infinite;
+}
+
+/* Gradient radial para o glow */
+.bg-gradient-radial {
+  background: radial-gradient(circle, var(--tw-gradient-stops));
 }
