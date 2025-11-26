@@ -2,14 +2,12 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, Moon, Sun, Linkedin, Github } from "lucide-react"
+import { Menu, X, Linkedin, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useTheme } from "@/contexts/theme-context"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("")
-  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,7 +67,7 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Right side - Icons and Theme Toggle */}
+          {/* Right side - Social Icons */}
           <div className="flex items-center gap-4">
             {/* Social Icons */}
             <div className="hidden md:flex items-center gap-3">
@@ -87,7 +85,7 @@ export function Header() {
                   <Linkedin className="h-4 w-4" />
                 </a>
               </Button>
-              
+
               <Button
                 asChild
                 size="icon"
@@ -103,11 +101,6 @@ export function Header() {
                 </a>
               </Button>
             </div>
-
-            {/* Theme Toggle */}
-            <Button variant="ghost" size="icon" onClick={toggleTheme} className="w-9 h-9 rounded-full hover:bg-muted">
-              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </Button>
 
             {/* Mobile Menu Button */}
             <Button

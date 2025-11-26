@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Fira_Code } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/contexts/theme-context"
 
 const firaCode = Fira_Code({ subsets: ["latin"] })
 
@@ -17,7 +16,6 @@ export const metadata: Metadata = {
     description: "Desenvolvedor Full Stack com 9 anos de experiência em projetos web de alta complexidade.",
     type: "website",
   },
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -26,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className="scroll-smooth">
+    <html lang="pt-BR" className="dark scroll-smooth">
       <body className={firaCode.className}>
-        <ThemeProvider>{children}</ThemeProvider>
+        {children}
       </body>
     </html>
   )

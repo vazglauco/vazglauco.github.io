@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="snap-y snap-mandatory h-screen overflow-y-scroll" style={{ scrollBehavior: 'smooth' }}>
+      <main className=" h-screen overflow-y-scroll" style={{ scrollBehavior: 'smooth' }}>
         <HeroSection />
         <AboutSection />
         <SkillsSection />

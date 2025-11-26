@@ -65,20 +65,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Smooth snap scroll */
-main {
-  scroll-snap-type: y mandatory;
-  scroll-padding: 0;
-  overscroll-behavior-y: none;
-}
-
-/* Suaviza o scroll do mouse */
-@media (hover: hover) and (pointer: fine) {
-  main {
-    scroll-snap-type: y proximity;
-  }
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -146,4 +132,14 @@ main {
 /* Gradient radial para o glow */
 .bg-gradient-radial {
   background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
