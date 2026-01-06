@@ -1,13 +1,31 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Menu, X, Linkedin, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useLoading } from "@/contexts/LoadingContext"
+import { gsap } from "gsap"
+import { TextPlugin } from "gsap/TextPlugin"
+
+gsap.registerPlugin(TextPlugin)
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("")
+  const { phase } = useLoading()
+  const [hasAnimated, setHasAnimated] = useState(false)
+
+  // Refs for animated elements
+  const headerRef = useRef<HTMLElement>(null)
+  const logoRef = useRef<HTMLSpanElement>(null)
+  const aboutRef = useRef<HTMLAnchorElement>(null)
+  const skillsRef = useRef<HTMLAnchorElement>(null)
+  const experienciaRef = useRef<HTMLAnchorElement>(null)
+  const formacaoRef = useRef<HTMLAnchorElement>(null)
+  const contatoRef = useRef<HTMLAnchorElement>(null)
+  const linkedinRef = useRef<HTMLAnchorElement>(null)
+  const githubRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,24 +48,139 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Header animation on typing phase
+  useEffect(() => {
+    console.log("Header phase:", phase, "hasAnimated:", hasAnimated)
+    if (phase !== "typing" || hasAnimated) return
+
+    console.log("Starting header animation!")
+    const tl = gsap.timeline()
+
+    // Fade in header first
+    if (headerRef.current) {
+      tl.to(headerRef.current, {
+        opacity: 1,
+        duration: 0.3,
+        ease: "power2.out"
+      })
+    }
+
+    // Hide all text elements initially
+    const allElements = [
+      logoRef.current,
+      aboutRef.current,
+      skillsRef.current,
+      experienciaRef.current,
+      formacaoRef.current,
+      contatoRef.current,
+      linkedinRef.current,
+      githubRef.current
+    ]
+
+    gsap.set(allElements, { opacity: 0 })
+
+    // Animate logo with typing effect
+    tl.to(logoRef.current, {
+      duration: 0.8,
+      text: { value: "glauco.vaz();" },
+      opacity: 1,
+      ease: "none"
+    })
+
+    // Animate menu items with typing effect (char by char in sequence)
+    tl.to(
+      aboutRef.current,
+      {
+        duration: 0.4,
+        text: { value: ".sobre()" },
+        opacity: 1,
+        ease: "none"
+      },
+      "+=0.1"
+    )
+
+    tl.to(
+      skillsRef.current,
+      {
+        duration: 0.4,
+        text: { value: ".skills()" },
+        opacity: 1,
+        ease: "none"
+      },
+      "+=0.1"
+    )
+
+    tl.to(
+      experienciaRef.current,
+      {
+        duration: 0.5,
+        text: { value: ".experiência()" },
+        opacity: 1,
+        ease: "none"
+      },
+      "+=0.1"
+    )
+
+    tl.to(
+      formacaoRef.current,
+      {
+        duration: 0.5,
+        text: { value: ".formação()" },
+        opacity: 1,
+        ease: "none"
+      },
+      "+=0.1"
+    )
+
+    tl.to(
+      contatoRef.current,
+      {
+        duration: 0.4,
+        text: { value: ".contato()" },
+        opacity: 1,
+        ease: "none"
+      },
+      "+=0.1"
+    )
+
+    // Animate social icons (fade-in)
+    tl.to(
+      [linkedinRef.current, githubRef.current],
+      {
+        opacity: 1,
+        duration: 0.4,
+        stagger: 0.1,
+        ease: "power2.out"
+      },
+      "+=0.1"
+    )
+
+    setHasAnimated(true)
+
+    return () => tl.kill()
+  }, [phase, hasAnimated])
+
   const menuItems = [
-    { href: "#sobre", label: ".sobre()" },
-    { href: "#skills", label: ".skills()" },
-    { href: "#experiencia", label: ".experiência()" },
-    { href: "#formacao", label: ".formação()" },
-    { href: "#contato", label: ".contato()" },
+    { href: "#sobre", label: ".sobre()", ref: aboutRef },
+    { href: "#skills", label: ".skills()", ref: skillsRef },
+    { href: "#experiencia", label: ".experiência()", ref: experienciaRef },
+    { href: "#formacao", label: ".formação()", ref: formacaoRef },
+    { href: "#contato", label: ".contato()", ref: contatoRef },
   ]
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-md z-50">
+    <header
+      ref={headerRef}
+      className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-md z-50"
+      style={{ opacity: phase === "initial" || phase === "zoom-in" || phase === "spin" || phase === "move-to-position" || phase === "settling" ? 0 : undefined }}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
+          {/* Logo with typing */}
           <Link href="#sobre" className="font-light text-lg tracking-tight">
-            <span className="text-foreground">glauco</span>
-            <span className="text-highlight">.</span>
-            <span className="text-highlight">vaz</span>
-            <span className="text-highlight">{"();"}</span>
+            <span ref={logoRef} className="text-foreground">
+              {/* Empty, will be filled by GSAP */}
+            </span>
           </Link>
 
           {/* Desktop Menu */}
@@ -55,6 +188,7 @@ export function Header() {
             {menuItems.map((item) => (
               <Link
                 key={item.href}
+                ref={item.ref}
                 href={item.href}
                 className={`text-sm font-light tracking-wide transition-colors duration-200 ${
                   activeSection === item.href.slice(1)
@@ -62,7 +196,7 @@ export function Header() {
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {item.label}
+                {/* Empty, will be filled by GSAP */}
               </Link>
             ))}
           </nav>
@@ -74,7 +208,8 @@ export function Header() {
               <Button
                 asChild
                 size="icon"
-                className="w-9 h-9 rounded-full bg-highlight hover:bg-highlight/90 text-white"
+                className="w-9 h-9 rounded-full bg-highlight hover:bg-highlight/90 text-white opacity-0"
+                ref={linkedinRef as any}
               >
                 <a
                   href="https://linkedin.com/in/glaucovaz"
@@ -89,7 +224,8 @@ export function Header() {
               <Button
                 asChild
                 size="icon"
-                className="w-9 h-9 rounded-full bg-highlight hover:bg-highlight/90 text-white"
+                className="w-9 h-9 rounded-full bg-highlight hover:bg-highlight/90 text-white opacity-0"
+                ref={githubRef as any}
               >
                 <a
                   href="https://github.com/vazglauco"
@@ -133,7 +269,7 @@ export function Header() {
                 </Link>
               ))}
             </nav>
-            
+
             {/* Mobile Social Icons */}
             <div className="flex items-center gap-3 px-4">
               <Button
@@ -150,7 +286,7 @@ export function Header() {
                   <Linkedin className="h-4 w-4" />
                 </a>
               </Button>
-              
+
               <Button
                 asChild
                 size="icon"

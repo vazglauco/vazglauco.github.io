@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react"
+import { useEffect, type RefObject } from "react"
 import { gsap } from "gsap"
 
 interface UseShineEffectProps {
   enabled: boolean
   duration?: number
   repeatDelay?: number
+  shineRef: RefObject<HTMLDivElement>
 }
 
 /**
@@ -12,14 +13,14 @@ interface UseShineEffectProps {
  * @param enabled - Ativa/desativa o efeito
  * @param duration - Duração do movimento do brilho (padrão: 1.2s)
  * @param repeatDelay - Delay entre repetições (padrão: 4s)
+ * @param shineRef - Ref do elemento de brilho
  */
 export function useShineEffect({
   enabled,
   duration = 1.2,
-  repeatDelay = 4
+  repeatDelay = 4,
+  shineRef
 }: UseShineEffectProps) {
-  const shineRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (!enabled || !shineRef.current) return
 
@@ -35,7 +36,5 @@ export function useShineEffect({
     return () => {
       shineTl.kill()
     }
-  }, [enabled, duration, repeatDelay])
-
-  return { shineRef }
+  }, [enabled, duration, repeatDelay, shineRef])
 }

@@ -1,10 +1,13 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { useTypewriterEffect } from "@/hooks/useTypewriterEffect"
+import { useLoading } from "@/contexts/LoadingContext"
 
 export function HeroContent() {
+  const { phase } = useLoading()
+  const [shouldStartTyping, setShouldStartTyping] = useState(false)
   // Refs para efeito de digitação
   const nameRef = useRef<HTMLSpanElement>(null)
   const nameSuffixRef = useRef<HTMLSpanElement>(null)
@@ -14,19 +17,26 @@ export function HeroContent() {
   const buttonsRef = useRef<HTMLDivElement>(null)
   const pdfLinkRef = useRef<HTMLDivElement>(null)
 
+  // Watch for typing phase
+  useEffect(() => {
+    if (phase === "typing") {
+      setShouldStartTyping(true)
+    }
+  }, [phase])
+
   // Textos
   const texts = {
-    name: "glauco",
-    nameSuffix: ".vaz();",
+    name: "GLAUCO",
+    nameSuffix: ".VAZ();",
     subtitle: "Software Engineer",
     desc1: "Desenvolvedor Full Stack Sr. apaixonado por tecnologia, negócios e criação de produtos digitais. Acredito que código é mais do que lógica, é a arte que transforma ideias em realidade.",
     desc2: "Construo sites, sistemas e apps; do planejamento ao deploy.",
     pdfLink: "Veja meu currículo em PDF"
   }
 
-  // Configuração do efeito de digitação
+  // Configuração do efeito de digitação - só inicia quando phase === 'typing'
   useTypewriterEffect({
-    start: true,
+    start: shouldStartTyping,
     steps: [
       { ref: nameRef, text: texts.name, duration: 1.2, delay: 0 },
       { ref: nameSuffixRef, text: texts.nameSuffix, duration: 1.4, delay: 0 },
@@ -38,7 +48,7 @@ export function HeroContent() {
 
   // Fade in dos botões e link PDF usando TypewriterEffect
   useTypewriterEffect({
-    start: true,
+    start: shouldStartTyping,
     steps: [
       { ref: pdfLinkRef as React.RefObject<HTMLElement>, text: "", duration: 0, delay: 11.5 }
     ]

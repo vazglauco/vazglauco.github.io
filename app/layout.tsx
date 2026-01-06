@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Fira_Code } from "next/font/google"
 import "./globals.css"
+import { LoadingProvider } from "@/contexts/LoadingContext"
 
 const firaCode = Fira_Code({ subsets: ["latin"] })
 
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className="dark scroll-smooth">
       <body className={firaCode.className}>
-        {children}
+        <LoadingProvider>
+          {children}
+        </LoadingProvider>
       </body>
     </html>
   )

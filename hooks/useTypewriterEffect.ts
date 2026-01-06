@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { gsap } from "gsap"
 import { TextPlugin } from "gsap/TextPlugin"
 
@@ -23,9 +23,10 @@ interface UseTypewriterEffectProps {
  */
 export function useTypewriterEffect({ steps, start }: UseTypewriterEffectProps) {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
+  const [hasRun, setHasRun] = useState(false)
 
   useEffect(() => {
-    if (!start) return
+    if (!start || hasRun) return
 
     // Inicializa todos os elementos vazios
     steps.forEach(({ ref }) => {
@@ -35,7 +36,9 @@ export function useTypewriterEffect({ steps, start }: UseTypewriterEffectProps) 
     })
 
     // Cria timeline de digitação
-    const tl = gsap.timeline()
+    const tl = gsap.timeline({
+      onComplete: () => setHasRun(true)
+    })
 
     steps.forEach(({ ref, text, duration, delay = 0 }, index) => {
       if (ref.current) {
@@ -52,7 +55,7 @@ export function useTypewriterEffect({ steps, start }: UseTypewriterEffectProps) 
     return () => {
       tl.kill()
     }
-  }, [start, steps])
+  }, [start, hasRun])
 
   return { timeline: timelineRef.current }
 }

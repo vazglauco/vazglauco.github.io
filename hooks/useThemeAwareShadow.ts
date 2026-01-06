@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react"
+import { useEffect, type RefObject } from "react"
 import { gsap } from "gsap"
 
 interface UseThemeAwareShadowProps {
   enabled: boolean
   duration?: number
+  shadowRef: RefObject<HTMLDivElement>
 }
 
 /**
@@ -11,13 +12,13 @@ interface UseThemeAwareShadowProps {
  * Nota: Como o site é apenas dark mode, sempre usará a sombra clara
  * @param enabled - Ativa/desativa a sombra animada
  * @param duration - Duração do ciclo de pulsação (padrão: 2.5s)
+ * @param shadowRef - Ref do elemento que terá a sombra
  */
 export function useThemeAwareShadow({
   enabled,
-  duration = 2.5
+  duration = 2.5,
+  shadowRef
 }: UseThemeAwareShadowProps) {
-  const shadowRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (!enabled || !shadowRef.current) return
 
@@ -40,7 +41,5 @@ export function useThemeAwareShadow({
     return () => {
       gsap.killTweensOf(shadowRef.current)
     }
-  }, [enabled, duration])
-
-  return { shadowRef }
+  }, [enabled, duration, shadowRef])
 }

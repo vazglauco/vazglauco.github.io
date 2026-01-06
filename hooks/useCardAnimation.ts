@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react"
+import { useEffect, type RefObject } from "react"
 import { gsap } from "gsap"
 
 interface UseCardAnimationProps {
   enabled: boolean
   duration?: number
   ease?: string
+  cardRef: RefObject<HTMLDivElement>
 }
 
 /**
@@ -12,14 +13,14 @@ interface UseCardAnimationProps {
  * @param enabled - Ativa/desativa a animação
  * @param duration - Duração de cada fase da rotação (padrão: 3s)
  * @param ease - Easing da animação (padrão: "power1.inOut")
+ * @param cardRef - Ref do elemento do card
  */
 export function useCardAnimation({
   enabled,
   duration = 3,
-  ease = "power1.inOut"
+  ease = "power1.inOut",
+  cardRef
 }: UseCardAnimationProps) {
-  const cardRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     if (!enabled || !cardRef.current) return
 
@@ -97,7 +98,5 @@ export function useCardAnimation({
       gsap.killTweensOf(cardRef.current)
       mainTimeline.kill()
     }
-  }, [enabled, duration, ease])
-
-  return { cardRef }
+  }, [enabled, duration, ease, cardRef])
 }
