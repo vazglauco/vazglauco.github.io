@@ -7,23 +7,6 @@ import Image from "next/image"
 export function AboutSection() {
   const contentRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    if (!contentRef.current) return
-
-    const tl = gsap.timeline()
-
-    tl.from(contentRef.current, {
-      opacity: 0,
-      y: 30,
-      duration: 1,
-      ease: "power2.out"
-    })
-
-    return () => {
-      tl.kill()
-    }
-  }, [])
-
   return (
     <section
       id="about"

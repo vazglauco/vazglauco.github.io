@@ -143,3 +143,32 @@ html {
     opacity: 1;
   }
 }
+
+/* Card spin animation - continuous Z rotation like a wheel */
+@keyframes cardSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pattern background scroll animations */
+@keyframes patternScrollRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes patternScrollLeft {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
