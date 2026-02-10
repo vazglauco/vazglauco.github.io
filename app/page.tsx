@@ -5,6 +5,7 @@ import { AboutMeSection } from "@/components/about-me-section"
 import { SkillsPanel } from "@/components/skills-panel"
 import { ServicesSection } from "@/components/services-section"
 import { ExperienceTimeline } from "@/components/experience-timeline"
+import { ProjectsSection } from "@/components/projects-section"
 import { HorizontalScrollLayout } from "@/components/horizontal-scroll-layout"
 
 export default function Home() {
@@ -14,11 +15,12 @@ export default function Home() {
         <SplitHome />
         <AboutMeSection />
       </HorizontalScrollLayout>
-      <HorizontalScrollLayout>
+      <HorizontalScrollLayout extraScrollVh={200}>
         <SkillsPanel />
         <ServicesSection />
       </HorizontalScrollLayout>
       <ExperienceTimeline />
+      <ProjectsSection />
     </>
   )
 }

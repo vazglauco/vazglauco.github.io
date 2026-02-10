@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useRef } from "react"
+
 const SERVICES = [
   {
     number: "01",
@@ -46,8 +48,34 @@ const STICKY_CONFIG = [
 ]
 
 export function ServicesSection() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleScroll = () => {
+      const hsl = container.closest("[data-hsl-extra-start]") as HTMLElement | null
+      if (!hsl) return
+
+      const start = parseFloat(hsl.dataset.hslExtraStart || "0")
+      const end = parseFloat(hsl.dataset.hslExtraEnd || "0")
+      if (end <= start) return
+
+      const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)))
+      container.scrollTop = progress * (container.scrollHeight - container.clientHeight)
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    const timer = setTimeout(handleScroll, 300)
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      clearTimeout(timer)
+    }
+  }, [])
+
   return (
-    <div className="relative bg-[#111111] text-white">
+    <div ref={containerRef} className="relative bg-[#111111] text-white h-full overflow-hidden">
       {/* Header */}
       <div className="px-8 md:px-16 lg:px-24 pt-24 pb-16">
         <h2 className="text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[8rem] font-black tracking-tight leading-[0.9] text-white uppercase">

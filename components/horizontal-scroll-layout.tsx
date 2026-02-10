@@ -60,7 +60,21 @@ export function HorizontalScrollLayout({ children, extraScrollVh = 0 }: Horizont
       tl.to({}, { duration: extraScroll })
     }
 
+    // Expose extra-scroll boundaries as data attributes for child components
+    let updateHslAttrs: (() => void) | null = null
+    if (extraScroll > 0) {
+      updateHslAttrs = () => {
+        const st = tl.scrollTrigger
+        if (!st) return
+        container.dataset.hslExtraStart = String(Math.round(st.start + transitionScroll))
+        container.dataset.hslExtraEnd = String(Math.round(st.end))
+      }
+      setTimeout(updateHslAttrs, 100)
+      ScrollTrigger.addEventListener("refresh", updateHslAttrs)
+    }
+
     return () => {
+      if (updateHslAttrs) ScrollTrigger.removeEventListener("refresh", updateHslAttrs)
       tl.scrollTrigger?.kill()
       tl.kill()
     }

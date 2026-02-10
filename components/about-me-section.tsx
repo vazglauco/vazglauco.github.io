@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react"
 
-const TITLE = "SOBRE MIM"
-
 const LINES = [
   "Eu amo programar.",
   "Uso minha paixão e habilidades para construir produtos digitais e experiências.",
@@ -21,7 +19,7 @@ export function AboutMeSection() {
       const vh = window.innerHeight
 
       // The horizontal transition takes 1*vw of scroll.
-      // After that, we have 300vh of extra scroll for text animation.
+      // After that, we have extra scroll for text animation.
       const transitionEnd = vw
       const internalScrollLength = 1.5 * vh
 
@@ -31,7 +29,6 @@ export function AboutMeSection() {
       // Move text block upward as scroll progresses
       if (textBlockRef.current) {
         const textHeight = textBlockRef.current.scrollHeight
-        // Start from below center, end above center
         const startY = vh * 0.35
         const endY = -(textHeight - vh * 0.3)
         const currentY = startY + progress * (endY - startY)
@@ -44,7 +41,6 @@ export function AboutMeSection() {
         const rect = line.getBoundingClientRect()
         const lineCenter = rect.top + rect.height / 2
 
-        // Highlight zone: between 20% and 55% of viewport height
         const zoneTop = vh * 0.2
         const zoneBottom = vh * 0.55
 
@@ -71,12 +67,11 @@ export function AboutMeSection() {
         </h2>
       </div>
 
-      {/* Scrolling text block — centered horizontally, text aligned left */}
+      {/* Scrolling text block */}
       <div
         ref={textBlockRef}
         className="absolute inset-x-0 flex flex-col items-center px-8 md:px-16 lg:px-24"
       >
-        {/* Body lines */}
         <div className="max-w-5xl w-full text-left">
           {LINES.map((text, i) => (
             <p
