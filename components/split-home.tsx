@@ -80,30 +80,20 @@ export function SplitHome() {
 
     isBreathingRef.current = true
 
-    gsap.to(card, {
-      rotateY: 0,
-      rotateX: Math.round(Math.sin(1.0) * 24),
-      duration: 1.2,
-      ease: "power2.inOut",
-      overwrite: "auto",
-      onComplete() {
-        if (!isBreathingRef.current) return
-        const proxy = { t: 0 }
-        lootTlRef.current = gsap.to(proxy, {
-          t: Math.PI * 2,
-          duration: 12,
-          ease: "none",
-          repeat: -1,
-          onUpdate() {
-            if (!cardRef.current) return
-            gsap.set(cardRef.current, {
-              rotateY: Math.sin(proxy.t) * 32,
-              rotateX: Math.sin(proxy.t * 2 + 1.0) * 18,
-            })
-          }
-        }) as unknown as gsap.core.Timeline
+    const proxy = { t: 0 }
+    lootTlRef.current = gsap.to(proxy, {
+      t: Math.PI * 2,
+      duration: 14,
+      ease: "none",
+      repeat: -1,
+      onUpdate() {
+        if (!cardRef.current) return
+        gsap.set(cardRef.current, {
+          rotateY: Math.sin(proxy.t) * 22,
+          rotateX: Math.sin(proxy.t * 2 + 1.0) * 14,
+        })
       }
-    })
+    }) as unknown as gsap.core.Timeline
   }, [])
 
   const cardCenterRef = useRef({ x: 0, y: 0 })
