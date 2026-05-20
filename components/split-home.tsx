@@ -7,48 +7,47 @@ import Image from 'next/image'
 
 /* ───── background pattern suits ───── */
 
+const hash = (a: number, b: number) => (a * 31 + b * 17 + a * b * 7) % 97
+
 function PatternBackground({ variant }: { variant: 'dark' | 'light' }) {
 	const isDark = variant === 'dark'
 	const suits = isDark ? ['♠', '♣'] : ['♥', '♦']
-	const suitColor = isDark ? 'text-white/[0.06]' : 'text-red-400/[0.08]'
-
+	const baseColor = isDark ? '255,255,255' : '220,38,38'
 	const rows = 8
-	const itemsPerRow = 12
-
-	const buildRow = (rowIdx: number) => {
-		const items = []
-		for (let i = 0; i < itemsPerRow; i++) {
-			const suit = suits[(rowIdx + i) % suits.length]
-			items.push(
-				<span key={i} className={`flex-shrink-0 ${suitColor} mx-10 md:mx-14 lg:mx-20`}>
-					{suit}
-				</span>,
-			)
-		}
-		return items
-	}
+	const cols = 12
 
 	return (
-		<div
-			className='absolute inset-0 overflow-hidden pointer-events-none select-none'
-			aria-hidden
-		>
+		<div className='absolute inset-0 overflow-hidden pointer-events-none select-none' aria-hidden>
 			<div className='flex flex-col justify-between h-full py-6'>
-				{Array.from({ length: rows }).map((_, r) => {
-					const goRight = r % 2 === 0
-					return (
-						<div
-							key={r}
-							className='flex items-center whitespace-nowrap text-xl md:text-2xl lg:text-3xl'
-							style={{
-								animation: `${goRight ? 'patternScrollRight' : 'patternScrollLeft'} ${25 + r * 3}s linear infinite`,
-							}}
-						>
-							{buildRow(r)}
-							{buildRow(r)}
-						</div>
-					)
-				})}
+				{Array.from({ length: rows }).map((_, r) => (
+					<div
+						key={r}
+						className='flex justify-between items-center px-8 md:px-12'
+						style={{ transform: r % 2 === 1 ? 'translateX(4%)' : 'none' }}
+					>
+						{Array.from({ length: cols }, (_, i) => {
+							const suit = suits[(r + i) % suits.length]
+							const h = hash(r, i)
+							const peakOp   = 0.04 + (h % 8) / 100
+							const valleyOp = 0.005 + ((h * 3) % 4) / 100
+							const duration = 1.8 + (hash(i, r) % 55) / 10
+							const delay    = (hash(r + 1, i + 1) % 80) / 10
+							return (
+								<span
+									key={i}
+									className='text-xl md:text-2xl lg:text-3xl'
+									style={{
+										color: `rgba(${baseColor}, ${peakOp})`,
+										['--valley' as string]: valleyOp,
+										animation: `suitBreath ${duration}s ${delay}s ease-in-out infinite`,
+									}}
+								>
+									{suit}
+								</span>
+							)
+						})}
+					</div>
+				))}
 			</div>
 		</div>
 	)
