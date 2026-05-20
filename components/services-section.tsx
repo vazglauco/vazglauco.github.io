@@ -1,13 +1,14 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import Image from "next/image"
 
 const SERVICES = [
   {
     number: "01",
-    title: "Full-Stack Development",
+    title: "Desenvolvimento Full Stack",
     description:
-      "Da interação no frontend até APIs robustas no backend, construo soluções web completas. Trabalho com stacks modernas para entregar aplicações escaláveis, mantíveis e prontas para o mundo real.",
+      "Da interface ao servidor, construo soluções completas. Trabalho com stacks modernas no frontend e no backend, entregando aplicações escaláveis, mantíveis e prontas para o mundo real.",
     skills: [
       "React, Angular, Next.js",
       "Node.js, NestJS, Express",
@@ -16,24 +17,24 @@ const SERVICES = [
   },
   {
     number: "02",
-    title: "UI/UX & Frontend",
+    title: "Visão de Produto",
     description:
-      "Design é mais do que aparência — é sobre clareza e conexão. Crio interfaces limpas, responsivas e intuitivas em qualquer dispositivo. Meu foco está em acessibilidade e experiências fluidas.",
+      "Entendo o negócio antes de escrever a primeira linha. Participo da definição de escopo, priorização de funcionalidades e alinhamento com stakeholders. Transformo requisitos difusos em decisões claras e entregas com propósito.",
     skills: [
-      "Next.js, TailwindCSS, GSAP",
-      "Figma to Code",
-      "HTML, CSS, JavaScript, TypeScript",
+      "Definição de escopo e requisitos",
+      "Priorização e roadmap",
+      "Alinhamento com stakeholders",
     ],
   },
   {
     number: "03",
-    title: "Arquitetura & DevOps",
+    title: "Colaboração no Time",
     description:
-      "Além do código, atuo na automação e entrega contínua, garantindo estabilidade e eficiência em cada etapa. Projeto arquiteturas escaláveis e pipelines otimizados.",
+      "Trabalho bem com pessoas. Organizo backlogs, participo de cerimônias ágeis, facilito discussões entre áreas e oriento outros desenvolvedores. Acredito que um time alinhado entrega mais do que qualquer talento individual.",
     skills: [
-      "Docker, AWS, CI/CD",
-      "Microserviços, Microfrontends",
-      "PostgreSQL, MongoDB, Redis",
+      "Gestão de backlog e tasks",
+      "Discussão entre áreas",
+      "Orientação e code review",
     ],
   },
 ]
@@ -55,11 +56,11 @@ export function ServicesSection() {
     if (!container) return
 
     const handleScroll = () => {
-      const hsl = container.closest("[data-hsl-extra-start]") as HTMLElement | null
+      const hsl = container.closest("[data-extra-scroll-start]") as HTMLElement | null
       if (!hsl) return
 
-      const start = parseFloat(hsl.dataset.hslExtraStart || "0")
-      const end = parseFloat(hsl.dataset.hslExtraEnd || "0")
+      const start = parseFloat(hsl.dataset.extraScrollStart || "0")
+      const end = parseFloat(hsl.dataset.extraScrollEnd || "0")
       if (end <= start) return
 
       const progress = Math.max(0, Math.min(1, (window.scrollY - start) / (end - start)))
@@ -75,25 +76,44 @@ export function ServicesSection() {
   }, [])
 
   return (
-    <div ref={containerRef} className="relative bg-[#111111] text-white h-full overflow-hidden">
+    <div ref={containerRef} className="relative bg-[#111111] text-white">
       {/* Header */}
       <div className="px-8 md:px-16 lg:px-24 pt-24 pb-16">
-        <h2 className="text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[8rem] font-black tracking-tight leading-[0.9] text-white uppercase">
-          WHAT I DO <span className="text-neutral-600">/</span>
-        </h2>
+        <div className="flex items-start gap-5 mb-6">
+          <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
+          <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-white uppercase">
+            O QUE FAÇO <span className="text-neutral-600">/</span>
+          </h2>
+        </div>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-12 md:mt-16 max-w-4xl ml-auto mr-8 md:mr-16">
           <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-200/60 font-mono shrink-0 pt-1">
-            (SERVICES)
+            (SERVIÇOS)
           </span>
           <p className="text-sm md:text-base text-neutral-400 leading-relaxed max-w-lg">
-            Sou especialista em construir aplicações web full-stack que são rápidas, confiáveis e fáceis de usar. Com uma base sólida em tecnologias de frontend e backend, ajudo a transformar ideias em realidade.
+            Atuo em todas as etapas do desenvolvimento de software: planejamento e análise de requisitos, passando por arquitetura, codificação e testes, até o deploy e a manutenção contínua. Além da parte técnica, participo também dos momentos de definição de produto: onde a ideia ainda está tomando forma.
           </p>
         </div>
       </div>
 
-      {/* Services — sticky stacking cards */}
-      <div className="flex flex-col px-8 md:px-16 lg:px-24 pt-12">
+      {/* Services — image left + sticky stacking cards right */}
+      <div className="flex items-end gap-0 pt-12">
+
+        {/* Ilustração sticky canto inferior esquerdo */}
+        <div className="hidden md:block shrink-0 w-80 lg:w-[26rem] self-stretch pl-8 md:pl-12 lg:pl-16">
+          <div className="sticky top-[30vh]">
+            <Image
+              src="/ilustra_trampos.png"
+              alt="Ilustração"
+              width={500}
+              height={600}
+              className="object-contain w-full h-auto"
+            />
+          </div>
+        </div>
+
+        {/* Cards */}
+        <div className="flex flex-col flex-1 px-8 md:px-12 lg:px-16">
         {SERVICES.map((service, i) => {
           const config = STICKY_CONFIG[i]
 
@@ -108,14 +128,14 @@ export function ServicesSection() {
                 <span className="text-xl md:text-3xl lg:text-4xl font-bold text-neutral-600 shrink-0">
                   ({service.number})
                 </span>
-                <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold italic tracking-tight text-amber-100/90">
+                <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold italic tracking-tight" style={{ color: "rgb(235 189 51)" }}>
                   {service.title}
                 </h3>
               </div>
 
               {/* Content — always visible, gets covered by next sticky card */}
               <div className="flex flex-col md:grid md:grid-cols-12 md:gap-x-8 min-h-[30vh] md:min-h-[40vh] pt-2">
-                <div className="md:col-span-7 md:col-start-6 flex flex-col gap-6 pt-4">
+                <div className="md:col-span-5 md:col-start-8 flex flex-col gap-6 pt-4">
                   <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-[40ch] text-balance">
                     {service.description}
                   </p>
@@ -138,6 +158,7 @@ export function ServicesSection() {
             </div>
           )
         })}
+        </div>
       </div>
 
       {/* Spacer so the last card's content is visible before next section */}

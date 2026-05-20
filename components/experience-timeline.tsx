@@ -3,45 +3,91 @@
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import Image from "next/image"
 
 gsap.registerPlugin(ScrollTrigger)
 
 const EXPERIENCES = [
   {
-    period: "2024 — Present",
-    role: "Senior Full-Stack Developer",
-    company: "Tech Company",
-    location: "São Paulo, BR",
+    period: "out 2025 — presente",
+    role: "Desenvolvedor Front-end",
+    company: "DOMVS iT · Mentes Notáveis",
+    location: "São Paulo, SP",
     description:
-      "Liderança técnica no desenvolvimento de aplicações web escaláveis com React, Next.js e Node.js. Responsável pela arquitetura de microfrontends e integração de APIs.",
-    stack: ["Next.js", "TypeScript", "Node.js", "AWS", "PostgreSQL"],
+      "Atuei no desenvolvimento de diferentes frentes de uma plataforma de educação complementar gamificada. Construí painéis administrativos com React e Next.js e as aplicações principais em Angular, responsáveis pela experiência dos alunos. Também desenvolvi jogos educacionais com TypeScript e Phaser.",
+    stack: ["Angular", "React", "Next.js", "TypeScript", "Phaser"],
   },
   {
-    period: "2022 — 2024",
-    role: "Full-Stack Developer",
-    company: "Digital Agency",
-    location: "São Paulo, BR",
+    period: "dez 2024 — jun 2025",
+    role: "Software Engineer Fullstack",
+    company: "Innvo Labs · Porto Seguro",
+    location: "São Paulo, SP · Remoto",
     description:
-      "Desenvolvimento de soluções web completas, desde a concepção do design até deploy em produção. Colaboração direta com equipes de produto e design.",
-    stack: ["React", "Angular", "NestJS", "Docker", "MongoDB"],
+      "Atuei em produtos voltados à jornada de contratação de seguros. No Portal das Imobiliárias, desenvolvi novas funcionalidades como fullstack. No sistema de Capitalização, liderei tecnicamente a implementação de um novo método de pagamento, participando da definição da arquitetura e conduzindo a integração com o gateway interno da Porto Seguro.",
+    stack: ["React", "Angular", "Node.js", "TypeScript"],
   },
   {
-    period: "2020 — 2022",
-    role: "Frontend Developer",
-    company: "Startup",
-    location: "São Paulo, BR",
+    period: "jun 2024 — dez 2024",
+    role: "Software Engineer Frontend",
+    company: "Sinqia",
+    location: "São Paulo, SP · Híbrido",
     description:
-      "Construção de interfaces responsivas e acessíveis, implementação de design systems e otimização de performance no frontend.",
-    stack: ["React", "TypeScript", "TailwindCSS", "GraphQL", "Firebase"],
+      "Atuei na modernização de um sistema legado do mercado financeiro, originado nos anos 90. Defini e implementei a estratégia de migração com micro frontends em Angular, conduzindo a evolução incremental da aplicação. Em alguns fluxos, realizamos migração completa; em outros, aplicamos estrangulamento integrando o legado em Java.",
+    stack: ["Angular", "Microfrontends", "TypeScript", "Java"],
   },
   {
-    period: "2018 — 2020",
-    role: "Junior Developer",
-    company: "Software House",
-    location: "São Paulo, BR",
+    period: "fev 2022 — fev 2024",
+    role: "Software Engineer Frontend / Fullstack",
+    company: "AgileThought · Santander",
+    location: "São Paulo, SP",
     description:
-      "Desenvolvimento de funcionalidades em aplicações web, manutenção de sistemas legados e aprendizado contínuo de novas tecnologias.",
-    stack: ["JavaScript", "HTML/CSS", "Node.js", "MySQL", "Git"],
+      "Trabalhei em três frentes dentro do ambiente corporativo do banco. Desenvolvi micro frontends em Angular para jornadas de contratação de seguros, evoluí um sistema interno de gestão de contratos atuando também no back-end em Java, e liderei tecnicamente o desenvolvimento front-end da segunda versão do painel PJ com integração ao Open Finance.",
+    stack: ["Angular", "Microfrontends", "Java", "Open Finance", "TypeScript"],
+  },
+  {
+    period: "abr 2021 — set 2021",
+    role: "Software Engineer Frontend",
+    company: "Poupachef",
+    location: "São Paulo, SP",
+    description:
+      "Atuei no desenvolvimento e sustentação de funcionalidades nos sistemas web da empresa, contribuindo na construção e manutenção das interfaces com React.",
+    stack: ["React", "JavaScript", "Git"],
+  },
+  {
+    period: "out 2019 — set 2020",
+    role: "Software Engineer Fullstack",
+    company: "Conquest · Guide Investimentos",
+    location: "São Paulo, SP",
+    description:
+      "Contribuí no desenvolvimento de um sistema de backoffice para operações internas, atuando tanto no front-end em Angular quanto no back-end em Ruby on Rails. Também apoiei desenvolvedores mais juniores na orientação sobre processos e fundamentos de desenvolvimento.",
+    stack: ["Angular", "Ruby on Rails", "REST APIs", "Git"],
+  },
+  {
+    period: "fev 2019 — out 2019",
+    role: "Software Engineer Frontend",
+    company: "Indra · Santander",
+    location: "São Paulo, SP",
+    description:
+      "Fui responsável pelo desenvolvimento de um dashboard para controle de dados internos do Santander, atuando na construção do front-end da aplicação com Angular.",
+    stack: ["Angular", "TypeScript", "JavaScript"],
+  },
+  {
+    period: "jun 2018 — jan 2019",
+    role: "Software Engineer Frontend",
+    company: "GFT · Serasa Experian",
+    location: "São Paulo, SP",
+    description:
+      "Alocado na Serasa Experian, atuei no desenvolvimento de novas funcionalidades em um dashboard de insights georreferenciados, contribuindo na evolução da aplicação e melhorias na visualização de dados. Trabalhei principalmente no front-end com Angular.",
+    stack: ["Angular", "JavaScript", "Git"],
+  },
+  {
+    period: "mar 2017 — mai 2018",
+    role: "Software Engineer Fullstack",
+    company: "Creditoo",
+    location: "São Paulo, SP",
+    description:
+      "Atuei desde o início do desenvolvimento da segunda versão da aplicação de uma fintech de crédito consignado com contratação 100% online. Contribuí na construção do front-end em Angular e no back-end em PHP com Laravel, além de atuar na sustentação de sistemas legados e APIs existentes.",
+    stack: ["Angular", "PHP", "Laravel", "JavaScript"],
   },
 ]
 
@@ -105,9 +151,12 @@ export function ExperienceTimeline() {
     <div ref={sectionRef} className="relative bg-white text-black">
       {/* Header */}
       <div className="px-8 md:px-16 lg:px-24 pt-24 pb-16">
-        <h2 className="text-[3.5rem] md:text-[5rem] lg:text-[7rem] xl:text-[8rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-          EXPERIENCE <span className="text-neutral-300">/</span>
-        </h2>
+        <div className="flex items-start gap-5 mb-6">
+          <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
+          <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-black uppercase">
+            EXPERIENCE <span className="text-neutral-300">/</span>
+          </h2>
+        </div>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-12 md:mt-16 max-w-4xl ml-auto mr-8 md:mr-16">
           <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono shrink-0 pt-1">
@@ -120,15 +169,16 @@ export function ExperienceTimeline() {
         </div>
       </div>
 
-      {/* Timeline entries */}
-      <div className="px-8 md:px-16 lg:px-24 pb-32">
+      {/* Timeline entries + imagem sticky direita */}
+      <div className="flex items-start">
+        <div className="flex-1 px-8 md:px-16 lg:px-24 pb-32">
         {EXPERIENCES.map((exp, i) => (
           <div
             key={i}
             ref={(el) => {
               if (el) entriesRef.current[i] = el
             }}
-            className="border-t border-neutral-200 min-h-[70vh] md:min-h-[80vh] flex flex-col md:grid md:grid-cols-12 md:gap-x-8 relative"
+            className="border-t border-neutral-200 md:min-h-[80vh] flex flex-col md:grid md:grid-cols-12 md:gap-x-8 relative"
           >
             {/* Left — Period (sticky) */}
             <div className="md:col-span-5 pt-8 md:pt-12">
@@ -198,6 +248,20 @@ export function ExperienceTimeline() {
         ))}
         {/* Bottom border */}
         <div className="border-t border-neutral-200" />
+        </div>
+
+        {/* Ilustração sticky canto direito */}
+        <div className="hidden md:block shrink-0 w-72 lg:w-[26rem] self-stretch pr-8 md:pr-12 lg:pr-16">
+          <div className="sticky top-[30vh]">
+            <Image
+              src="/ilustra_trampos_2.png"
+              alt="Ilustração"
+              width={500}
+              height={600}
+              className="object-contain w-full h-auto"
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

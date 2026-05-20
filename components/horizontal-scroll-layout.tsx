@@ -1,96 +1,127 @@
 "use client"
 
-import { useRef, useEffect, Children } from "react"
+import { useRef, useEffect, Children, useState } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
 gsap.registerPlugin(ScrollTrigger)
 
 interface HorizontalScrollLayoutProps {
-  children: React.ReactNode[]
-  /** Extra scroll distance (in vh units) for internal panel animations (e.g. text scroll). */
+  children: React.ReactNode
   extraScrollVh?: number
+  className?: string
 }
 
-/**
- * Horizontal scroll layout with support for internal panel animations.
- *
- * Phase 1: horizontal slide between panels (driven by scroll)
- * Phase 2: panels with internal scroll keep the track still while
- *          extra scroll continues (panels read window.scrollY for their animations)
- */
-export function HorizontalScrollLayout({ children, extraScrollVh = 0 }: HorizontalScrollLayoutProps) {
+export function HorizontalScrollLayout({
+  children,
+  extraScrollVh = 0,
+  className = ""
+}: HorizontalScrollLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)")
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+
+  useEffect(() => {
+    if (isMobile) return
+
     const container = containerRef.current
     const track = trackRef.current
     if (!container || !track) return
 
-    const panelCount = Children.count(children)
-    if (panelCount <= 1) return
+    const childArray = Children.toArray(children)
+    const panelCount = childArray.length
+
+    if (panelCount < 1) return
 
     const vw = window.innerWidth
     const vh = window.innerHeight
-    const transitionScroll = (panelCount - 1) * vw
-    const extraScroll = (extraScrollVh / 100) * vh
-    const totalScroll = transitionScroll + extraScroll
 
-    // Timeline: horizontal transition takes a portion, rest is for internal animations
+    const horizontalScrollDistance = (panelCount - 1) * vw
+    const extraScrollDistance = (extraScrollVh / 100) * vh
+    const totalScrollDistance = horizontalScrollDistance + extraScrollDistance
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
         pin: true,
-        scrub: 0.8,
-        end: () => `+=${totalScroll}`,
+        scrub: 1,
+        end: () => `+=${totalScrollDistance}`,
+        anticipatePin: 1,
         invalidateOnRefresh: true,
       },
     })
 
-    // Horizontal slide: only during the transition portion
-    tl.to(track, {
-      x: -transitionScroll,
-      duration: transitionScroll,
-      ease: "none",
-    })
-
-    // Extra scroll time: track stays still, scroll continues
-    if (extraScroll > 0) {
-      tl.to({}, { duration: extraScroll })
+    if (horizontalScrollDistance > 0) {
+      tl.to(track, {
+        x: -horizontalScrollDistance,
+        duration: horizontalScrollDistance,
+        ease: "none",
+      })
     }
 
-    // Expose extra-scroll boundaries as data attributes for child components
-    let updateHslAttrs: (() => void) | null = null
-    if (extraScroll > 0) {
-      updateHslAttrs = () => {
+    if (extraScrollDistance > 0) {
+      tl.to({}, { duration: extraScrollDistance })
+    }
+
+    let updateScrollBounds: (() => void) | null = null
+    if (extraScrollDistance > 0) {
+      updateScrollBounds = () => {
         const st = tl.scrollTrigger
         if (!st) return
-        container.dataset.hslExtraStart = String(Math.round(st.start + transitionScroll))
-        container.dataset.hslExtraEnd = String(Math.round(st.end))
+        container.dataset.extraScrollStart = String(Math.round(st.start + horizontalScrollDistance))
+        container.dataset.extraScrollEnd = String(Math.round(st.end))
       }
-      setTimeout(updateHslAttrs, 100)
-      ScrollTrigger.addEventListener("refresh", updateHslAttrs)
+      setTimeout(updateScrollBounds, 100)
+      ScrollTrigger.addEventListener("refresh", updateScrollBounds)
     }
 
     return () => {
-      if (updateHslAttrs) ScrollTrigger.removeEventListener("refresh", updateHslAttrs)
+      if (updateScrollBounds) {
+        ScrollTrigger.removeEventListener("refresh", updateScrollBounds)
+      }
       tl.scrollTrigger?.kill()
       tl.kill()
     }
-  }, [children, extraScrollVh])
+  }, [children, extraScrollVh, isMobile])
 
-  const panelCount = Children.count(children)
+  const childArray = Children.toArray(children)
+  const panelCount = childArray.length
+
+  if (isMobile) {
+    return (
+      <div className={className}>
+        {childArray.map((child, index) => (
+          <div key={index} className="min-h-screen">
+            {child}
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
-    <div ref={containerRef} className="overflow-hidden">
+    <div
+      ref={containerRef}
+      className={`relative overflow-hidden ${className}`}
+    >
       <div
         ref={trackRef}
         className="flex flex-nowrap"
         style={{ width: `${panelCount * 100}vw` }}
       >
-        {Children.map(children, (child, i) => (
-          <div key={i} className="w-screen h-screen flex-shrink-0">
+        {childArray.map((child, index) => (
+          <div
+            key={index}
+            className="w-screen h-screen flex-shrink-0"
+          >
             {child}
           </div>
         ))}

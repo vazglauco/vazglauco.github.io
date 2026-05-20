@@ -1,8 +1,11 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Fira_Code } from "next/font/google"
+import Script from "next/script"
 import "./globals.css"
-import { LoadingProvider } from "@/contexts/LoadingContext"
+import { Header } from "@/components/header"
+
+const GA_ID = "G-PXMB866NT3"
 
 const firaCode = Fira_Code({ subsets: ["latin"] })
 
@@ -26,10 +29,23 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className="dark">
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
+      </head>
       <body className={firaCode.className}>
-        <LoadingProvider>
-          {children}
-        </LoadingProvider>
+        <Header />
+        {children}
       </body>
     </html>
   )

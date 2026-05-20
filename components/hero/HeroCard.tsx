@@ -6,6 +6,7 @@ import { useCardAnimation } from "@/hooks/useCardAnimation"
 import { useFloatingAnimation } from "@/hooks/useFloatingAnimation"
 import { useShineEffect } from "@/hooks/useShineEffect"
 import { useThemeAwareShadow } from "@/hooks/useThemeAwareShadow"
+import { useBreathingEffect } from "@/hooks/useBreathingEffect"
 import { useLoading } from "@/contexts/LoadingContext"
 
 export function HeroCard() {
@@ -13,6 +14,8 @@ export function HeroCard() {
   const floatingRef = useRef<HTMLDivElement>(null)
   const shineRef = useRef<HTMLDivElement>(null)
   const shadowRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
+  const breathRef = useRef<HTMLDivElement>(null)
 
   const { phase, setPhase, config, isLoadingComplete } = useLoading()
   const [hasAnimated, setHasAnimated] = useState(false)
@@ -112,6 +115,7 @@ export function HeroCard() {
   useFloatingAnimation({ enabled: isLoadingComplete, floatingRef })
   useShineEffect({ enabled: isLoadingComplete, shineRef })
   useThemeAwareShadow({ enabled: isLoadingComplete, shadowRef })
+  useBreathingEffect({ enabled: isLoadingComplete, cardRef: breathRef, glowRef })
 
   return (
     <>
@@ -124,7 +128,10 @@ export function HeroCard() {
             style={{ perspective: "1000px" }}
           >
             {/* Glow de fundo pulsante */}
-            <div className="absolute -inset-3 md:-inset-6 lg:-inset-8 blur-xl md:blur-2xl lg:blur-3xl opacity-40 bg-gradient-radial from-yellow-500/50 via-red-500/30 to-transparent rounded-full animate-pulse" />
+            <div ref={glowRef} className="absolute -inset-3 md:-inset-6 lg:-inset-8 blur-xl md:blur-2xl lg:blur-3xl opacity-40 bg-gradient-radial from-yellow-500/50 via-red-500/30 to-transparent rounded-full" />
+
+            {/* Wrapper de respiração - isola o scale do breathing do overflow-hidden */}
+            <div ref={breathRef}>
 
             {/* Wrapper que rotaciona - contém carta e shine */}
             <div
@@ -149,6 +156,7 @@ export function HeroCard() {
                   mixBlendMode: "overlay"
                 }}
               />
+            </div>
             </div>
           </div>
         </div>

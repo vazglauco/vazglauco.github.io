@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { ExternalLink } from "lucide-react"
@@ -58,29 +58,74 @@ const PROJECTS: Project[] = [
   },
 ]
 
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <div className="relative rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 p-6 flex flex-col gap-5">
+      <span className="absolute top-5 right-6 text-[0.6rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
+        ({String(index + 1).padStart(2, "0")})
+      </span>
+
+      <div className="flex flex-col gap-3 flex-1">
+        <h3 className="text-xl font-bold tracking-tight text-black leading-tight pr-8">
+          {project.title}
+        </h3>
+        <p className="text-sm text-neutral-500 leading-relaxed">
+          {project.description}
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          {project.stack.map((tech, j) => (
+            <span
+              key={j}
+              className="px-3 py-1 text-xs font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 self-start px-4 py-2 text-sm font-semibold text-white bg-black rounded-full transition-all active:scale-95"
+      >
+        {project.label || "Visitar"}
+        <ExternalLink className="w-3.5 h-3.5" />
+      </a>
+    </div>
+  )
+}
+
 export function ProjectsSection() {
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement[]>([])
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const section = sectionRef.current
+    const mq = window.matchMedia("(max-width: 1023px)")
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+
+  useEffect(() => {
+    if (isMobile) return
+
+    const container = containerRef.current
     const track = trackRef.current
-    if (!section || !track) return
+    if (!container || !track) return
 
     const ctx = gsap.context(() => {
-      const getScrollAmount = () => {
-        const trackWidth = track.scrollWidth
-        const viewportWidth = window.innerWidth
-        return -(trackWidth - viewportWidth)
-      }
+      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth)
 
-      // Main horizontal scroll — pin the section, slide the track left
       const tween = gsap.to(track, {
         x: getScrollAmount,
         ease: "none",
         scrollTrigger: {
-          trigger: section,
+          trigger: container,
           start: "top top",
           end: () => `+=${Math.abs(getScrollAmount())}`,
           pin: true,
@@ -89,118 +134,141 @@ export function ProjectsSection() {
         },
       })
 
-      // Each card fades/slides in from the right as it enters the viewport
       cardsRef.current.forEach((card) => {
         if (!card) return
-
         gsap.fromTo(
           card,
-          { x: 120, opacity: 0, scale: 0.92 },
+          { x: 100, opacity: 0, scale: 0.93 },
           {
             x: 0,
             opacity: 1,
             scale: 1,
-            duration: 0.8,
             ease: "power2.out",
             scrollTrigger: {
               trigger: card,
               containerAnimation: tween,
-              start: "left 95%",
-              end: "left 60%",
+              start: "left 90%",
+              end: "left 55%",
               scrub: 0.5,
             },
           }
         )
       })
-    }, section)
+    }, container)
 
     return () => ctx.revert()
-  }, [])
+  }, [isMobile])
 
-  return (
-    <section
-      ref={sectionRef}
-      id="projetos"
-      className="relative bg-white"
-    >
-      <div className="h-screen flex flex-col justify-center overflow-hidden">
-        {/* Header — always visible, no separate scroll trigger */}
-        <div className="px-8 md:px-16 lg:px-24 mb-8 md:mb-12 pt-16 shrink-0">
+  // Mobile: lista vertical simples
+  if (isMobile) {
+    return (
+      <section id="projetos" className="relative bg-white">
+        <div className="px-8 pt-20 pb-12">
           <div className="flex items-start gap-5 mb-6">
-            <span className="block w-[4px] h-[4rem] md:h-[6rem] bg-amber-600 mt-3 rounded-full" />
-            <h2 className="text-[2.5rem] md:text-[4rem] lg:text-[5.5rem] font-black tracking-tight leading-[0.9] text-black uppercase">
+            <span className="block w-[4px] h-[3rem] bg-red-500 mt-2 rounded-full" />
+            <h2 className="text-[2rem] font-black tracking-tight leading-[0.9] text-black uppercase">
               PROJETOS <span className="text-neutral-300">/</span>
             </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4 md:gap-16 max-w-4xl ml-auto mr-8 md:mr-16">
-            <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono shrink-0 pt-1">
+          <div className="flex flex-col gap-3 mt-10">
+            <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono">
               (PORTFOLIO)
             </span>
-            <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-lg">
+            <p className="text-sm text-neutral-500 leading-relaxed max-w-lg">
               Projetos pessoais e profissionais que refletem minha paixão por
               criar soluções digitais com propósito e qualidade.
             </p>
           </div>
         </div>
 
-        {/* Horizontal cards track */}
+        <div className="px-8 pb-20 flex flex-col gap-5">
+          {PROJECTS.map((project, i) => (
+            <ProjectCard key={i} project={project} index={i} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  // Desktop: scroll horizontal com GSAP
+  return (
+    <section
+      ref={containerRef}
+      id="projetos"
+      className="relative bg-white overflow-hidden"
+    >
+      <div className="h-screen flex items-center">
         <div
           ref={trackRef}
-          className="flex items-center gap-8 px-8 md:px-16 lg:px-24 flex-nowrap"
+          className="flex flex-nowrap items-center"
           style={{ width: "max-content" }}
         >
-          {PROJECTS.map((project, i) => (
-            <div
-              key={i}
-              ref={(el) => {
-                if (el) cardsRef.current[i] = el
-              }}
-              className="group relative flex-shrink-0 w-[340px] md:w-[400px] lg:w-[440px] h-[420px] md:h-[460px] rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 p-8 flex flex-col justify-between transition-shadow duration-300 hover:shadow-2xl hover:shadow-neutral-200/50"
-            >
-              {/* Card number */}
-              <span className="absolute top-6 right-8 text-[0.6rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
-                ({String(i + 1).padStart(2, "0")})
-              </span>
-
-              {/* Content */}
-              <div className="flex flex-col gap-4">
-                <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-black leading-tight">
-                  {project.title}
-                </h3>
-
-                <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-[35ch]">
-                  {project.description}
-                </p>
-
-                {/* Tech stack */}
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {project.stack.map((tech, j) => (
-                    <span
-                      key={j}
-                      className="px-3 py-1.5 text-xs font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+          {/* Cabeçalho fixo (primeiro painel) */}
+          <div className="w-screen h-screen flex-shrink-0 flex flex-col justify-center overflow-hidden">
+            <div className="px-8 md:px-16 lg:px-24 mb-8 md:mb-12 pt-16 shrink-0">
+              <div className="flex items-start gap-5 mb-6">
+                <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
+                <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-black uppercase">
+                  PROJETOS <span className="text-neutral-300">/</span>
+                </h2>
               </div>
 
-              {/* Visit button */}
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 self-start px-5 py-2.5 text-sm font-semibold text-white bg-black rounded-full transition-all duration-300 hover:bg-amber-700 hover:scale-105 active:scale-95"
-              >
-                {project.label || "Visitar"}
-                <ExternalLink className="w-4 h-4" />
-              </a>
+              <div className="flex flex-col md:flex-row gap-4 md:gap-16 max-w-4xl ml-auto mr-8 md:mr-16">
+                <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono shrink-0 pt-1">
+                  (PORTFOLIO)
+                </span>
+                <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-lg">
+                  Projetos pessoais e profissionais que refletem minha paixão por
+                  criar soluções digitais com propósito e qualidade.
+                </p>
+              </div>
             </div>
-          ))}
 
-          {/* Spacer at the end */}
-          <div className="flex-shrink-0 w-[100px]" />
+            {/* Cards — overflow visível para se estenderem além deste painel */}
+            <div className="flex items-center gap-8 px-8 md:px-16 lg:px-24 flex-nowrap">
+              {PROJECTS.map((project, i) => (
+                <div
+                  key={i}
+                  ref={(el) => { if (el) cardsRef.current[i] = el }}
+                  className="group relative flex-shrink-0 w-[340px] md:w-[400px] lg:w-[440px] h-[420px] md:h-[460px] rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 p-8 flex flex-col justify-between transition-shadow duration-300 hover:shadow-2xl hover:shadow-neutral-200/50"
+                >
+                  <span className="absolute top-6 right-8 text-[0.6rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
+                    ({String(i + 1).padStart(2, "0")})
+                  </span>
+
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-black leading-tight">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-[35ch]">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {project.stack.map((tech, j) => (
+                        <span
+                          key={j}
+                          className="px-3 py-1.5 text-xs font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 self-start px-5 py-2.5 text-sm font-semibold text-white bg-black rounded-full transition-all duration-300 hover:bg-amber-700 hover:scale-105 active:scale-95"
+                  >
+                    {project.label || "Visitar"}
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
