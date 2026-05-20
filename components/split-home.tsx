@@ -95,31 +95,34 @@ export function SplitHome() {
 			},
 		}) as unknown as gsap.core.Timeline
 
-		// spin periódico a cada 8s
-		spinIntervalRef.current = setInterval(() => {
-			const tl = lootTlRef.current
-			const c = cardRef.current
-			if (!tl || !c || !isBreathingRef.current) return
+		// spin periódico a cada 8s via GSAP (sincronizado com rAF)
+		const scheduleSpin = () => {
+			spinIntervalRef.current = gsap.delayedCall(8, () => {
+				const tl = lootTlRef.current
+				const c = cardRef.current
+				if (!tl || !c || !isBreathingRef.current) return
 
-			tl.pause()
-			const curZ = gsap.getProperty(c, 'rotateZ') as number
-			gsap.to(c, {
-				rotateZ: curZ + 180,
-				duration: 1.0,
-				ease: 'power2.inOut',
-				overwrite: 'auto',
-				onComplete() {
-					if (isBreathingRef.current) tl.resume()
-				},
-			})
-		}, 6000)
+				tl.pause()
+				const curZ = gsap.getProperty(c, 'rotateZ') as number
+				gsap.to(c, {
+					rotateZ: curZ + 180,
+					duration: 1.2,
+					ease: 'power3.inOut',
+					onComplete() {
+						if (isBreathingRef.current) tl.resume()
+						scheduleSpin()
+					},
+				})
+			}) as unknown as ReturnType<typeof setInterval>
+		}
+		scheduleSpin()
 	}, [])
 
 	useEffect(() => {
 		startBreathing()
 
 		return () => {
-			if (spinIntervalRef.current) clearInterval(spinIntervalRef.current)
+			if (spinIntervalRef.current) (spinIntervalRef.current as unknown as gsap.core.Tween).kill()
 			if (lootTlRef.current) lootTlRef.current.kill()
 		}
 	}, [startBreathing])
@@ -213,8 +216,8 @@ export function SplitHome() {
 						{/* Stats */}
 						<div className='flex gap-6 justify-end mb-4'>
 							{[
-								{ value: '9', label: 'ANOS' },
-								{ value: '11', label: 'EMPRESAS' },
+								{ value: '10', label: 'ANOS' },
+								{ value: '9', label: 'EMPRESAS' },
 								{ value: '∞', label: 'COMMITS' },
 							].map(({ value, label }) => (
 								<div key={label} className='text-right'>
@@ -379,8 +382,8 @@ export function SplitHome() {
 					{/* Stats */}
 					<div className='flex gap-8 justify-end mb-10'>
 						{[
-							{ value: '9', label: 'ANOS' },
-							{ value: '11', label: 'EMPRESAS' },
+							{ value: '10', label: 'ANOS' },
+							{ value: '9', label: 'EMPRESAS' },
 							{ value: '∞', label: 'COMMITS' },
 						].map(({ value, label }) => (
 							<div key={label} className='text-right'>
