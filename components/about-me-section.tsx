@@ -1,189 +1,222 @@
-"use client"
+'use client'
 
-import { useEffect, useRef, useState } from "react"
-import Image from "next/image"
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 
-const LINES = [
-  "Salve! Eu sou o Glauco.",
-  "Atuo no desenvolvimento de sistemas e sites desde 2016. Construí minha carreira com forte atuação em aplicações Front End, e atualmente atuo também desenvolvendo APIs e soluções Back End, sendo um Full Stack \"coringa\", que joga em diversas posições do desenvolvimento de software, desde o planejamento estratégico, definição de arquitetura e requisitos, até a entrega final.",
-  "Atualmente vivo em São Paulo, movido pela curiosidade constante de descobrir e experimentar o novo. Fora do código, gosto de drama e suspense. Escuto muito Rap, Funk e Samba. Feijoada e bolo de cenoura.",
-  "Omo Orisa e Omo Ifa. Trago comigo a disciplina e postura que aprendi com quem veio antes.",
-]
+function LineContent({ index }: { index: number }) {
+	if (index === 0) return <>Salve.</>
+	if (index === 1)
+		return (
+			<>
+				Atuo no desenvolvimento de sistemas e sites desde <strong>2016</strong>. Construí
+				minha carreira com forte atuação em aplicações Front End, e atualmente atuo também
+				desenvolvendo APIs e soluções Back End, sendo um{' '}
+				<strong>Full Stack &ldquo;coringa&rdquo;</strong>, que joga em diversas posições do
+				desenvolvimento de software, desde o planejamento estratégico, definição de
+				arquitetura e requisitos, até a entrega final.
+			</>
+		)
+	if (index === 2)
+		return (
+			<>
+				Atualmente vivo em <strong>São Paulo</strong>, movido pela curiosidade constante de
+				descobrir e experimentar o novo. Fora do código, gosto de drama e suspense. Escuto
+				muito <strong>Rap, Funk e Samba</strong>.{' '}
+				<strong>Feijoada e bolo de cenoura</strong>.
+			</>
+		)
+	return (
+		<>
+			<em className='font-semibold'>Omo Orisa e Omo Ifa.</em> Trago comigo a disciplina e
+			postura que aprendi com quem veio antes.
+		</>
+	)
+}
+
+const LINE_NUMS = ['01', '02', '03', '04']
 
 export function AboutMeSection() {
-  const textBlockRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
-  const linesRef = useRef<(HTMLParagraphElement | null)[]>([])
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
+	const sectionRef = useRef<HTMLDivElement>(null)
+	const linesRef = useRef<(HTMLDivElement | null)[]>([])
+	const [visible, setVisible] = useState(false)
+	const [isMobile, setIsMobile] = useState(false)
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)")
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener("change", handler)
-    return () => mq.removeEventListener("change", handler)
-  }, [])
+	useEffect(() => {
+		const mq = window.matchMedia('(max-width: 1023px)')
+		setIsMobile(mq.matches)
+		const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+		mq.addEventListener('change', handler)
+		return () => mq.removeEventListener('change', handler)
+	}, [])
 
-  useEffect(() => {
-    if (isMobile) return
+	// Animate lines in when section snaps into view
+	useEffect(() => {
+		const section = sectionRef.current
+		if (!section) return
 
-    const handleScroll = () => {
-      if (!sectionRef.current) return
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setVisible(true)
+				} else {
+					setVisible(false)
+				}
+			},
+			{ threshold: 0.4 },
+		)
 
-      const vh = window.innerHeight
-      const scrollY = window.scrollY
+		observer.observe(section)
+		return () => observer.disconnect()
+	}, [])
 
-      const horizontalContainer = sectionRef.current.closest('[data-extra-scroll-start]') as HTMLElement
+	if (isMobile) {
+		return (
+			<div ref={sectionRef} className='w-full bg-[#faf9f7] relative overflow-hidden'>
+				<div className='px-8 pt-20 pb-10'>
+					<div className='mb-10 text-right'>
+						<div className='flex items-baseline justify-end gap-2'>
+							<span className='text-[2rem] font-black tracking-tight leading-none text-black uppercase'>
+								SOBRE
+							</span>
+							<span className='text-[2rem] font-black text-red-500 leading-none'>
+								|
+							</span>
+						</div>
+						<div className='flex items-baseline justify-end gap-2'>
+							<span className='text-[2rem] font-black tracking-tight leading-none text-black uppercase'>
+								MIM
+							</span>
+							<span className='text-[1.75rem] font-black text-red-500 leading-none'>
+								/
+							</span>
+						</div>
+					</div>
 
-      if (!horizontalContainer) return
+					<div className='flex flex-col gap-7'>
+						{LINE_NUMS.map((num, i) => (
+							<div key={i}>
+								<div className='flex items-start gap-3'>
+									<span className='text-[10px] font-mono text-neutral-400 mt-1 shrink-0 w-6'>
+										{num}.
+									</span>
+									<p
+										className={
+											i === 0
+												? 'text-xl font-black italic font-serif leading-tight text-neutral-800'
+												: i === 3
+													? 'text-base leading-relaxed text-neutral-700 italic'
+													: 'text-base leading-relaxed text-neutral-700 font-medium'
+										}
+									>
+										<LineContent index={i} />
+									</p>
+								</div>
+								{i === 0 && <div className='w-12 h-[2px] bg-red-500 mt-5 ml-9' />}
+							</div>
+						))}
+					</div>
+				</div>
 
-      const extraScrollStart = Number(horizontalContainer.dataset.extraScrollStart || 0)
-      const extraScrollEnd = Number(horizontalContainer.dataset.extraScrollEnd || 0)
-      const internalScrollLength = extraScrollEnd - extraScrollStart
+				<div className='flex justify-end px-8 pb-16 mt-4'>
+					<Image
+						src='/ilustra_about.png'
+						alt='Ilustração Glauco'
+						width={280}
+						height={320}
+						className='object-contain w-48 h-auto'
+					/>
+				</div>
+			</div>
+		)
+	}
 
-      if (internalScrollLength <= 0) return
+	return (
+		<div ref={sectionRef} className='w-full h-full bg-[#faf9f7] overflow-hidden relative'>
+			{/* Title — top right */}
+			<div
+				className='absolute top-14 right-8 md:right-14 lg:right-20 z-10 text-right select-none'
+				style={{ fontFamily: 'var(--font-fira-code), monospace' }}
+			>
+				<div className='flex items-baseline justify-end gap-3'>
+					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-none text-black uppercase'>
+						SOBRE
+					</span>
+					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black text-red-500 leading-none'>
+						|
+					</span>
+				</div>
+				<div className='flex items-baseline justify-end gap-3'>
+					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-none text-black uppercase'>
+						MIM
+					</span>
+					<span className='text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black text-red-500 leading-none'>
+						/
+					</span>
+				</div>
+			</div>
 
-      const progress = Math.min(1, Math.max(0, (scrollY - extraScrollStart) / internalScrollLength))
+			{/* Text block — left side, vertically centered */}
+			<div className='absolute inset-y-0 left-0 right-[36%] flex flex-col justify-center px-8 md:px-16 lg:px-24'>
+				{LINE_NUMS.map((num, i) => (
+					<div key={i}>
+						<div
+							ref={(el) => {
+								linesRef.current[i] = el
+							}}
+							className='flex items-start gap-4 mb-10'
+							style={{
+								color: '#1a1a1a',
+								opacity: visible ? 1 : 0,
+								transform: visible ? 'translateY(0)' : 'translateY(16px)',
+								transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
+							}}
+						>
+							<span className='text-[11px] font-mono mt-[0.35em] shrink-0 text- neutral-400'>
+								{num}.
+							</span>
+							<p
+								className={
+									i === 0
+										? 'text-3xl md:text-4xl lg:text-[2.6rem] font-black italic leading-tight'
+										: i === 3
+											? 'text-base md:text-lg lg:text-xl font-medium leading-loose tracking-wide italic text-neutral-600'
+											: 'text-base md:text-lg lg:text-xl font-medium leading-loose tracking-wide'
+								}
+							>
+								<LineContent index={i} />
+							</p>
+						</div>
+						{i === 0 && (
+							<div
+								className='w-14 h-[2px] bg-red-500 mb-10 ml-7'
+								style={{
+									opacity: visible ? 1 : 0,
+									transition: 'opacity 0.4s ease 0.05s',
+								}}
+							/>
+						)}
+					</div>
+				))}
+			</div>
 
-      if (textBlockRef.current) {
-        const textHeight = textBlockRef.current.scrollHeight
-        const startY = vh * 0.35
-        const endY = -(textHeight - vh * 0.3)
-        const currentY = startY + progress * (endY - startY)
-        textBlockRef.current.style.transform = `translateY(${currentY}px)`
-      }
-
-      if (imageRef.current) {
-        const startY = 0
-        const endY = -(vh * 0.35)
-        const currentY = startY + progress * (endY - startY)
-        imageRef.current.style.transform = `translateY(${currentY}px)`
-      }
-
-      linesRef.current.forEach((line) => {
-        if (!line) return
-        const rect = line.getBoundingClientRect()
-        const lineCenter = rect.top + rect.height / 2
-
-        const zoneTop = vh * 0.2
-        const zoneBottom = vh * 0.55
-
-        if (lineCenter > zoneTop && lineCenter < zoneBottom) {
-          line.style.color = "#1a1a1a"
-        } else {
-          line.style.color = "#d1d1d1"
-        }
-      })
-    }
-
-    const initTimeout = setTimeout(handleScroll, 150)
-
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => {
-      clearTimeout(initTimeout)
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [isMobile])
-
-  // Mobile: layout simples sem mecânicas de scroll
-  if (isMobile) {
-    return (
-      <div className="w-full bg-[#faf9f7] relative overflow-hidden">
-        <div className="px-8 pt-20 pb-10">
-          <div className="flex items-start gap-4 mb-10">
-            <span className="block w-[4px] h-[2.5rem] bg-red-500 mt-1 rounded-full" />
-            <h2 className="text-[2rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-              SOBRE MIM <span className="text-neutral-300">/</span>
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-7">
-            {LINES.map((text, i) => (
-              <p
-                key={i}
-                className="text-base leading-relaxed text-neutral-700 font-medium"
-              >
-                {text}
-              </p>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3 mt-10 text-xl">
-            <span className="text-neutral-300">♠</span>
-            <span className="text-red-400">♥</span>
-            <span className="text-red-400">♦</span>
-            <span className="text-neutral-300">♣</span>
-          </div>
-        </div>
-
-        <div className="flex justify-end px-8 pb-16 mt-4">
-          <Image
-            src="/ilustra_about.png"
-            alt="Ilustração Glauco"
-            width={280}
-            height={320}
-            className="object-contain w-48 h-auto"
-          />
-        </div>
-      </div>
-    )
-  }
-
-  // Desktop: layout original com animações de scroll
-  return (
-    <div ref={sectionRef} className="w-full h-full bg-[#faf9f7] overflow-hidden relative">
-      {/* Title fixed top-left */}
-      <div ref={titleRef} className="absolute top-24 left-8 md:left-16 lg:left-24 z-10 flex items-start gap-5">
-        <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
-        <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-          SOBRE MIM <span className="text-neutral-300">/</span>
-        </h2>
-      </div>
-
-      {/* Scrolling text block */}
-      <div
-        ref={textBlockRef}
-        className="absolute inset-x-0 flex flex-col items-center px-8 md:px-16 lg:px-24"
-      >
-        <div className="max-w-5xl w-full text-left">
-          {LINES.map((text, i) => (
-            <p
-              key={i}
-              ref={(el) => { linesRef.current[i + 1] = el }}
-              className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-3xl font-medium leading-loose tracking-wide mb-14"
-              style={{ color: "#d1d1d1", transition: "color 0.4s ease" }}
-            >
-              {text}
-            </p>
-          ))}
-
-          {/* Suits decoration */}
-          <div className="flex items-center gap-3 mt-4 text-2xl">
-            <span className="text-neutral-300">♠</span>
-            <span className="text-red-400">♥</span>
-            <span className="text-red-400">♦</span>
-            <span className="text-neutral-300">♣</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Ilustração canto inferior direito */}
-      <div
-        ref={imageRef}
-        className="absolute bottom-0 right-0 z-0 w-64 md:w-80 lg:w-96 pointer-events-none select-none"
-        style={{ willChange: "transform" }}
-      >
-        <Image
-          src="/ilustra_about.png"
-          alt="Ilustração Glauco"
-          width={480}
-          height={560}
-          className="object-contain w-full h-auto"
-          priority
-        />
-      </div>
-    </div>
-  )
+			{/* Illustration — bottom right */}
+			<div
+				className='absolute top-[30%] bottom-0 right-0 z-0 w-64 md:w-80 lg:w-[26rem] pointer-events-none select-none border-l-2 border-neutral-300 flex flex-col justify-end'
+				style={{
+					opacity: visible ? 1 : 0,
+					transform: visible ? 'translateY(0)' : 'translateY(24px)',
+					transition: 'opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s',
+				}}
+			>
+				<Image
+					src='/ilustra_about.png'
+					alt='Ilustração Glauco'
+					width={480}
+					height={560}
+					className='object-contain w-full h-auto'
+					priority
+				/>
+			</div>
+		</div>
+	)
 }

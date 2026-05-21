@@ -70,6 +70,33 @@ html {
   scroll-behavior: auto;
 }
 
+@media (min-width: 1024px) {
+  .snap-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .snap-container > * {
+    scroll-snap-align: start;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Combined skills+services section: needs extra scroll space for sticky stacking */
+  .snap-container > .skills-services-section {
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Experience timeline: scrollable with sticky entries */
+  .snap-container > .experience-section {
+    height: auto;
+    overflow: visible;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

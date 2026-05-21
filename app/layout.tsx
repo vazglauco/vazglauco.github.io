@@ -7,7 +7,7 @@ import { Header } from "@/components/header"
 
 const GA_ID = "G-PXMB866NT3"
 
-const firaCode = Fira_Code({ subsets: ["latin"] })
+const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" })
 
 export const metadata: Metadata = {
   title: "Glauco Vaz - Desenvolvedor Full Stack",
@@ -43,7 +43,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={firaCode.className}>
+      <body className={`${firaCode.className} ${firaCode.variable}`}>
         <Header />
         {children}
       </body>

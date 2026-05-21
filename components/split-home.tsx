@@ -17,7 +17,10 @@ function PatternBackground({ variant }: { variant: 'dark' | 'light' }) {
 	const cols = 12
 
 	return (
-		<div className='absolute inset-0 overflow-hidden pointer-events-none select-none' aria-hidden>
+		<div
+			className='absolute inset-0 overflow-hidden pointer-events-none select-none'
+			aria-hidden
+		>
 			<div className='flex flex-col justify-between h-full py-6'>
 				{Array.from({ length: rows }).map((_, r) => (
 					<div
@@ -28,10 +31,10 @@ function PatternBackground({ variant }: { variant: 'dark' | 'light' }) {
 						{Array.from({ length: cols }, (_, i) => {
 							const suit = suits[(r + i) % suits.length]
 							const h = hash(r, i)
-							const peakOp   = 0.04 + (h % 8) / 100
+							const peakOp = 0.04 + (h % 8) / 100
 							const valleyOp = 0.005 + ((h * 3) % 4) / 100
 							const duration = 1.8 + (hash(i, r) % 55) / 10
-							const delay    = (hash(r + 1, i + 1) % 80) / 10
+							const delay = (hash(r + 1, i + 1) % 80) / 10
 							return (
 								<span
 									key={i}
@@ -121,7 +124,8 @@ export function SplitHome() {
 		startBreathing()
 
 		return () => {
-			if (spinIntervalRef.current) (spinIntervalRef.current as unknown as gsap.core.Tween).kill()
+			if (spinIntervalRef.current)
+				(spinIntervalRef.current as unknown as gsap.core.Tween).kill()
 			if (lootTlRef.current) lootTlRef.current.kill()
 		}
 	}, [startBreathing])
@@ -135,7 +139,7 @@ export function SplitHome() {
 					className='relative bg-[#0a0a0a] flex flex-col justify-center px-7 pt-8'
 					style={{ flex: '0 0 58%', paddingBottom: 'clamp(160px, 24vh, 210px)' }}
 				>
-					<PatternBackground variant='dark' />
+					{/*<PatternBackground variant='dark' />*/}
 
 					<div className='relative z-10 flex flex-col gap-4'>
 						<p className='font-mono text-xs text-neutral-400 tracking-wide'>
@@ -197,7 +201,7 @@ export function SplitHome() {
 					className='relative bg-white flex flex-col justify-center px-7 pb-6'
 					style={{ flex: '0 0 42%', paddingTop: 'clamp(160px, 24vh, 210px)' }}
 				>
-					<PatternBackground variant='light' />
+					{/*<PatternBackground variant='light' />*/}
 
 					<div className='relative z-10 text-right'>
 						{/* Title */}
@@ -295,7 +299,7 @@ export function SplitHome() {
 
 			{/* ===== LEFT PANEL — Dark ===== */}
 			<div className='relative flex-1 min-h-[55vh] lg:min-h-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden'>
-				<PatternBackground variant='dark' />
+				{/*<PatternBackground variant='dark' />*/}
 
 				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full'>
 					<p className='font-mono text-lg text-neutral-400 mb-7 tracking-wide leading-relaxed'>
@@ -347,7 +351,9 @@ export function SplitHome() {
 							className='whitespace-nowrap inline-flex items-center gap-2 font-mono text-sm text-neutral-300 hover:text-white transition-colors group'
 						>
 							<span className='text-[rgb(200,30,20)]'>↓</span>
-							<span className='underline underline-offset-4 decoration-neutral-600 group-hover:decoration-neutral-400 transition-colors'>baixar currículo (.pdf)</span>
+							<span className='underline underline-offset-4 decoration-neutral-600 group-hover:decoration-neutral-400 transition-colors'>
+								baixar currículo (.pdf)
+							</span>
 						</a>
 					</div>
 				</div>
@@ -360,7 +366,7 @@ export function SplitHome() {
 
 			{/* ===== RIGHT PANEL — White ===== */}
 			<div className='relative flex-1 min-h-[45vh] lg:min-h-0 bg-white flex items-center justify-center overflow-hidden'>
-				<PatternBackground variant='light' />
+				{/*<PatternBackground variant='light' />*/}
 
 				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full text-right'>
 					{/* Title */}

@@ -100,13 +100,15 @@ export function ExperienceTimeline() {
   useEffect(() => {
     if (!sectionRef.current) return
 
+    const scroller =
+      (sectionRef.current.closest(".snap-container") as HTMLElement) || undefined
+
     const ctx = gsap.context(() => {
       entriesRef.current.forEach((entry, i) => {
         const period = periodsRef.current[i]
         const content = contentsRef.current[i]
         if (!entry || !period || !content) return
 
-        // The period text fades/slides in when entry enters
         gsap.fromTo(
           period,
           { y: 80, opacity: 0 },
@@ -117,6 +119,7 @@ export function ExperienceTimeline() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: entry,
+              scroller,
               start: "top 85%",
               end: "top 40%",
               scrub: 0.5,
@@ -124,7 +127,6 @@ export function ExperienceTimeline() {
           }
         )
 
-        // Content slides in from right
         gsap.fromTo(
           content,
           { y: 60, opacity: 0 },
@@ -135,6 +137,7 @@ export function ExperienceTimeline() {
             ease: "power2.out",
             scrollTrigger: {
               trigger: entry,
+              scroller,
               start: "top 75%",
               end: "top 35%",
               scrub: 0.5,
@@ -142,35 +145,17 @@ export function ExperienceTimeline() {
           }
         )
       })
+
+      ScrollTrigger.refresh()
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
 
   return (
-    <div ref={sectionRef} className="relative bg-white text-black">
-      {/* Header */}
-      <div className="px-8 md:px-16 lg:px-24 pt-24 pb-16">
-        <div className="flex items-start gap-5 mb-6">
-          <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
-          <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-            EXPERIENCE <span className="text-neutral-300">/</span>
-          </h2>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-4 md:gap-16 mt-12 md:mt-16 max-w-4xl ml-auto mr-8 md:mr-16">
-          <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono shrink-0 pt-1">
-            (TIMELINE)
-          </span>
-          <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-lg">
-            Minha trajetória profissional, construída com dedicação e evolução
-            constante em cada projeto e equipe.
-          </p>
-        </div>
-      </div>
-
+    <div ref={sectionRef} className="experience-section relative bg-white text-black">
       {/* Timeline entries + imagem sticky direita */}
-      <div className="flex items-start">
+      <div className="flex items-start pt-16">
         <div className="flex-1 px-8 md:px-16 lg:px-24 pb-32">
         {EXPERIENCES.map((exp, i) => (
           <div
@@ -250,9 +235,22 @@ export function ExperienceTimeline() {
         <div className="border-t border-neutral-200" />
         </div>
 
-        {/* Ilustração sticky canto direito */}
+        {/* Título + ilustração sticky canto direito */}
         <div className="hidden md:block shrink-0 w-72 lg:w-[26rem] self-stretch pr-8 md:pr-12 lg:pr-16">
-          <div className="sticky top-[30vh]">
+          <div className="sticky top-14">
+            <div
+              className="text-right mb-6 select-none"
+              style={{ fontFamily: "var(--font-fira-code), monospace" }}
+            >
+              <div className="flex items-baseline justify-end gap-3">
+                <span className="text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black tracking-tight leading-none text-black uppercase">
+                  EXPERIENCE
+                </span>
+                <span className="text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black text-red-500 leading-none">
+                  /
+                </span>
+              </div>
+            </div>
             <Image
               src="/ilustra_trampos_2.png"
               alt="Ilustração"
