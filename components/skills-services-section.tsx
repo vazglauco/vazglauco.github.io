@@ -112,7 +112,7 @@ export function SkillsServicesSection() {
 			style={{ height: 'auto', overflow: 'visible' }}
 		>
 			{/* LEFT — Skills — white bg — sticky on desktop */}
-			<div className='lg:self-start lg:sticky lg:top-0 lg:h-screen w-full lg:w-1/2 bg-white overflow-hidden flex flex-col px-8 md:px-12 lg:px-14 py-10 lg:py-12'>
+			<div className='lg:self-start lg:sticky lg:top-0 lg:h-screen w-full lg:w-1/2 bg-[#faf9f7] overflow-hidden flex flex-col px-8 md:px-12 lg:px-14 py-10 lg:py-12'>
 				{CATEGORIES.map((cat) => (
 					<div
 						key={cat.title}

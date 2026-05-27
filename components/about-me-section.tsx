@@ -131,7 +131,7 @@ export function AboutMeSection() {
 	}
 
 	return (
-		<div ref={sectionRef} className='w-full h-full bg-[#faf9f7] overflow-hidden relative'>
+		<div ref={sectionRef} className='w-full min-h-screen bg-[#faf9f7] overflow-hidden relative'>
 			{/* Title — top right */}
 			<div
 				className='absolute top-14 right-8 md:right-14 lg:right-20 z-10 text-right select-none'

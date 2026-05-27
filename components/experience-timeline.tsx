@@ -1,265 +1,243 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import Image from "next/image"
-
-gsap.registerPlugin(ScrollTrigger)
+import { useEffect, useState } from "react"
 
 const EXPERIENCES = [
   {
     period: "out 2025 — presente",
     role: "Desenvolvedor Front-end",
-    company: "DOMVS iT · Mentes Notáveis",
+    company: "DOMVS iT",
+    client: "Mentes Notáveis",
     location: "São Paulo, SP",
     description:
-      "Atuei no desenvolvimento de diferentes frentes de uma plataforma de educação complementar gamificada. Construí painéis administrativos com React e Next.js e as aplicações principais em Angular, responsáveis pela experiência dos alunos. Também desenvolvi jogos educacionais com TypeScript e Phaser.",
+      "Desenvolvimento de plataforma de educação gamificada. Painéis administrativos com React e Next.js. Aplicações principais em Angular. Jogos educacionais com TypeScript e Phaser.",
     stack: ["Angular", "React", "Next.js", "TypeScript", "Phaser"],
   },
   {
     period: "dez 2024 — jun 2025",
     role: "Software Engineer Fullstack",
-    company: "Innvo Labs · Porto Seguro",
+    company: "Innvo Labs",
+    client: "Porto Seguro",
     location: "São Paulo, SP · Remoto",
     description:
-      "Atuei em produtos voltados à jornada de contratação de seguros. No Portal das Imobiliárias, desenvolvi novas funcionalidades como fullstack. No sistema de Capitalização, liderei tecnicamente a implementação de um novo método de pagamento, participando da definição da arquitetura e conduzindo a integração com o gateway interno da Porto Seguro.",
+      "Produtos voltados à jornada de contratação de seguros. Liderança técnica na implementação de novo método de pagamento integrado ao gateway interno da Porto Seguro.",
     stack: ["React", "Angular", "Node.js", "TypeScript"],
   },
   {
     period: "jun 2024 — dez 2024",
     role: "Software Engineer Frontend",
     company: "Sinqia",
+    client: null,
     location: "São Paulo, SP · Híbrido",
     description:
-      "Atuei na modernização de um sistema legado do mercado financeiro, originado nos anos 90. Defini e implementei a estratégia de migração com micro frontends em Angular, conduzindo a evolução incremental da aplicação. Em alguns fluxos, realizamos migração completa; em outros, aplicamos estrangulamento integrando o legado em Java.",
+      "Modernização de sistema legado do mercado financeiro. Estratégia de migração com micro frontends em Angular, evolução incremental com estrangulamento do legado em Java.",
     stack: ["Angular", "Microfrontends", "TypeScript", "Java"],
   },
   {
     period: "fev 2022 — fev 2024",
     role: "Software Engineer Frontend / Fullstack",
-    company: "AgileThought · Santander",
+    company: "AgileThought",
+    client: "Santander",
     location: "São Paulo, SP",
     description:
-      "Trabalhei em três frentes dentro do ambiente corporativo do banco. Desenvolvi micro frontends em Angular para jornadas de contratação de seguros, evoluí um sistema interno de gestão de contratos atuando também no back-end em Java, e liderei tecnicamente o desenvolvimento front-end da segunda versão do painel PJ com integração ao Open Finance.",
+      "Micro frontends em Angular para jornadas de seguros. Sistema interno de gestão de contratos com back-end em Java. Liderança técnica no painel PJ com integração ao Open Finance.",
     stack: ["Angular", "Microfrontends", "Java", "Open Finance", "TypeScript"],
   },
   {
     period: "abr 2021 — set 2021",
     role: "Software Engineer Frontend",
     company: "Poupachef",
+    client: null,
     location: "São Paulo, SP",
     description:
-      "Atuei no desenvolvimento e sustentação de funcionalidades nos sistemas web da empresa, contribuindo na construção e manutenção das interfaces com React.",
+      "Desenvolvimento e sustentação de funcionalidades nos sistemas web da empresa, contribuindo na construção e manutenção das interfaces com React.",
     stack: ["React", "JavaScript", "Git"],
   },
   {
     period: "out 2019 — set 2020",
     role: "Software Engineer Fullstack",
-    company: "Conquest · Guide Investimentos",
+    company: "Conquest",
+    client: "Guide Investimentos",
     location: "São Paulo, SP",
     description:
-      "Contribuí no desenvolvimento de um sistema de backoffice para operações internas, atuando tanto no front-end em Angular quanto no back-end em Ruby on Rails. Também apoiei desenvolvedores mais juniores na orientação sobre processos e fundamentos de desenvolvimento.",
+      "Sistema de backoffice para operações internas com Angular e Ruby on Rails. Apoio a desenvolvedores juniores na orientação sobre processos e fundamentos.",
     stack: ["Angular", "Ruby on Rails", "REST APIs", "Git"],
   },
   {
     period: "fev 2019 — out 2019",
     role: "Software Engineer Frontend",
-    company: "Indra · Santander",
+    company: "Indra",
+    client: "Santander",
     location: "São Paulo, SP",
     description:
-      "Fui responsável pelo desenvolvimento de um dashboard para controle de dados internos do Santander, atuando na construção do front-end da aplicação com Angular.",
+      "Desenvolvimento de dashboard para controle de dados internos do Santander, construindo o front-end da aplicação com Angular.",
     stack: ["Angular", "TypeScript", "JavaScript"],
   },
   {
     period: "jun 2018 — jan 2019",
     role: "Software Engineer Frontend",
-    company: "GFT · Serasa Experian",
+    company: "GFT",
+    client: "Serasa Experian",
     location: "São Paulo, SP",
     description:
-      "Alocado na Serasa Experian, atuei no desenvolvimento de novas funcionalidades em um dashboard de insights georreferenciados, contribuindo na evolução da aplicação e melhorias na visualização de dados. Trabalhei principalmente no front-end com Angular.",
+      "Dashboard de insights georreferenciados na Serasa Experian. Desenvolvimento de novas funcionalidades e melhorias na visualização de dados com Angular.",
     stack: ["Angular", "JavaScript", "Git"],
   },
   {
     period: "mar 2017 — mai 2018",
     role: "Software Engineer Fullstack",
     company: "Creditoo",
+    client: null,
     location: "São Paulo, SP",
     description:
-      "Atuei desde o início do desenvolvimento da segunda versão da aplicação de uma fintech de crédito consignado com contratação 100% online. Contribuí na construção do front-end em Angular e no back-end em PHP com Laravel, além de atuar na sustentação de sistemas legados e APIs existentes.",
+      "Segunda versão de fintech de crédito consignado 100% online. Front-end em Angular, back-end em PHP com Laravel, sustentação de sistemas legados e APIs.",
     stack: ["Angular", "PHP", "Laravel", "JavaScript"],
   },
 ]
 
+function Period({ text }: { text: string }) {
+  const [start, end] = text.split("—").map((s) => s.trim())
+  return (
+    <span>
+      {start} <span className="text-red-500">→</span> {end}
+    </span>
+  )
+}
+
 export function ExperienceTimeline() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const entriesRef = useRef<HTMLDivElement[]>([])
-  const periodsRef = useRef<HTMLDivElement[]>([])
-  const contentsRef = useRef<HTMLDivElement[]>([])
+  const [openQueue, setOpenQueue] = useState<number[]>([0, 1])
 
-  useEffect(() => {
-    if (!sectionRef.current) return
-
-    const scroller =
-      (sectionRef.current.closest(".snap-container") as HTMLElement) || undefined
-
-    const ctx = gsap.context(() => {
-      entriesRef.current.forEach((entry, i) => {
-        const period = periodsRef.current[i]
-        const content = contentsRef.current[i]
-        if (!entry || !period || !content) return
-
-        gsap.fromTo(
-          period,
-          { y: 80, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: entry,
-              scroller,
-              start: "top 85%",
-              end: "top 40%",
-              scrub: 0.5,
-            },
-          }
-        )
-
-        gsap.fromTo(
-          content,
-          { y: 60, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: entry,
-              scroller,
-              start: "top 75%",
-              end: "top 35%",
-              scrub: 0.5,
-            },
-          }
-        )
-      })
-
-      ScrollTrigger.refresh()
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  const toggle = (i: number) =>
+    setOpenQueue((prev) => {
+      if (prev.includes(i)) return prev.filter((x) => x !== i)
+      const next = [...prev, i]
+      return next.length > 2 ? next.slice(1) : next
+    })
 
   return (
-    <div ref={sectionRef} className="experience-section relative bg-white text-black">
-      {/* Timeline entries + imagem sticky direita */}
-      <div className="flex items-start pt-16">
-        <div className="flex-1 px-8 md:px-16 lg:px-24 pb-32">
-        {EXPERIENCES.map((exp, i) => (
-          <div
-            key={i}
-            ref={(el) => {
-              if (el) entriesRef.current[i] = el
-            }}
-            className="border-t border-neutral-200 md:min-h-[80vh] flex flex-col md:grid md:grid-cols-12 md:gap-x-8 relative"
-          >
-            {/* Left — Period (sticky) */}
-            <div className="md:col-span-5 pt-8 md:pt-12">
-              <div
-                ref={(el) => {
-                  if (el) periodsRef.current[i] = el
-                }}
-                className="sticky top-[25vh]"
-              >
-                <span className="text-[0.6rem] font-mono text-neutral-400 tracking-[0.2em] uppercase block mb-3">
-                  ({String(i + 1).padStart(2, "0")})
-                </span>
-                <h3 className="text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] xl:text-[5.5rem] font-black leading-[0.9] tracking-tight text-neutral-800">
-                  {exp.period.split("—")[0].trim()}
-                  <span className="text-neutral-300"> — </span>
-                  <br />
-                  <span className="text-neutral-400">
-                    {exp.period.split("—")[1]?.trim() || ""}
-                  </span>
-                </h3>
-              </div>
-            </div>
+    <div className="experience-section bg-[#0a0a0a] text-white flex flex-col justify-center py-16 min-h-screen">
+      {/* Header */}
+      <div className="px-8 md:px-16 lg:px-24 mb-6 flex items-baseline justify-between">
+        <span className="text-[0.58rem] font-mono tracking-[0.25em] uppercase text-neutral-500">
+          experiências
+        </span>
+        <span className="text-[0.58rem] font-mono text-neutral-500">
+          {EXPERIENCES.length} empresas{" "}
+          <span className="text-red-500">·</span> 2017
+          <span className="text-red-500">→</span>2025
+        </span>
+      </div>
 
-            {/* Right — Content (sticky) */}
-            <div className="md:col-span-7 pt-6 md:pt-12 pb-16 md:pb-24">
-              <div
-                ref={(el) => {
-                  if (el) contentsRef.current[i] = el
-                }}
-                className="sticky top-[25vh]"
+      {/* Log list */}
+      <div className="border-t border-neutral-700/40 mx-8 md:mx-16 lg:mx-24">
+        {EXPERIENCES.map((exp, i) => {
+          const isActive = openQueue.includes(i)
+          return (
+            <div key={i} className="border-b border-neutral-700/40">
+              {/* Row — always visible */}
+              <button
+                onClick={() => toggle(i)}
+                className={`w-full text-left px-0 py-3.5 flex items-center gap-4 md:gap-5 transition-colors group focus:outline-none ${
+                  isActive
+                    ? "bg-white/[0.04]"
+                    : "hover:bg-white/[0.06]"
+                }`}
               >
-                <div className="flex flex-col gap-6">
-                  {/* Role & Company */}
-                  <div>
-                    <h4 className="text-2xl md:text-3xl lg:text-4xl font-bold italic tracking-tight text-black mb-2">
-                      {exp.role}
-                    </h4>
-                    <div className="flex items-center gap-3 text-sm md:text-base">
-                      <span className="text-amber-700/80 font-semibold">
-                        {exp.company}
-                      </span>
-                      <span className="text-neutral-300">•</span>
-                      <span className="text-neutral-500">{exp.location}</span>
-                    </div>
-                  </div>
+                {/* Index */}
+                <span className="font-mono text-[0.58rem] shrink-0 w-9 text-neutral-500 select-none">
+                  <span className="text-red-500">(</span>
+                  {String(i + 1).padStart(2, "0")}
+                  <span className="text-red-500">)</span>
+                </span>
+
+                {/* Period */}
+                <span className="hidden md:block font-mono text-[0.58rem] text-neutral-500 shrink-0 w-44 leading-none">
+                  <Period text={exp.period} />
+                </span>
+
+                {/* Company */}
+                <span
+                  className={`font-black text-sm md:text-[0.9rem] tracking-tight shrink-0 transition-colors leading-none ${
+                    isActive
+                      ? "text-white"
+                      : "text-neutral-400 group-hover:text-white"
+                  }`}
+                >
+                  {exp.company}
+                </span>
+
+                <span className="text-red-500 text-xs shrink-0 hidden sm:block select-none">
+                  ·
+                </span>
+
+                {/* Role */}
+                <span
+                  className={`text-[0.72rem] font-light italic transition-colors hidden sm:block leading-none ${
+                    isActive
+                      ? "text-neutral-300"
+                      : "text-neutral-600 group-hover:text-neutral-400"
+                  }`}
+                >
+                  {exp.role}
+                </span>
+
+                {/* Toggle indicator */}
+                <span className={`ml-auto font-mono text-base font-semibold shrink-0 transition-colors select-none leading-none ${
+                  isActive
+                    ? "text-red-500"
+                    : "text-neutral-600 group-hover:text-neutral-400"
+                }`}>
+                  {isActive ? "−" : "+"}
+                </span>
+              </button>
+
+              {/* Expanded detail */}
+              <div
+                className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
+                  isActive ? "max-h-56" : "max-h-0"
+                }`}
+              >
+                <div className="pb-5 pt-1 pl-[52px] md:pl-[252px]">
+                  {/* Period on mobile */}
+                  <p className="md:hidden font-mono text-[0.58rem] text-neutral-500 mb-2">
+                    <Period text={exp.period} />
+                  </p>
 
                   {/* Description */}
-                  <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-[45ch] text-balance">
+                  <p className="text-[0.72rem] text-neutral-400 leading-relaxed max-w-[62ch] mb-3">
+                    <span className="text-red-500 font-mono">// </span>
                     {exp.description}
                   </p>
 
-                  {/* Tech stack */}
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  {/* Stack */}
+                  <div className="flex flex-wrap gap-1.5 mb-2">
                     {exp.stack.map((tech, j) => (
                       <span
                         key={j}
-                        className="px-3 py-1.5 text-xs md:text-sm font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
+                        className="px-2 py-0.5 text-[0.56rem] font-mono text-neutral-400 border border-neutral-700 rounded-sm"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
+
+                  {/* Client · Location */}
+                  {(exp.client || exp.location) && (
+                    <p className="text-[0.58rem] font-mono text-neutral-500">
+                      {exp.client && (
+                        <>
+                          via {exp.client}
+                          <span className="text-red-500"> · </span>
+                        </>
+                      )}
+                      {exp.location}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-        {/* Bottom border */}
-        <div className="border-t border-neutral-200" />
-        </div>
-
-        {/* Título + ilustração sticky canto direito */}
-        <div className="hidden md:block shrink-0 w-72 lg:w-[26rem] self-stretch pr-8 md:pr-12 lg:pr-16">
-          <div className="sticky top-14">
-            <div
-              className="text-right mb-6 select-none"
-              style={{ fontFamily: "var(--font-fira-code), monospace" }}
-            >
-              <div className="flex items-baseline justify-end gap-3">
-                <span className="text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black tracking-tight leading-none text-black uppercase">
-                  EXPERIENCE
-                </span>
-                <span className="text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black text-red-500 leading-none">
-                  /
-                </span>
-              </div>
-            </div>
-            <Image
-              src="/ilustra_trampos_2.png"
-              alt="Ilustração"
-              width={500}
-              height={600}
-              className="object-contain w-full h-auto"
-            />
-          </div>
-        </div>
+          )
+        })}
       </div>
     </div>
   )

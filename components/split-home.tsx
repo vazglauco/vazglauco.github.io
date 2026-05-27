@@ -198,7 +198,7 @@ export function SplitHome() {
 
 				{/* Painel branco — 42% abaixo */}
 				<div
-					className='relative bg-white flex flex-col justify-center px-7 pb-6'
+					className='relative bg-[#faf9f7] flex flex-col justify-center px-7 pb-6'
 					style={{ flex: '0 0 42%', paddingTop: 'clamp(160px, 24vh, 210px)' }}
 				>
 					{/*<PatternBackground variant='light' />*/}
@@ -365,7 +365,7 @@ export function SplitHome() {
 			</div>
 
 			{/* ===== RIGHT PANEL — White ===== */}
-			<div className='relative flex-1 min-h-[45vh] lg:min-h-0 bg-white flex items-center justify-center overflow-hidden'>
+			<div className='relative flex-1 min-h-[45vh] lg:min-h-0 bg-[#faf9f7] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='light' />*/}
 
 				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full text-right'>

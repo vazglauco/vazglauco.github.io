@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { ExternalLink } from "lucide-react"
+import Image from "next/image"
+import { useState } from "react"
+import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 
-gsap.registerPlugin(ScrollTrigger)
+type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
 
 interface Project {
   title: string
@@ -13,7 +12,16 @@ interface Project {
   stack: string[]
   url: string
   label?: string
+  categories: Category[]
 }
+
+const CATEGORIES: Category[] = [
+  "Landing page",
+  "Portfolio",
+  "E-commerce",
+  "Aplicativo",
+  "Sistema web",
+]
 
 const PROJECTS: Project[] = [
   {
@@ -23,6 +31,7 @@ const PROJECTS: Project[] = [
     stack: ["Next.js", "TypeScript", "GSAP", "TailwindCSS"],
     url: "https://vazglauco.github.io",
     label: "Visitar",
+    categories: ["Portfolio", "Landing page"],
   },
   {
     title: "Task Flow",
@@ -31,6 +40,7 @@ const PROJECTS: Project[] = [
     stack: ["Angular", "NestJS", "PostgreSQL", "Docker"],
     url: "#",
     label: "Em breve",
+    categories: ["Aplicativo", "Sistema web"],
   },
   {
     title: "DevConnect",
@@ -39,6 +49,7 @@ const PROJECTS: Project[] = [
     stack: ["React", "Node.js", "MongoDB", "Socket.io"],
     url: "#",
     label: "Em breve",
+    categories: ["Aplicativo", "Sistema web"],
   },
   {
     title: "AI Content Studio",
@@ -47,6 +58,7 @@ const PROJECTS: Project[] = [
     stack: ["Next.js", "Python", "OpenAI API", "Redis"],
     url: "#",
     label: "Em breve",
+    categories: ["Sistema web"],
   },
   {
     title: "FinTrack",
@@ -55,221 +67,195 @@ const PROJECTS: Project[] = [
     stack: ["Angular", "NestJS", "Chart.js", "PostgreSQL"],
     url: "#",
     label: "Em breve",
+    categories: ["Aplicativo", "Sistema web"],
+  },
+  {
+    title: "CloudDeploy",
+    description:
+      "CLI para automação de deploys em AWS com rollback automático, logs em tempo real e notificações de status.",
+    stack: ["Node.js", "AWS SDK", "TypeScript", "Docker"],
+    url: "#",
+    label: "Em breve",
+    categories: ["Sistema web"],
+  },
+  {
+    title: "DesignSys",
+    description:
+      "Design system completo com componentes acessíveis, tokens de design e documentação interativa via Storybook.",
+    stack: ["React", "Storybook", "CSS Modules", "Figma"],
+    url: "#",
+    label: "Em breve",
+    categories: ["Landing page", "E-commerce"],
   },
 ]
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const isLive = project.url !== "#"
+
   return (
-    <div className="relative rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 p-6 flex flex-col gap-5">
-      <span className="absolute top-5 right-6 text-[0.6rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
+    <div className="group relative flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-100">
+      <span className="text-[0.55rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
         ({String(index + 1).padStart(2, "0")})
       </span>
 
-      <div className="flex flex-col gap-3 flex-1">
-        <h3 className="text-xl font-bold tracking-tight text-black leading-tight pr-8">
-          {project.title}
-        </h3>
-        <p className="text-sm text-neutral-500 leading-relaxed">
-          {project.description}
-        </p>
-        <div className="flex flex-wrap gap-2 pt-1">
-          {project.stack.map((tech, j) => (
-            <span
-              key={j}
-              className="px-3 py-1 text-xs font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+      <h3 className="text-lg font-bold tracking-tight text-black leading-tight">
+        {project.title}
+      </h3>
+
+      <p className="text-sm text-neutral-400 leading-relaxed line-clamp-3 flex-1">
+        {project.description}
+      </p>
+
+      <div className="flex flex-wrap gap-1.5 pt-1">
+        {project.stack.slice(0, 3).map((tech, j) => (
+          <span
+            key={j}
+            className="px-2.5 py-1 text-[0.65rem] font-mono font-medium text-neutral-400 border border-neutral-200 rounded-full"
+          >
+            {tech}
+          </span>
+        ))}
       </div>
 
       <a
         href={project.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-2 self-start px-4 py-2 text-sm font-semibold text-white bg-black rounded-full transition-all active:scale-95"
+        target={isLive ? "_blank" : undefined}
+        rel={isLive ? "noopener noreferrer" : undefined}
+        className={`inline-flex items-center gap-1.5 self-start mt-1 px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 active:scale-95 ${
+          isLive
+            ? "text-white bg-black hover:bg-neutral-800"
+            : "text-neutral-400 bg-neutral-100 cursor-default"
+        }`}
+        onClick={isLive ? undefined : (e) => e.preventDefault()}
       >
         {project.label || "Visitar"}
-        <ExternalLink className="w-3.5 h-3.5" />
+        {isLive && <ExternalLink className="w-3 h-3" />}
       </a>
     </div>
   )
 }
 
+const PER_PAGE = 6 // 3 cols × 2 rows
+
 export function ProjectsSection() {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement[]>([])
-  const [isMobile, setIsMobile] = useState(false)
+  const [selected, setSelected] = useState<Set<Category>>(new Set())
+  const [page, setPage] = useState(0)
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)")
-    setIsMobile(mq.matches)
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener("change", handler)
-    return () => mq.removeEventListener("change", handler)
-  }, [])
-
-  useEffect(() => {
-    if (isMobile) return
-
-    const container = containerRef.current
-    const track = trackRef.current
-    if (!container || !track) return
-
-    const ctx = gsap.context(() => {
-      const getScrollAmount = () => -(track.scrollWidth - window.innerWidth)
-
-      const tween = gsap.to(track, {
-        x: getScrollAmount,
-        ease: "none",
-        scrollTrigger: {
-          trigger: container,
-          start: "top top",
-          end: () => `+=${Math.abs(getScrollAmount())}`,
-          pin: true,
-          scrub: 0.8,
-          invalidateOnRefresh: true,
-        },
-      })
-
-      cardsRef.current.forEach((card) => {
-        if (!card) return
-        gsap.fromTo(
-          card,
-          { x: 100, opacity: 0, scale: 0.93 },
-          {
-            x: 0,
-            opacity: 1,
-            scale: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: card,
-              containerAnimation: tween,
-              start: "left 90%",
-              end: "left 55%",
-              scrub: 0.5,
-            },
-          }
-        )
-      })
-    }, container)
-
-    return () => ctx.revert()
-  }, [isMobile])
-
-  // Mobile: lista vertical simples
-  if (isMobile) {
-    return (
-      <section id="projetos" className="relative bg-white">
-        <div className="px-8 pt-20 pb-12">
-          <div className="flex items-start gap-5 mb-6">
-            <span className="block w-[4px] h-[3rem] bg-red-500 mt-2 rounded-full" />
-            <h2 className="text-[2rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-              PROJETOS <span className="text-neutral-300">/</span>
-            </h2>
-          </div>
-
-          <div className="flex flex-col gap-3 mt-10">
-            <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono">
-              (PORTFOLIO)
-            </span>
-            <p className="text-sm text-neutral-500 leading-relaxed max-w-lg">
-              Projetos pessoais e profissionais que refletem minha paixão por
-              criar soluções digitais com propósito e qualidade.
-            </p>
-          </div>
-        </div>
-
-        <div className="px-8 pb-20 flex flex-col gap-5">
-          {PROJECTS.map((project, i) => (
-            <ProjectCard key={i} project={project} index={i} />
-          ))}
-        </div>
-      </section>
-    )
+  function toggle(cat: Category) {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      next.has(cat) ? next.delete(cat) : next.add(cat)
+      return next
+    })
+    setPage(0)
   }
 
-  // Desktop: scroll horizontal com GSAP
+  const filtered =
+    selected.size === 0
+      ? PROJECTS
+      : PROJECTS.filter((p) => p.categories.some((c) => selected.has(c)))
+
+  const totalPages = Math.ceil(filtered.length / PER_PAGE)
+  const pageItems = filtered.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)
+
   return (
     <section
-      ref={containerRef}
       id="projetos"
-      className="relative bg-white overflow-hidden"
+      className="relative bg-[#faf9f7] flex items-start pt-16 pb-12 px-8 md:px-16 lg:px-24"
     >
-      <div className="h-screen flex items-center">
-        <div
-          ref={trackRef}
-          className="flex flex-nowrap items-center"
-          style={{ width: "max-content" }}
-        >
-          {/* Cabeçalho fixo (primeiro painel) */}
-          <div className="w-screen h-screen flex-shrink-0 flex flex-col justify-center overflow-hidden">
-            <div className="px-8 md:px-16 lg:px-24 mb-8 md:mb-12 pt-16 shrink-0">
-              <div className="flex items-start gap-5 mb-6">
-                <span className="block w-[4px] h-[3rem] md:h-[4.5rem] bg-red-500 mt-2 rounded-full" />
-                <h2 className="text-[2rem] md:text-[3rem] lg:text-[4rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-                  PROJETOS <span className="text-neutral-300">/</span>
-                </h2>
-              </div>
+      <div className="flex gap-10 xl:gap-14 items-start w-full">
 
-              <div className="flex flex-col md:flex-row gap-4 md:gap-16 max-w-4xl ml-auto mr-8 md:mr-16">
-                <span className="text-[0.65rem] tracking-[0.25em] uppercase text-amber-700/60 font-mono shrink-0 pt-1">
-                  (PORTFOLIO)
-                </span>
-                <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-lg">
-                  Projetos pessoais e profissionais que refletem minha paixão por
-                  criar soluções digitais com propósito e qualidade.
-                </p>
-              </div>
+        {/* Category filter — vertical, left */}
+        <div className="hidden lg:flex flex-col gap-2 shrink-0">
+          <span className="text-[0.6rem] font-mono tracking-[0.2em] uppercase text-neutral-300 mb-1">
+            filtrar
+          </span>
+          {CATEGORIES.map((cat) => {
+            const active = selected.has(cat)
+            return (
+              <button
+                key={cat}
+                onClick={() => toggle(cat)}
+                className={`text-left px-3 py-2 text-xs font-medium rounded-lg border transition-all duration-150 whitespace-nowrap ${
+                  active
+                    ? "bg-black text-white border-black"
+                    : "bg-[#faf9f7] text-neutral-400 border-neutral-200 hover:border-neutral-400 hover:text-neutral-600"
+                }`}
+              >
+                {cat}
+              </button>
+            )
+          })}
+          {selected.size > 0 && (
+            <button
+              onClick={() => { setSelected(new Set()); setPage(0) }}
+              className="mt-1 text-[0.6rem] font-mono tracking-widest uppercase text-neutral-300 hover:text-red-500 transition-colors text-left"
+            >
+              limpar
+            </button>
+          )}
+        </div>
+
+        {/* Center: title + grid + pagination */}
+        <div className="flex-1 min-w-0 flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-start gap-4">
+              <span className="block w-[3px] h-10 bg-red-500 mt-1 rounded-full shrink-0" />
+              <h2 className="text-[2rem] md:text-[2.5rem] lg:text-[3rem] font-black tracking-tight leading-[0.9] text-black uppercase">
+                PROJETOS <span className="text-neutral-300">/</span>
+              </h2>
             </div>
 
-            {/* Cards — overflow visível para se estenderem além deste painel */}
-            <div className="flex items-center gap-8 px-8 md:px-16 lg:px-24 flex-nowrap">
-              {PROJECTS.map((project, i) => (
-                <div
-                  key={i}
-                  ref={(el) => { if (el) cardsRef.current[i] = el }}
-                  className="group relative flex-shrink-0 w-[340px] md:w-[400px] lg:w-[440px] h-[420px] md:h-[460px] rounded-2xl border border-neutral-200 bg-gradient-to-br from-white to-neutral-50 p-8 flex flex-col justify-between transition-shadow duration-300 hover:shadow-2xl hover:shadow-neutral-200/50"
+            {/* Arrows + page counter */}
+            {totalPages > 1 && (
+              <div className="flex items-center gap-3 shrink-0">
+                <span className="text-[0.65rem] font-mono text-neutral-300 tracking-widest">
+                  {String(page + 1).padStart(2, "0")}&nbsp;/&nbsp;{String(totalPages).padStart(2, "0")}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-neutral-200 text-neutral-400 hover:border-black hover:text-black disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-150"
                 >
-                  <span className="absolute top-6 right-8 text-[0.6rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
-                    ({String(i + 1).padStart(2, "0")})
-                  </span>
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  disabled={page === totalPages - 1}
+                  className="w-8 h-8 flex items-center justify-center rounded-full border border-neutral-200 text-neutral-400 hover:border-black hover:text-black disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-150"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
 
-                  <div className="flex flex-col gap-4">
-                    <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-black leading-tight">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm md:text-base text-neutral-500 leading-relaxed max-w-[35ch]">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {project.stack.map((tech, j) => (
-                        <span
-                          key={j}
-                          className="px-3 py-1.5 text-xs font-mono font-medium text-amber-800/70 border border-neutral-200 rounded-full bg-neutral-100/50"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 self-start px-5 py-2.5 text-sm font-semibold text-white bg-black rounded-full transition-all duration-300 hover:bg-amber-700 hover:scale-105 active:scale-95"
-                  >
-                    {project.label || "Visitar"}
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                </div>
+          {filtered.length > 0 ? (
+            <div className="grid grid-cols-3 gap-3">
+              {pageItems.map((project, i) => (
+                <ProjectCard key={project.title} project={project} index={page * PER_PAGE + i} />
               ))}
             </div>
+          ) : (
+            <div className="flex items-center justify-center h-40 text-neutral-300 text-sm font-mono">
+              nenhum projeto nessa categoria
+            </div>
+          )}
+        </div>
+
+        {/* Right: oval image — fixed to bottom of section */}
+        <div className="hidden lg:block shrink-0 w-[180px] xl:w-[220px]">
+          <div className="w-full rounded-full overflow-hidden" style={{ height: "72vh" }}>
+            <Image
+              src="/ilustra_trampos.png"
+              alt=""
+              width={220}
+              height={400}
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
+
       </div>
     </section>
   )
