@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import { useState } from "react"
-import { ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import Image from "next/image"
+import { ArrowUpRight } from "lucide-react"
 
 type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
 
@@ -13,6 +13,7 @@ interface Project {
   url: string
   label?: string
   categories: Category[]
+  image: string | null
 }
 
 const CATEGORIES: Category[] = [
@@ -32,6 +33,7 @@ const PROJECTS: Project[] = [
     url: "https://vazglauco.github.io",
     label: "Visitar",
     categories: ["Portfolio", "Landing page"],
+    image: null,
   },
   {
     title: "Task Flow",
@@ -41,6 +43,7 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Aplicativo", "Sistema web"],
+    image: null,
   },
   {
     title: "DevConnect",
@@ -50,6 +53,7 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Aplicativo", "Sistema web"],
+    image: null,
   },
   {
     title: "AI Content Studio",
@@ -59,6 +63,7 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Sistema web"],
+    image: null,
   },
   {
     title: "FinTrack",
@@ -68,6 +73,7 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Aplicativo", "Sistema web"],
+    image: null,
   },
   {
     title: "CloudDeploy",
@@ -77,6 +83,7 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Sistema web"],
+    image: null,
   },
   {
     title: "DesignSys",
@@ -86,60 +93,29 @@ const PROJECTS: Project[] = [
     url: "#",
     label: "Em breve",
     categories: ["Landing page", "E-commerce"],
+    image: null,
   },
 ]
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const isLive = project.url !== "#"
+const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
+function ProjectImagePlaceholder({ index }: { index: number }) {
+  const suit = SUIT_CHARS[index % SUIT_CHARS.length]
   return (
-    <div className="group relative flex flex-col gap-4 rounded-2xl border border-neutral-200 bg-white p-6 transition-shadow duration-300 hover:shadow-lg hover:shadow-neutral-100">
-      <span className="text-[0.55rem] font-mono text-neutral-300 tracking-[0.2em] uppercase">
-        ({String(index + 1).padStart(2, "0")})
-      </span>
-
-      <h3 className="text-lg font-bold tracking-tight text-black leading-tight">
-        {project.title}
-      </h3>
-
-      <p className="text-sm text-neutral-400 leading-relaxed line-clamp-3 flex-1">
-        {project.description}
-      </p>
-
-      <div className="flex flex-wrap gap-1.5 pt-1">
-        {project.stack.slice(0, 3).map((tech, j) => (
-          <span
-            key={j}
-            className="px-2.5 py-1 text-[0.65rem] font-mono font-medium text-neutral-400 border border-neutral-200 rounded-full"
-          >
-            {tech}
-          </span>
-        ))}
-      </div>
-
-      <a
-        href={project.url}
-        target={isLive ? "_blank" : undefined}
-        rel={isLive ? "noopener noreferrer" : undefined}
-        className={`inline-flex items-center gap-1.5 self-start mt-1 px-4 py-2 text-xs font-semibold rounded-full transition-all duration-200 active:scale-95 ${
-          isLive
-            ? "text-white bg-black hover:bg-neutral-800"
-            : "text-neutral-400 bg-neutral-100 cursor-default"
-        }`}
-        onClick={isLive ? undefined : (e) => e.preventDefault()}
+    <div className="w-full h-full flex items-center justify-center bg-neutral-100 select-none">
+      <span
+        className="font-black text-neutral-200 pointer-events-none"
+        style={{ fontSize: "clamp(3rem, 6vw, 5rem)" }}
+        aria-hidden
       >
-        {project.label || "Visitar"}
-        {isLive && <ExternalLink className="w-3 h-3" />}
-      </a>
+        {suit}
+      </span>
     </div>
   )
 }
 
-const PER_PAGE = 6 // 3 cols × 2 rows
-
 export function ProjectsSection() {
   const [selected, setSelected] = useState<Set<Category>>(new Set())
-  const [page, setPage] = useState(0)
 
   function toggle(cat: Category) {
     setSelected((prev) => {
@@ -147,7 +123,6 @@ export function ProjectsSection() {
       next.has(cat) ? next.delete(cat) : next.add(cat)
       return next
     })
-    setPage(0)
   }
 
   const filtered =
@@ -155,107 +130,125 @@ export function ProjectsSection() {
       ? PROJECTS
       : PROJECTS.filter((p) => p.categories.some((c) => selected.has(c)))
 
-  const totalPages = Math.ceil(filtered.length / PER_PAGE)
-  const pageItems = filtered.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE)
-
   return (
-    <section
-      id="projetos"
-      className="relative bg-[#faf9f7] flex items-start pt-16 pb-12 px-8 md:px-16 lg:px-24"
-    >
-      <div className="flex gap-10 xl:gap-14 items-start w-full">
+    <section id="projetos" className="bg-[#faf9f7] py-16 min-h-screen flex flex-col">
 
-        {/* Category filter — vertical, left */}
-        <div className="hidden lg:flex flex-col gap-2 shrink-0">
-          <span className="text-[0.6rem] font-mono tracking-[0.2em] uppercase text-neutral-300 mb-1">
-            filtrar
-          </span>
-          {CATEGORIES.map((cat) => {
-            const active = selected.has(cat)
-            return (
-              <button
-                key={cat}
-                onClick={() => toggle(cat)}
-                className={`text-left px-3 py-2 text-xs font-medium rounded-lg border transition-all duration-150 whitespace-nowrap ${
-                  active
-                    ? "bg-black text-white border-black"
-                    : "bg-[#faf9f7] text-neutral-400 border-neutral-200 hover:border-neutral-400 hover:text-neutral-600"
-                }`}
-              >
-                {cat}
-              </button>
-            )
-          })}
-          {selected.size > 0 && (
-            <button
-              onClick={() => { setSelected(new Set()); setPage(0) }}
-              className="mt-1 text-[0.6rem] font-mono tracking-widest uppercase text-neutral-300 hover:text-red-500 transition-colors text-left"
+      {/* Header */}
+      <div className="px-8 md:px-16 lg:px-24 flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <span className="block w-[3px] h-10 bg-red-500 shrink-0" />
+          <h2 className="text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] font-black tracking-tight leading-none text-black uppercase">
+            PROJETOS<span className="text-neutral-300">/</span>
+          </h2>
+        </div>
+        <span className="font-mono text-xs text-neutral-400 tracking-widest hidden md:block">
+          {filtered.length} trabalhos
+        </span>
+      </div>
+
+      {/* Filters */}
+      <div className="px-8 md:px-16 lg:px-24 mb-0 flex gap-1 flex-wrap">
+        <button
+          onClick={() => setSelected(new Set())}
+          className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
+            selected.size === 0
+              ? "border-black bg-black text-white"
+              : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
+          }`}
+        >
+          todos
+        </button>
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => toggle(cat)}
+            className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
+              selected.has(cat)
+                ? "border-red-500 text-red-500"
+                : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Project rows */}
+      <div className="mt-6 border-t border-neutral-200 mx-8 md:mx-16 lg:mx-24">
+        {filtered.length === 0 && (
+          <div className="flex items-center justify-center h-40 text-neutral-300 text-sm font-mono">
+            nenhum projeto nessa categoria
+          </div>
+        )}
+
+        {filtered.map((project, i) => {
+          const isLive = project.url !== "#"
+          return (
+            <div
+              key={project.title}
+              className="border-b border-neutral-200 flex items-stretch group hover:bg-[#f0ede8] transition-colors duration-150"
             >
-              limpar
-            </button>
-          )}
-        </div>
-
-        {/* Center: title + grid + pagination */}
-        <div className="flex-1 min-w-0 flex flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-start gap-4">
-              <span className="block w-[3px] h-10 bg-red-500 mt-1 rounded-full shrink-0" />
-              <h2 className="text-[2rem] md:text-[2.5rem] lg:text-[3rem] font-black tracking-tight leading-[0.9] text-black uppercase">
-                PROJETOS <span className="text-neutral-300">/</span>
-              </h2>
-            </div>
-
-            {/* Arrows + page counter */}
-            {totalPages > 1 && (
-              <div className="flex items-center gap-3 shrink-0">
-                <span className="text-[0.65rem] font-mono text-neutral-300 tracking-widest">
-                  {String(page + 1).padStart(2, "0")}&nbsp;/&nbsp;{String(totalPages).padStart(2, "0")}
+              {/* Content */}
+              <div className="flex-1 py-6 flex flex-col gap-3 pr-6">
+                <span className="font-mono text-[0.6rem] text-red-500 leading-none">
+                  ({String(i + 1).padStart(2, "0")})
                 </span>
-                <button
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  disabled={page === 0}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-neutral-200 text-neutral-400 hover:border-black hover:text-black disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-150"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                  disabled={page === totalPages - 1}
-                  className="w-8 h-8 flex items-center justify-center rounded-full border border-neutral-200 text-neutral-400 hover:border-black hover:text-black disabled:opacity-25 disabled:cursor-not-allowed transition-all duration-150"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+
+                <h3 className="font-black tracking-tight leading-none uppercase text-neutral-800 text-[1.4rem] md:text-[1.7rem] lg:text-[2rem]">
+                  {project.title}
+                </h3>
+
+                <p className="text-sm text-neutral-400 leading-relaxed max-w-[55ch]">
+                  <span className="text-red-500 font-mono text-xs">// </span>
+                  {project.description}
+                </p>
+
+                <div className="flex items-center justify-between mt-auto pt-2 flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.stack.slice(0, 4).map((t) => (
+                      <span
+                        key={t}
+                        className="font-mono text-[0.58rem] text-neutral-400 border border-neutral-200 px-2 py-1 leading-none"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  {isLive ? (
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 font-mono text-xs font-bold border border-black text-black px-4 py-2 hover:bg-black hover:text-white transition-colors shrink-0"
+                    >
+                      {project.label || "Visitar"}
+                      <ArrowUpRight className="w-3 h-3" />
+                    </a>
+                  ) : (
+                    <span className="font-mono text-xs text-neutral-300 border border-neutral-200 px-4 py-2 shrink-0">
+                      {project.label}
+                    </span>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
 
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-3 gap-3">
-              {pageItems.map((project, i) => (
-                <ProjectCard key={project.title} project={project} index={page * PER_PAGE + i} />
-              ))}
+              {/* Image */}
+              <div className="w-[38%] md:w-[40%] shrink-0 border-l border-neutral-200 overflow-hidden self-stretch relative">
+                {project.image ? (
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover object-top"
+                  />
+                ) : (
+                  <ProjectImagePlaceholder index={i} />
+                )}
+              </div>
             </div>
-          ) : (
-            <div className="flex items-center justify-center h-40 text-neutral-300 text-sm font-mono">
-              nenhum projeto nessa categoria
-            </div>
-          )}
-        </div>
-
-        {/* Right: oval image — fixed to bottom of section */}
-        <div className="hidden lg:block shrink-0 w-[180px] xl:w-[220px]">
-          <div className="w-full rounded-full overflow-hidden" style={{ height: "72vh" }}>
-            <Image
-              src="/ilustra_trampos.png"
-              alt=""
-              width={220}
-              height={400}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-
+          )
+        })}
       </div>
     </section>
   )

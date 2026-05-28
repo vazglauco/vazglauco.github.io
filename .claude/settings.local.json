@@ -13,7 +13,11 @@
       "Bash(npx tsc *)",
       "Bash(pnpm dev *)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
-      "Bash(rm components/education-section.tsx components/languages-section.tsx components/profile-section.tsx components/contact-section.tsx components/experience-section.tsx components/hero-section.tsx components/skills-section.tsx components/skills-panel.tsx components/experience-projects-layout.tsx components/about-section.tsx components/services-section.tsx components/blog-section.tsx components/horizontal-scroll-layout.tsx components/hero/HeroContent.tsx components/hero/HeroCard.tsx components/ui/button.tsx components/ui/tabs.tsx)"
+      "Bash(rm components/education-section.tsx components/languages-section.tsx components/profile-section.tsx components/contact-section.tsx components/experience-section.tsx components/hero-section.tsx components/skills-section.tsx components/skills-panel.tsx components/experience-projects-layout.tsx components/about-section.tsx components/services-section.tsx components/blog-section.tsx components/horizontal-scroll-layout.tsx components/hero/HeroContent.tsx components/hero/HeroCard.tsx components/ui/button.tsx components/ui/tabs.tsx)",
+      "Bash(npx playwright *)",
+      "Bash(node -e ' *)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(rm -f \"C:/apps/portfolios/vazglauco.github.io/.next/dev/lock\")"
     ],
     "deny": [],
     "ask": []

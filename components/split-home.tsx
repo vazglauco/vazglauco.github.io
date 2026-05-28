@@ -133,7 +133,7 @@ export function SplitHome() {
 	/* ───── MOBILE LAYOUT ───── */
 	if (isMobile) {
 		return (
-			<div className='h-screen w-screen flex flex-col relative overflow-hidden'>
+			<div className='h-full w-screen flex flex-col relative overflow-hidden'>
 				{/* Painel escuro — 58% do topo */}
 				<div
 					className='relative bg-[#0a0a0a] flex flex-col justify-center px-7 pt-8'
@@ -277,7 +277,7 @@ export function SplitHome() {
 
 	/* ───── DESKTOP LAYOUT (original) ───── */
 	return (
-		<div className='h-screen w-screen flex flex-col lg:flex-row overflow-hidden relative'>
+		<div className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
 			{/* ===== Card — fixed at center boundary ===== */}
 			<div
 				className='hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none'

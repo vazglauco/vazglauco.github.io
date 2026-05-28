@@ -1,189 +1,84 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { Mail, MessageCircle, Download, Github, Linkedin, ArrowUp } from "lucide-react"
 import Image from "next/image"
+import { ArrowUpRight, ArrowDown } from "lucide-react"
 
-gsap.registerPlugin(ScrollTrigger)
+const LINKS = [
+  { label: "E-mail", href: "mailto:vazz.glauco@gmail.com", external: false, download: false },
+  { label: "WhatsApp", href: "https://wa.me/5511983701618?text=Ol%C3%A1%20Glauco%21%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20oportunidades.", external: true, download: false },
+  { label: "LinkedIn", href: "https://linkedin.com/in/vazglauco", external: true, download: false },
+  { label: "GitHub", href: "https://github.com/vazglauco", external: true, download: false },
+  { label: "Currículo", href: "/curriculo-glauco-vaz.pdf", external: false, download: true },
+]
 
 export function ContactFooter() {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const itemsRef = useRef<HTMLElement[]>([])
-
-  useEffect(() => {
-    if (!sectionRef.current) return
-
-    const ctx = gsap.context(() => {
-      itemsRef.current.forEach((el, i) => {
-        if (!el) return
-        gsap.fromTo(
-          el,
-          { y: 50, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: el,
-              start: "top 90%",
-              end: "top 60%",
-              scrub: 0.4,
-            },
-          }
-        )
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
-
-  const whatsappMessage = encodeURIComponent(
-    "Olá Glauco! Vi seu portfólio e gostaria de conversar sobre oportunidades."
-  )
-  const whatsappUrl = `https://wa.me/5511983701618?text=${whatsappMessage}`
-
   return (
-    <section
-      ref={sectionRef}
-      id="contato"
-      className="relative bg-[#faf9f7] text-black min-h-screen flex flex-col justify-between"
-    >
-      {/* Main content */}
-      <div className="flex-1 flex flex-col justify-center px-8 md:px-16 lg:px-24 py-24">
-        {/* Header */}
-        <div
-          ref={(el) => { if (el) itemsRef.current[0] = el }}
-          className="mb-16 md:mb-24"
-        >
-          <h2 className="text-[3rem] md:text-[5rem] lg:text-[7rem] xl:text-[9rem] font-black tracking-tight leading-[0.85] text-black uppercase">
-            VAMOS
-            <br />
-            <span className="text-amber-500">CONVERSAR</span>
-            <span className="text-neutral-400">.</span>
+    <section id="contato" className="bg-white">
+
+      {/* Main — 4 columns */}
+      <div className="px-8 md:px-16 lg:px-24 pt-14 pb-10 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 lg:gap-10 items-center">
+
+        {/* Col 1: heading */}
+        <div className="flex flex-col gap-3">
+          <span className="font-mono text-[0.6rem] text-neutral-400 tracking-[0.3em] uppercase">
+            // entre em contato
+          </span>
+          <h2 className="font-black tracking-tight leading-[0.88] uppercase text-black text-[2.8rem] md:text-[3rem] lg:text-[4.5rem]">
+            VAMOS<br />CONVERSAR<span className="text-red-600">.</span>
           </h2>
         </div>
 
-        {/* Contact links + imagem */}
-        <div className="flex items-stretch gap-8 lg:gap-16">
-          <div className="flex flex-col gap-0 max-w-4xl w-full">
-          <a
-            ref={(el) => { if (el) itemsRef.current[1] = el }}
-            href="mailto:vazz.glauco@gmail.com"
-            className="group flex items-center justify-between py-6 border-b border-neutral-200 hover:border-amber-800/40 transition-colors"
-          >
-            <div className="flex items-center gap-4 md:gap-6">
-              <Mail className="w-5 h-5 text-neutral-400 group-hover:text-amber-500 transition-colors" />
-              <span className="text-lg md:text-2xl font-bold tracking-tight group-hover:text-amber-100 transition-colors">
-                vazz.glauco@gmail.com
+        {/* Col 2–3: todos os links */}
+        <div className="col-span-2 flex flex-col">
+          {LINKS.map(({ label, href, external, download }) => (
+            <a
+              key={label}
+              href={href}
+              target={external ? "_blank" : undefined}
+              rel={external ? "noopener noreferrer" : undefined}
+              download={download ? "Curriculo-Glauco-Vaz.pdf" : undefined}
+              className="group flex items-center justify-between py-4 border-b border-black/10 hover:border-black transition-colors"
+            >
+              <span className="font-black text-[1.4rem] md:text-[1.8rem] lg:text-[2rem] tracking-tight uppercase text-black/30 group-hover:text-black transition-colors leading-none">
+                {label}
               </span>
-            </div>
-            <span className="text-xs font-mono text-neutral-400 tracking-wider uppercase hidden sm:block">
-              Email
-            </span>
-          </a>
-
-          <a
-            ref={(el) => { if (el) itemsRef.current[2] = el }}
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between py-6 border-b border-neutral-200 hover:border-green-800/40 transition-colors"
-          >
-            <div className="flex items-center gap-4 md:gap-6">
-              <MessageCircle className="w-5 h-5 text-neutral-400 group-hover:text-green-500 transition-colors" />
-              <span className="text-lg md:text-2xl font-bold tracking-tight group-hover:text-green-100 transition-colors">
-                WhatsApp
-              </span>
-            </div>
-            <span className="text-xs font-mono text-neutral-400 tracking-wider uppercase hidden sm:block">
-              Chat
-            </span>
-          </a>
-
-          <a
-            ref={(el) => { if (el) itemsRef.current[3] = el }}
-            href="https://linkedin.com/in/vazglauco"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between py-6 border-b border-neutral-200 hover:border-blue-800/40 transition-colors"
-          >
-            <div className="flex items-center gap-4 md:gap-6">
-              <Linkedin className="w-5 h-5 text-neutral-400 group-hover:text-blue-500 transition-colors" />
-              <span className="text-lg md:text-2xl font-bold tracking-tight group-hover:text-blue-100 transition-colors">
-                LinkedIn
-              </span>
-            </div>
-            <span className="text-xs font-mono text-neutral-400 tracking-wider uppercase hidden sm:block">
-              Rede
-            </span>
-          </a>
-
-          <a
-            ref={(el) => { if (el) itemsRef.current[4] = el }}
-            href="https://github.com/vazglauco"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center justify-between py-6 border-b border-neutral-200 hover:border-neutral-600 transition-colors"
-          >
-            <div className="flex items-center gap-4 md:gap-6">
-              <Github className="w-5 h-5 text-neutral-400 group-hover:text-white transition-colors" />
-              <span className="text-lg md:text-2xl font-bold tracking-tight group-hover:text-neutral-100 transition-colors">
-                GitHub
-              </span>
-            </div>
-            <span className="text-xs font-mono text-neutral-400 tracking-wider uppercase hidden sm:block">
-              Código
-            </span>
-          </a>
-
-          <a
-            ref={(el) => { if (el) itemsRef.current[5] = el }}
-            href="/curriculo-glauco-vaz.pdf"
-            download="Curriculo-Glauco-Vaz.pdf"
-            className="group flex items-center justify-between py-6 border-b border-neutral-200 hover:border-amber-800/40 transition-colors"
-          >
-            <div className="flex items-center gap-4 md:gap-6">
-              <Download className="w-5 h-5 text-neutral-400 group-hover:text-amber-500 transition-colors" />
-              <span className="text-lg md:text-2xl font-bold tracking-tight group-hover:text-amber-100 transition-colors">
-                Download Currículo
-              </span>
-            </div>
-            <span className="text-xs font-mono text-neutral-400 tracking-wider uppercase hidden sm:block">
-              PDF
-            </span>
-          </a>
-          </div>
-
-          {/* Ilustração centralizada na segunda coluna */}
-          <div className="hidden md:flex shrink-0 w-56 lg:w-72 xl:w-80 items-center justify-center">
-            <Image
-              src="/ilustra_contato.png"
-              alt="Ilustração contato"
-              width={400}
-              height={480}
-              className="object-contain w-full h-auto"
-            />
-          </div>
+              {download
+                ? <ArrowDown className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
+                : <ArrowUpRight className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
+              }
+            </a>
+          ))}
         </div>
+
+        {/* Col 4: illustration */}
+        <div className="relative w-full aspect-square select-none">
+          <Image
+            src="/ilustra_contato.png"
+            alt=""
+            fill
+            className="object-contain object-top"
+            aria-hidden
+          />
+        </div>
+
       </div>
 
-      {/* Footer */}
-      <div className="px-8 md:px-16 lg:px-24 py-8 border-t border-neutral-200 flex items-center justify-between">
-        <p className="text-xs text-neutral-400 font-mono">
-          © {new Date().getFullYear()} Glauco Vaz. Todos os direitos reservados.
+      {/* Footer bottom */}
+      <div className="px-8 md:px-16 lg:px-24 py-6 border-t border-black/10 flex items-center justify-between">
+        <p className="text-[0.6rem] font-mono text-neutral-400">
+          © {new Date().getFullYear()} Glauco Vaz
+          <span className="text-red-600"> · </span>
+          Todos os direitos reservados.
         </p>
-
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="group flex items-center gap-2 text-xs font-mono text-neutral-400 hover:text-amber-500 transition-colors"
+          className="group flex items-center gap-2 text-[0.6rem] font-mono text-neutral-400 hover:text-black transition-colors tracking-widest uppercase"
         >
           Voltar ao topo
-          <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
+          <span className="group-hover:text-red-600 transition-colors">↑</span>
         </button>
       </div>
+
     </section>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 const EXPERIENCES = [
   {
@@ -67,7 +67,7 @@ const EXPERIENCES = [
     period: "fev 2019 — out 2019",
     role: "Software Engineer Frontend",
     company: "Indra",
-    client: "Santander",
+    client: null,
     location: "São Paulo, SP",
     description:
       "Desenvolvimento de dashboard para controle de dados internos do Santander, construindo o front-end da aplicação com Angular.",
@@ -105,139 +105,220 @@ function Period({ text }: { text: string }) {
 }
 
 export function ExperienceTimeline() {
-  const [openQueue, setOpenQueue] = useState<number[]>([0, 1])
+  const [selected, setSelected] = useState(0)
+  const [openMobile, setOpenMobile] = useState<number | null>(0)
 
-  const toggle = (i: number) =>
-    setOpenQueue((prev) => {
-      if (prev.includes(i)) return prev.filter((x) => x !== i)
-      const next = [...prev, i]
-      return next.length > 2 ? next.slice(1) : next
-    })
+  const exp = EXPERIENCES[selected]
 
   return (
-    <div className="experience-section bg-[#0a0a0a] text-white flex flex-col justify-center py-16 min-h-screen">
-      {/* Header */}
-      <div className="px-8 md:px-16 lg:px-24 mb-6 flex items-baseline justify-between">
-        <span className="text-[0.58rem] font-mono tracking-[0.25em] uppercase text-neutral-500">
-          experiências
-        </span>
-        <span className="text-[0.58rem] font-mono text-neutral-500">
-          {EXPERIENCES.length} empresas{" "}
-          <span className="text-red-500">·</span> 2017
-          <span className="text-red-500">→</span>2025
-        </span>
-      </div>
+    <div className="experience-section bg-[#faf9f7]">
 
-      {/* Log list */}
-      <div className="border-t border-neutral-700/40 mx-8 md:mx-16 lg:mx-24">
-        {EXPERIENCES.map((exp, i) => {
-          const isActive = openQueue.includes(i)
-          return (
-            <div key={i} className="border-b border-neutral-700/40">
-              {/* Row — always visible */}
+      {/* ── DESKTOP: two-panel layout ── */}
+      <div className="hidden lg:flex items-start gap-8 xl:gap-12 px-12 xl:px-20 py-16 xl:py-20">
+
+        {/* Left — company list (dark card) */}
+        <div className="w-[38%] bg-[#0a0a0a] text-white flex flex-col justify-center px-10 xl:px-14 py-14 overflow-y-auto shrink-0">
+          <div className="mb-8">
+            <h2 className="text-[1.6rem] xl:text-[2rem] font-black tracking-tight uppercase text-white leading-none mb-2">
+              EXPERIÊNCIAS<span className="text-red-500">.</span>
+            </h2>
+            <span className="font-mono text-sm text-neutral-400">
+              {EXPERIENCES.length} empresas{" "}
+              <span className="text-red-500">·</span>{" "}
+              2017<span className="text-red-500">→</span>2025
+            </span>
+          </div>
+
+          <nav className="flex flex-col">
+            {EXPERIENCES.map((e, i) => (
               <button
-                onClick={() => toggle(i)}
-                className={`w-full text-left px-0 py-3.5 flex items-center gap-4 md:gap-5 transition-colors group focus:outline-none ${
-                  isActive
-                    ? "bg-white/[0.04]"
-                    : "hover:bg-white/[0.06]"
-                }`}
+                key={i}
+                onClick={() => setSelected(i)}
+                className="text-left py-3 border-b border-neutral-900 group flex items-center gap-3 focus:outline-none"
               >
-                {/* Index */}
-                <span className="font-mono text-[0.58rem] shrink-0 w-9 text-neutral-500 select-none">
-                  <span className="text-red-500">(</span>
-                  {String(i + 1).padStart(2, "0")}
-                  <span className="text-red-500">)</span>
-                </span>
-
-                {/* Period */}
-                <span className="hidden md:block font-mono text-[0.58rem] text-neutral-500 shrink-0 w-44 leading-none">
-                  <Period text={exp.period} />
-                </span>
-
-                {/* Company */}
                 <span
-                  className={`font-black text-sm md:text-[0.9rem] tracking-tight shrink-0 transition-colors leading-none ${
-                    isActive
-                      ? "text-white"
-                      : "text-neutral-400 group-hover:text-white"
+                  className={`font-mono text-[0.6rem] w-4 shrink-0 transition-colors ${
+                    selected === i ? "text-red-500" : "text-transparent"
                   }`}
                 >
-                  {exp.company}
+                  →
                 </span>
-
-                <span className="text-red-500 text-xs shrink-0 hidden sm:block select-none">
-                  ·
-                </span>
-
-                {/* Role */}
                 <span
-                  className={`text-[0.72rem] font-light italic transition-colors hidden sm:block leading-none ${
-                    isActive
-                      ? "text-neutral-300"
-                      : "text-neutral-600 group-hover:text-neutral-400"
+                  className={`font-black tracking-tight transition-all duration-150 ${
+                    selected === i
+                      ? "text-white text-[1.1rem]"
+                      : "text-neutral-400 text-[0.95rem] group-hover:text-neutral-100"
                   }`}
                 >
-                  {exp.role}
+                  {e.client ?? e.company}
                 </span>
-
-                {/* Toggle indicator */}
-                <span className={`ml-auto font-mono text-base font-semibold shrink-0 transition-colors select-none leading-none ${
-                  isActive
-                    ? "text-red-500"
-                    : "text-neutral-600 group-hover:text-neutral-400"
-                }`}>
-                  {isActive ? "−" : "+"}
+                <span className="font-mono text-[0.65rem] text-neutral-400 ml-auto shrink-0 group-hover:text-white transition-colors">
+                  {e.client
+                    ? <><span className="text-red-500">via</span> {e.company}</>
+                    : null
+                  }
                 </span>
               </button>
+            ))}
+          </nav>
+        </div>
 
-              {/* Expanded detail */}
-              <div
-                className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                  isActive ? "max-h-56" : "max-h-0"
-                }`}
-              >
-                <div className="pb-5 pt-1 pl-[52px] md:pl-[252px]">
-                  {/* Period on mobile */}
-                  <p className="md:hidden font-mono text-[0.58rem] text-neutral-500 mb-2">
-                    <Period text={exp.period} />
-                  </p>
+        {/* Right — detail panel */}
+        <div className="flex-1 flex flex-col justify-center px-4 xl:px-8 py-14">
+          <div key={selected} className="flex flex-col gap-5" style={{
+            animation: "fadeIn 0.25s ease"
+          }}>
+            <span className="font-mono text-[0.62rem] text-neutral-400 tracking-widest">
+              <Period text={exp.period} />
+            </span>
 
-                  {/* Description */}
-                  <p className="text-[0.72rem] text-neutral-400 leading-relaxed max-w-[62ch] mb-3">
-                    <span className="text-red-500 font-mono">// </span>
-                    {exp.description}
-                  </p>
+            <div>
+              <h3 className="text-[2.8rem] xl:text-[3.5rem] font-black tracking-tight leading-none text-black">
+                {exp.company}
+                <span className="text-red-500">.</span>
+              </h3>
+              <p className="text-base font-light italic text-neutral-500 mt-2">
+                {exp.role}
+              </p>
+            </div>
 
-                  {/* Stack */}
-                  <div className="flex flex-wrap gap-1.5 mb-2">
-                    {exp.stack.map((tech, j) => (
-                      <span
-                        key={j}
-                        className="px-2 py-0.5 text-[0.56rem] font-mono text-neutral-400 border border-neutral-700 rounded-sm"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+            <div className="w-10 h-[2px] bg-red-500" />
 
-                  {/* Client · Location */}
-                  {(exp.client || exp.location) && (
-                    <p className="text-[0.58rem] font-mono text-neutral-500">
-                      {exp.client && (
-                        <>
-                          via {exp.client}
-                          <span className="text-red-500"> · </span>
-                        </>
-                      )}
-                      {exp.location}
+            <p className="text-[0.85rem] text-neutral-500 leading-relaxed max-w-[54ch]">
+              <span className="text-red-500 font-mono text-xs">// </span>
+              {exp.description}
+            </p>
+
+            <div className="flex flex-wrap gap-2">
+              {exp.stack.map((tech, j) => (
+                <span
+                  key={j}
+                  className="px-3 py-1 text-[0.62rem] font-mono text-neutral-400 border border-neutral-200"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {(exp.client || exp.location) && (
+              <p className="text-[0.62rem] font-mono text-neutral-400">
+                {exp.client && (
+                  <>
+                    <span className="text-red-500">via</span> {exp.client}{" "}
+                    <span className="text-red-500">·</span>{" "}
+                  </>
+                )}
+                {exp.location}
+              </p>
+            )}
+
+            <span className="font-mono text-[0.58rem] text-neutral-400 mt-2">
+              ({String(selected + 1).padStart(2, "0")}/
+              {String(EXPERIENCES.length).padStart(2, "0")})
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── MOBILE: accordion ── */}
+      <div className="lg:hidden py-12">
+        <div className="px-8 mb-6 flex items-baseline justify-between">
+          <span className="text-[0.58rem] font-mono tracking-[0.25em] uppercase text-neutral-500">
+            experiências
+          </span>
+          <span className="text-[0.58rem] font-mono text-neutral-500">
+            {EXPERIENCES.length} empresas{" "}
+            <span className="text-red-500">·</span> 2017
+            <span className="text-red-500">→</span>2025
+          </span>
+        </div>
+
+        <div className="border-t border-neutral-700/40 mx-8">
+          {EXPERIENCES.map((e, i) => {
+            const isActive = openMobile === i
+            return (
+              <div key={i} className="border-b border-neutral-700/40">
+                <button
+                  onClick={() => setOpenMobile(isActive ? null : i)}
+                  className={`w-full text-left px-0 py-3.5 flex items-center gap-4 transition-colors group focus:outline-none ${
+                    isActive ? "bg-white/[0.04]" : "hover:bg-white/[0.06]"
+                  }`}
+                >
+                  <span className="font-mono text-[0.58rem] shrink-0 w-9 text-neutral-500 select-none">
+                    <span className="text-red-500">(</span>
+                    {String(i + 1).padStart(2, "0")}
+                    <span className="text-red-500">)</span>
+                  </span>
+                  <span
+                    className={`font-black text-sm tracking-tight shrink-0 transition-colors leading-none ${
+                      isActive
+                        ? "text-white"
+                        : "text-neutral-400 group-hover:text-white"
+                    }`}
+                  >
+                    {e.company}
+                  </span>
+                  <span className="text-red-500 text-xs shrink-0 select-none hidden sm:block">·</span>
+                  <span
+                    className={`text-[0.72rem] font-light italic transition-colors hidden sm:block leading-none ${
+                      isActive
+                        ? "text-neutral-300"
+                        : "text-neutral-600 group-hover:text-neutral-400"
+                    }`}
+                  >
+                    {e.role}
+                  </span>
+                  <span
+                    className={`ml-auto font-mono text-base font-semibold shrink-0 transition-colors select-none leading-none ${
+                      isActive
+                        ? "text-red-500"
+                        : "text-neutral-600 group-hover:text-neutral-400"
+                    }`}
+                  >
+                    {isActive ? "−" : "+"}
+                  </span>
+                </button>
+
+                <div
+                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
+                    isActive ? "max-h-64" : "max-h-0"
+                  }`}
+                >
+                  <div className="pb-5 pt-1 pl-[52px]">
+                    <p className="font-mono text-[0.58rem] text-neutral-500 mb-2">
+                      <Period text={e.period} />
                     </p>
-                  )}
+                    <p className="text-[0.72rem] text-neutral-400 leading-relaxed max-w-[62ch] mb-3">
+                      <span className="text-red-500 font-mono">// </span>
+                      {e.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {e.stack.map((tech, j) => (
+                        <span
+                          key={j}
+                          className="px-2 py-0.5 text-[0.56rem] font-mono text-neutral-400 border border-neutral-700"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                    {(e.client || e.location) && (
+                      <p className="text-[0.58rem] font-mono text-neutral-500">
+                        {e.client && (
+                          <>
+                            via {e.client}
+                            <span className="text-red-500"> · </span>
+                          </>
+                        )}
+                        {e.location}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )

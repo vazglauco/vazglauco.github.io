@@ -1,0 +1,37 @@
+---
+title: "Como construí este portfolio"
+date: "2026-04-10"
+tags: ["next.js", "gsap", "design"]
+excerpt: "A ideia de usar uma carta de baralho como elemento central veio de uma necessidade de ter algo que pertencesse a dois mundos ao mesmo tempo."
+---
+
+## A ideia
+
+A ideia de usar uma carta de baralho como elemento central veio de uma necessidade de ter algo que pertencesse a dois mundos ao mesmo tempo — o lado técnico e frio do desenvolvimento de software, e o lado editorial e visual do design.
+
+A carta fica exatamente na fronteira entre o painel escuro e o painel claro. Ela não pertence a nenhum dos dois, ou pertence aos dois. Era a metáfora certa.
+
+## Stack escolhida
+
+Para a animação do card, usei **GSAP** com `rotateY` e `rotateX` num ciclo de 14 segundos. O efeito de tilt é feito com evento `mousemove` — o card responde à posição do cursor com até 45° de rotação.
+
+```ts
+gsap.to(card, {
+  rotateY: tiltX,
+  rotateX: -tiltY,
+  duration: 0.15,
+  ease: 'power2.out',
+})
+```
+
+O header usa `mix-blend-mode: difference` no elemento `<header>` em si — não nos filhos. Isso garante que o texto sempre contraste com o fundo independente da seção.
+
+## Tipografia como código
+
+A decisão de escrever o nome como `glauco.vaz()` e a localização como `{ location: "São Paulo" }` foi pensada para criar uma linguagem visual consistente. O desenvolvedor lê código o tempo todo — o portfolio deveria falar essa língua.
+
+O acento vermelho aparece **só na pontuação**: `.`, `(`, `)`, `[]`. Nunca em palavras inteiras.
+
+## O que aprendi
+
+Construir algo com uma identidade visual forte antes de escrever uma linha de código muda o resultado. A maioria das decisões técnicas virou consequência das decisões de design, não o contrário.

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Menu, X, Linkedin, Github } from "lucide-react"
 import { gsap } from "gsap"
 import { TextPlugin } from "gsap/TextPlugin"
@@ -45,6 +46,7 @@ export function Header() {
   const [activeSection, setActiveSection] = useState("")
   const [lm, setLm] = useState<Record<string, boolean>>({})
 
+  const pathname   = usePathname()
   const headerRef  = useRef<HTMLElement>(null)
   const logoRef    = useRef<HTMLSpanElement>(null)
   const aboutRef   = useRef<HTMLAnchorElement>(null)
@@ -52,6 +54,7 @@ export function Header() {
   const expRef     = useRef<HTMLAnchorElement>(null)
   const formRef    = useRef<HTMLAnchorElement>(null)
   const contatoRef = useRef<HTMLAnchorElement>(null)
+  const blogRef    = useRef<HTMLAnchorElement>(null)
   const liRef      = useRef<HTMLAnchorElement>(null)
   const ghRef      = useRef<HTMLAnchorElement>(null)
 
@@ -102,6 +105,7 @@ export function Header() {
       ["exp", expRef as React.RefObject<Element | null>],
       ["form", formRef as React.RefObject<Element | null>],
       ["contato", contatoRef as React.RefObject<Element | null>],
+      ["blog", blogRef as React.RefObject<Element | null>],
       ["li", liRef as React.RefObject<Element | null>],
       ["gh", ghRef as React.RefObject<Element | null>],
     ]
@@ -127,7 +131,7 @@ export function Header() {
 
   // Entrance + typewriter
   useEffect(() => {
-    const all = [logoRef, aboutRef, skillsRef, expRef, formRef, contatoRef, liRef, ghRef]
+    const all = [logoRef, aboutRef, skillsRef, expRef, formRef, contatoRef, blogRef, liRef, ghRef]
       .map(r => r.current)
 
     gsap.set(all, { opacity: 0 })
@@ -140,6 +144,7 @@ export function Header() {
     tl.to(expRef.current,     { duration: 0.4, text: { value: ".experiência()" }, opacity: 1, ease: "none" }, "+=0.06")
     tl.to(formRef.current,    { duration: 0.4, text: { value: ".formação()" },    opacity: 1, ease: "none" }, "+=0.06")
     tl.to(contatoRef.current, { duration: 0.3, text: { value: ".contato()" },     opacity: 1, ease: "none" }, "+=0.06")
+    tl.to(blogRef.current,   { duration: 0.3, text: { value: ".blog()" },        opacity: 1, ease: "none" }, "+=0.06")
     tl.to([liRef.current, ghRef.current], { opacity: 1, duration: 0.3, stagger: 0.08 }, "+=0.06")
 
     return () => tl.kill()
@@ -151,6 +156,7 @@ export function Header() {
     { href: "#experiencia", ref: expRef,     text: ".experiência()" },
     { href: "#formacao",    ref: formRef,    text: ".formação()"    },
     { href: "#contato",     ref: contatoRef, text: ".contato()"     },
+    { href: "/blog",        ref: blogRef,    text: ".blog()"        },
   ]
 
   const cancelRefs = useRef<Map<string, () => void>>(new Map())
@@ -188,10 +194,13 @@ export function Header() {
           {/* Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {menuItems.map((item) => {
-              const key = item.href.slice(1) === "experiencia" ? "exp"
-                        : item.href.slice(1) === "formacao"    ? "form"
-                        : item.href.slice(1)
-              const isActive = activeSection === item.href.slice(1)
+              const hrefKey = item.href.startsWith('/') ? item.href.slice(1) : item.href.slice(1)
+              const key = hrefKey === "experiencia" ? "exp"
+                        : hrefKey === "formacao"    ? "form"
+                        : hrefKey
+              const isActive = item.href.startsWith('/')
+                ? pathname.startsWith(item.href)
+                : activeSection === item.href.slice(1)
               return (
                 <Link
                   key={item.href}
@@ -252,6 +261,7 @@ export function Header() {
                   : item.href === "#skills"      ? ".skills()"
                   : item.href === "#experiencia" ? ".experiência()"
                   : item.href === "#formacao"    ? ".formação()"
+                  : item.href === "/blog"        ? ".blog()"
                   : ".contato()"}
                 </Link>
               )

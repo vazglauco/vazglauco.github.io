@@ -1,0 +1,45 @@
+---
+title: "Padrão Repository na prática"
+date: "2026-03-15"
+tags: ["arquitetura", "node.js", "typescript"]
+excerpt: "O Repository Pattern resolve um problema simples: separar a lógica de negócio do acesso a dados. Mas a maioria dos exemplos que vi complica demais."
+---
+
+## O problema
+
+A maioria dos tutoriais de Repository Pattern cria interfaces enormes, classes abstratas e hierarquias que parecem mais um exercício acadêmico do que código que vai pra produção.
+
+O padrão resolve um problema simples: **separar a lógica de negócio do acesso a dados**. Nada mais.
+
+## Implementação mínima
+
+```ts
+interface UserRepository {
+  findById(id: string): Promise<User | null>
+  save(user: User): Promise<void>
+}
+
+class PrismaUserRepository implements UserRepository {
+  async findById(id: string) {
+    return prisma.user.findUnique({ where: { id } })
+  }
+
+  async save(user: User) {
+    await prisma.user.upsert({
+      where: { id: user.id },
+      create: user,
+      update: user,
+    })
+  }
+}
+```
+
+A interface define o contrato. A implementação faz o trabalho sujo. O service não precisa saber que existe Prisma.
+
+## Quando vale a pena
+
+Vale quando você precisa trocar a camada de dados (de Prisma para uma API externa, por exemplo) ou quando quer testar o service sem bater no banco.
+
+Não vale quando o projeto é pequeno e a "camada de dados" é uma chamada direta ao Prisma que nunca vai mudar.
+
+Complexidade tem custo. Use quando o benefício cobre esse custo.
