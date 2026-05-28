@@ -108,7 +108,7 @@ export function SkillsServicesSection() {
 				className='flex'
 			>
 				{/* Left image column */}
-				<div className='hidden md:flex w-[28%] lg:w-[26%] h-full items-center justify-center px-8 shrink-0'>
+				<div className='hidden md:flex w-[22%] h-full items-center justify-center px-6 shrink-0'>
 					<div className='relative w-full h-[70%]'>
 						<Image
 							src='/ilustra_trampos.png'
@@ -119,7 +119,7 @@ export function SkillsServicesSection() {
 					</div>
 				</div>
 
-				{/* Right cards area */}
+				{/* Center cards area */}
 				<div className='relative flex-1 overflow-hidden h-full'>
 					{SERVICES.map((service, i) => (
 						<div
@@ -134,7 +134,7 @@ export function SkillsServicesSection() {
 								right: 0,
 								transform: `translateY(${translates[i]}px)`,
 							}}
-							className={`bg-[#111111] px-8 md:px-10 lg:px-12 pt-8 pb-8${i > 0 ? ' border-t border-neutral-800' : ''}`}
+							className={`bg-[#111111] px-8 pt-8 pb-8${i > 0 ? ' border-t border-neutral-800' : ''}`}
 						>
 							<div className='flex items-baseline gap-4 mb-5'>
 								<span className='text-lg font-bold text-neutral-600 shrink-0'>
@@ -168,6 +168,18 @@ export function SkillsServicesSection() {
 							</div>
 						</div>
 					))}
+				</div>
+
+				{/* Right image column */}
+				<div className='hidden md:flex w-[22%] h-full items-center justify-center px-6 shrink-0'>
+					<div className='relative w-full h-[70%]'>
+						<Image
+							src='/ilustra_trampos_2.png'
+							alt='Ilustração de trabalho 2'
+							fill
+							className='object-contain'
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
