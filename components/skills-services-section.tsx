@@ -38,71 +38,128 @@ const SERVICES = [
 // Each card slides in over 40vh of scroll. After all cards are in, 30vh of dwell before exit.
 const PHASE_VH = 0.4
 const DWELL_VH = 0.3
+const TITLE_HEIGHT = 100 // px — collapsed card shows only its title on mobile
 
 export function SkillsServicesSection() {
 	const outerRef = useRef<HTMLDivElement>(null)
-	const cardRefs = useRef<(HTMLDivElement | null)[]>([null, null, null])
-	const heightsRef = useRef([200, 200, 200])
+	const stickyRef = useRef<HTMLDivElement>(null)
+	const cardRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null])
+	const titleRefs = useRef<(HTMLDivElement | null)[]>([null, null, null])
+	const heightsRef = useRef([200, 200, 200, 0])
+	const titleHeightsRef = useRef([80, 80, 80])
 	const phaseRef = useRef(320)
+	const isMobileRef = useRef(false)
+
+	// Mirrors the rendered 100svh of the sticky container — single source of truth for JS math
+	const stableHeightRef = useRef(800)
 
 	const [outerHeight, setOuterHeight] = useState('auto')
-	// translateY for each card — cards 1 and 2 start off the bottom
-	const [translates, setTranslates] = useState<[number, number, number]>([0, 9999, 9999])
+	const [translates, setTranslates] = useState<number[]>([0, 9999, 9999, 9999])
+	const [clipHeights, setClipHeights] = useState<(number | string)[]>(['auto', 'auto', 'auto'])
+	const [isMobile, setIsMobile] = useState(false)
 
 	useEffect(() => {
-		const measure = () => {
-			heightsRef.current = cardRefs.current.map(r => r?.offsetHeight ?? 200)
-			phaseRef.current = window.innerHeight * PHASE_VH
-			const totalScroll =
-				window.innerHeight +
-				(SERVICES.length - 1) * phaseRef.current +
-				window.innerHeight * DWELL_VH
-			setOuterHeight(`${totalScroll}px`)
-			updateTranslates()
-		}
+		// Use the actual rendered height of the sticky container (= 100svh in px)
+		// so JS scroll math stays in sync with CSS
+		stableHeightRef.current = stickyRef.current?.offsetHeight ?? window.innerHeight
+
+		const mq = window.matchMedia('(max-width: 1023px)')
+		isMobileRef.current = mq.matches
+		setIsMobile(mq.matches)
 
 		const updateTranslates = () => {
 			if (!outerRef.current) return
 			const scrolled = Math.max(0, -outerRef.current.getBoundingClientRect().top)
 			const ph = phaseRef.current
+			// Use scrollHeight so natural height is preserved even when card is clipped
 			const [h0, h1] = heightsRef.current
-			const vh = window.innerHeight
+			const vh = stableHeightRef.current
 
-			// t1: 0→1 during first phase scroll
 			const t1 = Math.max(0, Math.min(1, scrolled / ph))
-			// t2: 0→1 during second phase scroll
 			const t2 = Math.max(0, Math.min(1, (scrolled - ph) / ph))
 
-			// card 0 always at 0, card 1 slides vh→h0, card 2 slides vh→(h0+h1)
-			setTranslates([
-				0,
-				vh + (h0 - vh) * t1,
-				vh + (h0 + h1 - vh) * t2,
-			])
+			if (isMobileRef.current) {
+				const [th0, th1] = titleHeightsRef.current
+				// Collapse only starts in the second half of each card's travel
+				const clip1 = Math.max(0, Math.min(1, (t1 - 0.5) / 0.5))
+				const clip2 = Math.max(0, Math.min(1, (t2 - 0.5) / 0.5))
+				const t3 = Math.max(0, Math.min(1, (scrolled - 2 * ph) / ph))
+
+				setTranslates([
+					0,
+					vh + (th0 - vh) * t1,
+					vh + (th0 + th1 - vh) * t2,
+					vh * (1 - t3),
+				])
+				setClipHeights([
+					h0 + (th0 - h0) * clip1,
+					h1 + (th1 - h1) * clip2,
+					'auto',
+				])
+			} else {
+				setTranslates([
+					0,
+					vh + (h0 - vh) * t1,
+					vh + (h0 + h1 - vh) * t2,
+				])
+				setClipHeights(['auto', 'auto', 'auto'])
+			}
+		}
+
+		const measure = () => {
+			// scrollHeight gives natural height even when overflow:hidden clips the element
+			heightsRef.current = cardRefs.current.map(r => r?.scrollHeight ?? 200)
+			// pt-8 (32px) + title row height + 16px breathing room
+			titleHeightsRef.current = titleRefs.current.map(r => 32 + (r?.offsetHeight ?? 40) + 16)
+			phaseRef.current = stableHeightRef.current * PHASE_VH
+			const extraPhase = isMobileRef.current ? 1 : 0
+			const totalScroll =
+				stableHeightRef.current +
+				(SERVICES.length - 1 + extraPhase) * phaseRef.current +
+				stableHeightRef.current * DWELL_VH
+			setOuterHeight(`${totalScroll}px`)
+			updateTranslates()
 		}
 
 		measure()
 
+		const mqHandler = (e: MediaQueryListEvent) => {
+			isMobileRef.current = e.matches
+			setIsMobile(e.matches)
+			measure()
+		}
+		mq.addEventListener('change', mqHandler)
+
+		const onResize = () => {
+			const newH = stickyRef.current?.offsetHeight ?? window.innerHeight
+			if (Math.abs(newH - stableHeightRef.current) > 100) {
+				stableHeightRef.current = newH
+				measure()
+			}
+		}
+
 		const obs = new ResizeObserver(measure)
 		cardRefs.current.forEach(r => r && obs.observe(r))
 		window.addEventListener('scroll', updateTranslates, { passive: true })
-		window.addEventListener('resize', measure)
+		window.addEventListener('resize', onResize)
 
 		return () => {
 			obs.disconnect()
+			mq.removeEventListener('change', mqHandler)
 			window.removeEventListener('scroll', updateTranslates)
-			window.removeEventListener('resize', measure)
+			window.removeEventListener('resize', onResize)
 		}
 	}, [])
 
 	return (
-		<div ref={outerRef} style={{ height: outerHeight }} className='bg-[#111111] text-white'>
+		<div id="skills" ref={outerRef} style={{ height: outerHeight }} className='bg-[#111111] text-white'>
 			{/* Single sticky container — all cards exit together when outer div ends */}
 			<div
+				ref={stickyRef}
 				style={{
 					position: 'sticky',
 					top: 100,
-					height: '100vh',
+					height: '100svh',
 					overflow: 'hidden',
 				}}
 				className='flex'
@@ -133,10 +190,11 @@ export function SkillsServicesSection() {
 								left: 0,
 								right: 0,
 								transform: `translateY(${translates[i]}px)`,
+								...(isMobile && i < 2 ? { height: clipHeights[i], overflow: 'hidden' } : {}),
 							}}
 							className={`bg-[#111111] px-8 pt-8 pb-8${i > 0 ? ' border-t border-neutral-800' : ''}`}
 						>
-							<div className='flex items-baseline gap-4 mb-5'>
+							<div ref={el => { titleRefs.current[i] = el }} className='flex items-baseline gap-4 mb-5'>
 								<span className='text-lg font-bold text-neutral-600 shrink-0'>
 									({service.number})
 								</span>
@@ -168,6 +226,25 @@ export function SkillsServicesSection() {
 							</div>
 						</div>
 					))}
+
+					{/* Mobile closing card — image only, slides in to cover everything */}
+					<div
+						ref={el => { cardRefs.current[3] = el }}
+						className='lg:hidden absolute top-0 left-0 right-0 bg-[#111111] flex items-center justify-center'
+						style={{
+							transform: `translateY(${translates[3] ?? 9999}px)`,
+							height: '100svh',
+						}}
+					>
+						<div className='relative w-full h-[75%]'>
+							<Image
+								src='/ilustra_trampos.png'
+								alt='Ilustração de trampos'
+								fill
+								className='object-contain'
+							/>
+						</div>
+					</div>
 				</div>
 
 				{/* Right image column */}

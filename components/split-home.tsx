@@ -133,11 +133,11 @@ export function SplitHome() {
 	/* ───── MOBILE LAYOUT ───── */
 	if (isMobile) {
 		return (
-			<div className='h-full w-screen flex flex-col relative overflow-hidden'>
-				{/* Painel escuro — 58% do topo */}
+			<div className='w-screen flex flex-col relative'>
+				{/* Painel escuro — 70vh */}
 				<div
-					className='relative bg-[#0a0a0a] flex flex-col justify-center px-7 pt-8'
-					style={{ flex: '0 0 58%', paddingBottom: 'clamp(160px, 24vh, 210px)' }}
+					className='relative bg-[#0a0a0a] flex flex-col px-7 pt-[96px]'
+					style={{ minHeight: '80svh', flex: '0 0 auto', paddingBottom: 'clamp(95px, 13svh, 115px)' }}
 				>
 					{/*<PatternBackground variant='dark' />*/}
 
@@ -171,16 +171,16 @@ export function SplitHome() {
 						</div>
 
 						<div className='flex flex-col gap-3 mt-1'>
-							<div className='flex gap-2'>
+							<div className='flex gap-3'>
 								<a
 									href='/blog'
-									className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-[9px] font-bold tracking-widest uppercase px-3 py-2 transition-colors'
+									className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
 								>
 									✦ Leia meu blog
 								</a>
 								<a
 									href='mailto:ext.glaucobaptista@mentesnotaveis.com.br'
-									className='inline-block border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-[9px] font-bold tracking-widest uppercase px-3 py-2 transition-colors'
+									className='inline-block border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
 								>
 									Mensagem →
 								</a>
@@ -196,39 +196,32 @@ export function SplitHome() {
 					</div>
 				</div>
 
-				{/* Painel branco — 42% abaixo */}
+				{/* Painel branco — 25% abaixo */}
 				<div
-					className='relative bg-[#faf9f7] flex flex-col justify-center px-7 pb-6'
-					style={{ flex: '0 0 42%', paddingTop: 'clamp(160px, 24vh, 210px)' }}
+					className='relative bg-[#faf9f7] flex flex-col justify-center px-7 pb-14'
+					style={{ flex: '0 0 auto', paddingTop: 'clamp(195px, 24svh, 220px)' }}
 				>
 					{/*<PatternBackground variant='light' />*/}
 
 					<div className='relative z-10 text-right'>
 						{/* Title */}
-						<h2 className='font-black text-neutral-900 text-[1.4rem] leading-[1.05] mb-1 whitespace-nowrap'>
+						<h2 className='font-black text-neutral-900 text-[1.3rem] leading-[1.05] mb-1 whitespace-nowrap'>
 							Fullstack Engineer<span className='text-[rgb(200,30,20)]'>.</span>
 						</h2>
 
-						{/* Subtitle */}
-						<p className='font-mono text-[12px] text-neutral-400 tracking-wide mb-4'>
-							desde <span className='text-neutral-700 font-bold'>2016</span>
-							<span className='mx-1 text-neutral-300'>·</span>
-							freela &amp; CLT
-						</p>
-
 						{/* Stats */}
-						<div className='flex gap-6 justify-end mb-4'>
+						<div className='flex gap-5 justify-end mb-2'>
 							{[
 								{ value: '10', label: 'ANOS' },
 								{ value: '9', label: 'EMPRESAS' },
 								{ value: '∞', label: 'COMMITS' },
 							].map(({ value, label }) => (
 								<div key={label} className='text-right'>
-									<div className='font-black text-[1.8rem] text-neutral-900 leading-none'>
+									<div className='font-black text-[1.6rem] text-neutral-900 leading-none'>
 										{value}
 										<span className='text-[rgb(200,30,20)]'>.</span>
 									</div>
-									<div className='font-mono text-[10px] tracking-[0.2em] text-neutral-400 mt-0.5 uppercase'>
+									<div className='font-mono text-[9px] tracking-[0.2em] text-neutral-400 mt-0.5 uppercase'>
 										{label}
 									</div>
 								</div>
@@ -236,23 +229,19 @@ export function SplitHome() {
 						</div>
 
 						{/* Stack */}
-						<p className='font-black text-neutral-900 text-[1.1rem]'>
+						<p className='font-black text-neutral-900 text-[0.95rem]'>
 							Angular <span className='text-[rgb(200,30,20)]'>·</span> React{' '}
 							<span className='text-[rgb(200,30,20)]'>·</span> Node
 						</p>
 					</div>
 
-					<div className='absolute bottom-4 left-7 flex items-center gap-2 text-neutral-400 text-[10px] tracking-widest uppercase z-10'>
-						<ChevronDown className='h-3 w-3 animate-bounce' />
-						scroll
-					</div>
 				</div>
 
 				{/* Carta — centralizada no boundary entre os dois painéis */}
 				<div
 					className='absolute left-1/2 z-30 pointer-events-none'
 					style={{
-						top: '58%',
+						top: '80svh',
 						transform: 'translateX(-50%) translateY(-50%)',
 						perspective: '800px',
 					}}
@@ -265,7 +254,7 @@ export function SplitHome() {
 								width={280}
 								height={400}
 								className='object-contain drop-shadow-2xl'
-								style={{ width: '52vw', height: 'auto', maxWidth: '240px' }}
+								style={{ width: '58vw', height: 'auto', maxWidth: '220px' }}
 								priority
 							/>
 						</div>
@@ -358,10 +347,6 @@ export function SplitHome() {
 					</div>
 				</div>
 
-				<div className='absolute bottom-6 left-8 md:left-12 lg:left-14 flex items-center gap-2 text-neutral-300 text-[11px] tracking-widest uppercase'>
-					<ChevronDown className='h-3 w-3 animate-bounce' />
-					scroll
-				</div>
 			</div>
 
 			{/* ===== RIGHT PANEL — White ===== */}

@@ -37,13 +37,13 @@ const ALL_SKILLS: Skill[] = [
 
 const tripled = [...ALL_SKILLS, ...ALL_SKILLS, ...ALL_SKILLS]
 
-const ANIMATION = 'skm-left 60s linear infinite'
+const ANIMATION = 'skm-left 90s linear infinite'
 
-function Strip({ textColor, darkIcons }: { textColor: string; darkIcons: boolean }) {
+function Strip({ textColor, darkIcons, iconsOnly }: { textColor: string; darkIcons: boolean; iconsOnly?: boolean }) {
 	return (
 		<div
-			className='flex items-center gap-10 py-4'
-			style={{ width: 'max-content', animation: ANIMATION }}
+			className='flex items-center py-4'
+			style={{ width: 'max-content', animation: ANIMATION, gap: iconsOnly ? '1.5rem' : '2.5rem' }}
 		>
 			{tripled.map((skill, i) => (
 				<div key={i} className='flex items-center gap-2.5 shrink-0'>
@@ -51,16 +51,17 @@ function Strip({ textColor, darkIcons }: { textColor: string; darkIcons: boolean
 					<img
 						src={skill.icon}
 						alt={skill.name}
-						className='w-6 h-6 object-contain'
+						className='w-8 h-8 object-contain'
 						style={darkIcons && skill.darkInvert ? { filter: 'brightness(0) invert(1)' } : undefined}
 					/>
-					<span
-						className='text-[0.72rem] font-mono whitespace-nowrap'
-						style={{ color: textColor }}
-					>
-						{skill.name}
-					</span>
-					<span style={{ color: textColor, marginLeft: '1.5rem' }}>·</span>
+					{!iconsOnly && (
+						<>
+							<span className='text-[0.72rem] font-mono whitespace-nowrap' style={{ color: textColor }}>
+								{skill.name}
+							</span>
+							<span style={{ color: textColor, marginLeft: '1.5rem' }}>·</span>
+						</>
+					)}
 				</div>
 			))}
 		</div>
@@ -69,40 +70,61 @@ function Strip({ textColor, darkIcons }: { textColor: string; darkIcons: boolean
 
 export function SkillsMarquee() {
 	return (
-		<div
-			className='absolute bottom-0 left-0 right-0 z-20 border-t border-neutral-500/30'
-			style={{ display: 'grid' }}
-		>
+		<>
 			<style>{`
 				@keyframes skm-left {
 					from { transform: translateX(0); }
 					to   { transform: translateX(-33.333%); }
 				}
+				@keyframes skm-right {
+					from { transform: translateX(-33.333%); }
+					to   { transform: translateX(0); }
+				}
 			`}</style>
 
-			{/* Dark half — left side, white text */}
-			<div
-				className='overflow-hidden'
-				style={{
-					gridArea: '1/1',
-					background: '#0a0a0a',
-					clipPath: 'inset(0 50vw 0 0)',
-				}}
-			>
-				<Strip textColor='white' darkIcons={true} />
+			{/* Mobile — 2 linhas, sentidos opostos */}
+			<div className='md:hidden flex flex-col'>
+				{/* Linha 1 — light, esquerda */}
+				<div className='overflow-hidden bg-[#faf9f7]'>
+					<Strip textColor='#111111' darkIcons={false} iconsOnly />
+				</div>
+				{/* Linha 2 — light, direita */}
+				<div className='overflow-hidden bg-[#faf9f7]'>
+					<div
+						className='flex items-center py-4'
+						style={{ width: 'max-content', animation: 'skm-right 90s linear infinite', gap: '1.5rem' }}
+					>
+						{[...ALL_SKILLS, ...ALL_SKILLS, ...ALL_SKILLS].map((skill, i) => (
+							<div key={i} className='flex items-center gap-2.5 shrink-0'>
+								{/* eslint-disable-next-line @next/next/no-img-element */}
+								<img
+									src={skill.icon}
+									alt={skill.name}
+									className='w-8 h-8 object-contain'
+								/>
+							</div>
+						))}
+					</div>
+				</div>
 			</div>
 
-			{/* Light half — right side, dark text */}
+			{/* Desktop — split half dark / half light, colado no bottom do hero */}
 			<div
-				className='overflow-hidden'
-				style={{
-					gridArea: '1/1',
-					background: '#faf9f7',
-					clipPath: 'inset(0 0 0 50vw)',
-				}}
+				className='hidden md:grid md:absolute md:bottom-0 md:left-0 md:right-0 z-20 border-t border-neutral-500/30'
 			>
-				<Strip textColor='#111111' darkIcons={false} />
+				<div
+					className='overflow-hidden'
+					style={{ gridArea: '1/1', background: '#0a0a0a', clipPath: 'inset(0 50vw 0 0)' }}
+				>
+					<Strip textColor='white' darkIcons={true} />
+				</div>
+				<div
+					className='overflow-hidden'
+					style={{ gridArea: '1/1', background: '#faf9f7', clipPath: 'inset(0 0 0 50vw)' }}
+				>
+					<Strip textColor='#111111' darkIcons={false} />
+				</div>
 			</div>
-		</div>
+		</>
 	)
 }

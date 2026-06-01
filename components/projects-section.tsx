@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
@@ -116,11 +116,22 @@ function ProjectImagePlaceholder({ index }: { index: number }) {
 
 export function ProjectsSection() {
   const [selected, setSelected] = useState<Set<Category>>(new Set())
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   function toggle(cat: Category) {
     setSelected((prev) => {
       const next = new Set(prev)
       next.has(cat) ? next.delete(cat) : next.add(cat)
+      setOpenIndex(0)
       return next
     })
   }
@@ -129,6 +140,134 @@ export function ProjectsSection() {
     selected.size === 0
       ? PROJECTS
       : PROJECTS.filter((p) => p.categories.some((c) => selected.has(c)))
+
+  const filters = (
+    <div className="px-8 md:px-16 lg:px-24 mb-0 flex gap-1 flex-wrap">
+      <button
+        onClick={() => { setSelected(new Set()); setCurrentIndex(0) }}
+        className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
+          selected.size === 0
+            ? "border-black bg-black text-white"
+            : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
+        }`}
+      >
+        todos
+      </button>
+      {CATEGORIES.map((cat) => (
+        <button
+          key={cat}
+          onClick={() => toggle(cat)}
+          className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
+            selected.has(cat)
+              ? "border-red-500 text-red-500"
+              : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
+          }`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  )
+
+  if (isMobile) {
+    return (
+      <section id="projetos" className="bg-[#faf9f7] py-16 flex flex-col">
+        {/* Header */}
+        <div className="px-8 flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <span className="block w-[3px] h-10 bg-red-500 shrink-0" />
+            <h2 className="text-[2.5rem] font-black tracking-tight leading-none text-black uppercase">
+              PROJETOS<span className="text-neutral-300">/</span>
+            </h2>
+          </div>
+          <span className="font-mono text-xs text-neutral-400 tracking-widest">
+            {filtered.length} trabalhos
+          </span>
+        </div>
+
+        {filters}
+
+        <div className="mt-6 border-t border-neutral-200 mx-8">
+          {filtered.length === 0 && (
+            <div className="flex items-center justify-center h-40 text-neutral-300 text-sm font-mono">
+              nenhum projeto nessa categoria
+            </div>
+          )}
+
+          {filtered.map((project, i) => {
+            const isOpen = openIndex === i
+            const isLive = project.url !== "#"
+            return (
+              <div key={project.title} className="border-b border-neutral-200">
+                {/* Row — always visible */}
+                <button
+                  className="w-full flex items-center justify-between py-4 text-left"
+                  onClick={() => setOpenIndex(isOpen ? null : i)}
+                >
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-mono text-[0.6rem] text-red-500 shrink-0">
+                      ({String(i + 1).padStart(2, "0")})
+                    </span>
+                    <span className="font-black tracking-tight uppercase text-neutral-800 text-base leading-tight">
+                      {project.title}
+                    </span>
+                  </div>
+                  <span
+                    className="font-mono text-neutral-400 text-lg leading-none shrink-0 ml-3 transition-transform duration-200"
+                    style={{ transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)' }}
+                  >
+                    +
+                  </span>
+                </button>
+
+                {/* Expanded content */}
+                <div
+                  className="overflow-hidden transition-all duration-300 ease-out"
+                  style={{ maxHeight: isOpen ? '500px' : '0px' }}
+                >
+                  <div className="pb-5 flex flex-col gap-3">
+                    <div className="w-full h-44 border border-neutral-200 overflow-hidden relative">
+                      {project.image ? (
+                        <Image src={project.image} alt={project.title} fill className="object-cover object-top" />
+                      ) : (
+                        <ProjectImagePlaceholder index={i} />
+                      )}
+                    </div>
+                    <p className="text-sm text-neutral-400 leading-relaxed">
+                      <span className="text-red-500 font-mono text-xs">// </span>
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {project.stack.slice(0, 4).map((t) => (
+                        <span key={t} className="font-mono text-[0.58rem] text-neutral-400 border border-neutral-200 px-2 py-1 leading-none">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    {isLive ? (
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="self-start inline-flex items-center gap-1.5 font-mono text-xs font-bold border border-black text-black px-4 py-2"
+                      >
+                        {project.label || "Visitar"}
+                        <ArrowUpRight className="w-3 h-3" />
+                      </a>
+                    ) : (
+                      <span className="self-start font-mono text-xs text-neutral-300 border border-neutral-200 px-4 py-2">
+                        {project.label}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section id="projetos" className="bg-[#faf9f7] py-16 min-h-screen flex flex-col">
@@ -146,32 +285,7 @@ export function ProjectsSection() {
         </span>
       </div>
 
-      {/* Filters */}
-      <div className="px-8 md:px-16 lg:px-24 mb-0 flex gap-1 flex-wrap">
-        <button
-          onClick={() => setSelected(new Set())}
-          className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
-            selected.size === 0
-              ? "border-black bg-black text-white"
-              : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
-          }`}
-        >
-          todos
-        </button>
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => toggle(cat)}
-            className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
-              selected.has(cat)
-                ? "border-red-500 text-red-500"
-                : "border-neutral-200 text-neutral-400 hover:border-neutral-600 hover:text-neutral-600"
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      {filters}
 
       {/* Project rows */}
       <div className="mt-6 border-t border-neutral-200 mx-8 md:mx-16 lg:mx-24">

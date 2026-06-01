@@ -71,8 +71,8 @@ export function AboutMeSection() {
 
 	if (isMobile) {
 		return (
-			<div ref={sectionRef} className='w-full bg-[#faf9f7] relative overflow-hidden'>
-				<div className='px-8 pt-20 pb-10'>
+			<div ref={sectionRef} className='w-full bg-[#faf9f7] relative'>
+				<div className='px-8 pt-20 pb-[480px]'>
 					<div className='mb-10 text-right'>
 						<div className='flex items-baseline justify-end gap-2'>
 							<span className='text-[2rem] font-black tracking-tight leading-none text-black uppercase'>
@@ -93,19 +93,17 @@ export function AboutMeSection() {
 					</div>
 
 					<div className='flex flex-col gap-7'>
-						{LINE_NUMS.map((num, i) => (
+						{[0, 1, 2].map((i) => (
 							<div key={i}>
 								<div className='flex items-start gap-3'>
 									<span className='text-[10px] font-mono text-neutral-400 mt-1 shrink-0 w-6'>
-										{num}.
+										{LINE_NUMS[i]}.
 									</span>
 									<p
 										className={
 											i === 0
 												? 'text-xl font-black italic font-serif leading-tight text-neutral-800'
-												: i === 3
-													? 'text-base leading-relaxed text-neutral-700 italic'
-													: 'text-base leading-relaxed text-neutral-700 font-medium'
+												: 'text-base leading-relaxed text-neutral-700 font-medium'
 										}
 									>
 										<LineContent index={i} />
@@ -114,16 +112,26 @@ export function AboutMeSection() {
 								{i === 0 && <div className='w-12 h-[2px] bg-red-500 mt-5 ml-9' />}
 							</div>
 						))}
+
+						{/* Parágrafo 04 */}
+						<div className='flex items-start gap-3'>
+							<span className='text-[10px] font-mono text-neutral-400 mt-1 shrink-0 w-6'>
+								{LINE_NUMS[3]}.
+							</span>
+							<p className='text-base leading-relaxed text-neutral-700 italic'>
+								<LineContent index={3} />
+							</p>
+						</div>
 					</div>
 				</div>
 
-				<div className='flex justify-end px-8 pb-16 mt-4'>
+				<div className='absolute bottom-0 left-0 pointer-events-none select-none'>
 					<Image
 						src='/ilustra_about.png'
 						alt='Ilustração Glauco'
 						width={280}
 						height={320}
-						className='object-contain w-48 h-auto'
+						className='object-contain w-full h-auto'
 					/>
 				</div>
 			</div>
@@ -131,7 +139,7 @@ export function AboutMeSection() {
 	}
 
 	return (
-		<div ref={sectionRef} className='w-full min-h-screen bg-[#faf9f7] overflow-hidden relative'>
+		<div id="sobre" ref={sectionRef} className='w-full min-h-screen bg-[#faf9f7] overflow-hidden relative'>
 			{/* Title — top right */}
 			<div
 				className='absolute top-14 right-8 md:right-14 lg:right-20 z-10 text-right select-none'

@@ -14,8 +14,13 @@ export default function Home() {
 
 	return (
 		<>
-			<div className="h-screen relative overflow-hidden">
+			<div className="md:h-screen relative md:overflow-hidden">
 				<SplitHome />
+				<div className="hidden md:block">
+					<SkillsMarquee />
+				</div>
+			</div>
+			<div className="md:hidden">
 				<SkillsMarquee />
 			</div>
 			<AboutMeSection />

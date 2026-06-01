@@ -52,7 +52,6 @@ export function Header() {
   const aboutRef   = useRef<HTMLAnchorElement>(null)
   const skillsRef  = useRef<HTMLAnchorElement>(null)
   const expRef     = useRef<HTMLAnchorElement>(null)
-  const formRef    = useRef<HTMLAnchorElement>(null)
   const contatoRef = useRef<HTMLAnchorElement>(null)
   const blogRef    = useRef<HTMLAnchorElement>(null)
   const liRef      = useRef<HTMLAnchorElement>(null)
@@ -62,7 +61,7 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY + 100
-      for (const id of ["sobre", "skills", "experiencia", "formacao", "contato"]) {
+      for (const id of ["sobre", "skills", "projetos", "experiencia", "blog", "contato"]) {
         const el = document.getElementById(id)
         if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
           setActiveSection(id)
@@ -103,7 +102,6 @@ export function Header() {
       ["sobre", aboutRef as React.RefObject<Element | null>],
       ["skills", skillsRef as React.RefObject<Element | null>],
       ["exp", expRef as React.RefObject<Element | null>],
-      ["form", formRef as React.RefObject<Element | null>],
       ["contato", contatoRef as React.RefObject<Element | null>],
       ["blog", blogRef as React.RefObject<Element | null>],
       ["li", liRef as React.RefObject<Element | null>],
@@ -131,7 +129,7 @@ export function Header() {
 
   // Entrance + typewriter
   useEffect(() => {
-    const all = [logoRef, aboutRef, skillsRef, expRef, formRef, contatoRef, blogRef, liRef, ghRef]
+    const all = [logoRef, aboutRef, skillsRef, expRef, contatoRef, blogRef, liRef, ghRef]
       .map(r => r.current)
 
     gsap.set(all, { opacity: 0 })
@@ -142,7 +140,6 @@ export function Header() {
     tl.to(aboutRef.current,   { duration: 0.3, text: { value: ".sobre()" },       opacity: 1, ease: "none" }, "+=0.06")
     tl.to(skillsRef.current,  { duration: 0.3, text: { value: ".skills()" },      opacity: 1, ease: "none" }, "+=0.06")
     tl.to(expRef.current,     { duration: 0.4, text: { value: ".experiência()" }, opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(formRef.current,    { duration: 0.4, text: { value: ".formação()" },    opacity: 1, ease: "none" }, "+=0.06")
     tl.to(contatoRef.current, { duration: 0.3, text: { value: ".contato()" },     opacity: 1, ease: "none" }, "+=0.06")
     tl.to(blogRef.current,   { duration: 0.3, text: { value: ".blog()" },        opacity: 1, ease: "none" }, "+=0.06")
     tl.to([liRef.current, ghRef.current], { opacity: 1, duration: 0.3, stagger: 0.08 }, "+=0.06")
@@ -154,7 +151,6 @@ export function Header() {
     { href: "#sobre",       ref: aboutRef,   text: ".sobre()"       },
     { href: "#skills",      ref: skillsRef,  text: ".skills()"      },
     { href: "#experiencia", ref: expRef,     text: ".experiência()" },
-    { href: "#formacao",    ref: formRef,    text: ".formação()"    },
     { href: "#contato",     ref: contatoRef, text: ".contato()"     },
     { href: "/blog",        ref: blogRef,    text: ".blog()"        },
   ]
@@ -182,7 +178,7 @@ export function Header() {
         <div className="flex items-center justify-between h-14 px-10 md:px-16">
 
           {/* Logo */}
-          <Link href="#sobre"
+          <Link href="/"
             onMouseEnter={() => handleHover("logo", logoRef.current, "glauco.vaz();")}
           >
             <span
@@ -257,12 +253,7 @@ export function Header() {
                       : "text-black/45 border-transparent hover:text-black/70"
                   }`}
                   onClick={() => setIsMenuOpen(false)}>
-                  {item.href === "#sobre"       ? ".sobre()"
-                  : item.href === "#skills"      ? ".skills()"
-                  : item.href === "#experiencia" ? ".experiência()"
-                  : item.href === "#formacao"    ? ".formação()"
-                  : item.href === "/blog"        ? ".blog()"
-                  : ".contato()"}
+                  {item.text}
                 </Link>
               )
             })}

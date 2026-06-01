@@ -111,7 +111,7 @@ export function ExperienceTimeline() {
   const exp = EXPERIENCES[selected]
 
   return (
-    <div className="experience-section bg-[#faf9f7]">
+    <div id="experiencia" className="experience-section bg-[#0a0a0a] lg:bg-[#faf9f7]">
 
       {/* ── DESKTOP: two-panel layout ── */}
       <div className="hidden lg:flex items-start gap-8 xl:gap-12 px-12 xl:px-20 py-16 xl:py-20">
@@ -222,15 +222,16 @@ export function ExperienceTimeline() {
 
       {/* ── MOBILE: accordion ── */}
       <div className="lg:hidden py-12">
-        <div className="px-8 mb-6 flex items-baseline justify-between">
-          <span className="text-[0.58rem] font-mono tracking-[0.25em] uppercase text-neutral-500">
-            experiências
-          </span>
-          <span className="text-[0.58rem] font-mono text-neutral-500">
-            {EXPERIENCES.length} empresas{" "}
-            <span className="text-red-500">·</span> 2017
-            <span className="text-red-500">→</span>2025
-          </span>
+        <div className="px-8 mb-6 flex items-center gap-4">
+          <span className="block w-[3px] h-10 bg-red-500 shrink-0" />
+          <div>
+            <h2 className="text-[2.5rem] font-black tracking-tight leading-none text-white uppercase">
+              EXPERIÊNCIAS<span className="text-red-500">.</span>
+            </h2>
+            <span className="font-mono text-xs text-neutral-500 tracking-widest">
+              {EXPERIENCES.length} empresas
+            </span>
+          </div>
         </div>
 
         <div className="border-t border-neutral-700/40 mx-8">

@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Fira_Code } from "next/font/google"
 import Script from "next/script"
 import "./globals.css"
@@ -8,6 +8,13 @@ import { Header } from "@/components/header"
 const GA_ID = "G-PXMB866NT3"
 
 const firaCode = Fira_Code({ subsets: ["latin"], variable: "--font-fira-code" })
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   title: "Glauco Vaz - Desenvolvedor Full Stack",
@@ -44,6 +51,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${firaCode.className} ${firaCode.variable}`}>
+        <Script id="prevent-pinch-zoom" strategy="afterInteractive">
+          {`document.addEventListener('touchmove', function(e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });`}
+        </Script>
         <Header />
         {children}
       </body>

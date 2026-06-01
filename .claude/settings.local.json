@@ -17,7 +17,11 @@
       "Bash(npx playwright *)",
       "Bash(node -e ' *)",
       "Bash(taskkill /F /IM node.exe)",
-      "Bash(rm -f \"C:/apps/portfolios/vazglauco.github.io/.next/dev/lock\")"
+      "Bash(rm -f \"C:/apps/portfolios/vazglauco.github.io/.next/dev/lock\")",
+      "Bash(Get-ChildItem -Recurse -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(awk '{print $NF}')"
     ],
     "deny": [],
     "ask": []
