@@ -13,52 +13,55 @@ const LINKS = [
 
 export function ContactFooter() {
   return (
-    <section id="contato" className="bg-white">
+    <section id="contato" className="bg-white overflow-visible relative z-10">
 
-      {/* Main — 4 columns */}
-      <div className="px-8 md:px-16 lg:px-24 pt-14 pb-10 grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-6 lg:gap-10 items-center">
+      {/* Main — 2 cols: content left, image right */}
+      <div className="flex items-stretch min-h-[420px]">
 
-        {/* Col 1: heading */}
-        <div className="flex flex-col gap-3">
-          <span className="font-mono text-[0.6rem] text-neutral-400 tracking-[0.3em] uppercase">
-            // entre em contato
-          </span>
-          <h2 className="font-black tracking-tight leading-[0.88] uppercase text-black text-[2.8rem] md:text-[3rem] lg:text-[4.5rem]">
-            VAMOS<br />CONVERSAR<span className="text-red-600">.</span>
-          </h2>
+        {/* Left: heading + links */}
+        <div className="flex-1 px-8 md:px-16 lg:px-24 pt-14 pb-10 flex flex-col gap-8">
+          <div className="flex flex-col gap-3">
+            <span className="font-mono text-[0.6rem] text-neutral-400 tracking-[0.3em] uppercase">
+              // entre em contato
+            </span>
+            <h2 className="font-black tracking-tight leading-[0.88] uppercase text-black text-[2.8rem] md:text-[3rem] lg:text-[4.5rem]">
+              VAMOS<br />CONVERSAR<span className="text-red-600">.</span>
+            </h2>
+          </div>
+
+          <div className="flex flex-col">
+            {LINKS.map(({ label, href, external, download }) => (
+              <a
+                key={label}
+                href={href}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noopener noreferrer" : undefined}
+                download={download ? "Curriculo-Glauco-Vaz.pdf" : undefined}
+                className="group flex items-center justify-between py-4 border-b border-black/10 hover:border-black transition-colors"
+              >
+                <span className="font-black text-[1.4rem] md:text-[1.8rem] lg:text-[2rem] tracking-tight uppercase text-black/30 group-hover:text-black transition-colors leading-none">
+                  {label}
+                </span>
+                {download
+                  ? <ArrowDown className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
+                  : <ArrowUpRight className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
+                }
+              </a>
+            ))}
+          </div>
         </div>
 
-        {/* Col 2–3: todos os links */}
-        <div className="col-span-2 flex flex-col">
-          {LINKS.map(({ label, href, external, download }) => (
-            <a
-              key={label}
-              href={href}
-              target={external ? "_blank" : undefined}
-              rel={external ? "noopener noreferrer" : undefined}
-              download={download ? "Curriculo-Glauco-Vaz.pdf" : undefined}
-              className="group flex items-center justify-between py-4 border-b border-black/10 hover:border-black transition-colors"
-            >
-              <span className="font-black text-[1.4rem] md:text-[1.8rem] lg:text-[2rem] tracking-tight uppercase text-black/30 group-hover:text-black transition-colors leading-none">
-                {label}
-              </span>
-              {download
-                ? <ArrowDown className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
-                : <ArrowUpRight className="w-5 h-5 text-black/20 group-hover:text-black transition-colors shrink-0" />
-              }
-            </a>
-          ))}
-        </div>
-
-        {/* Col 4: illustration */}
-        <div className="relative w-full aspect-square select-none">
-          <Image
-            src="/ilustra_contato.png"
-            alt=""
-            fill
-            className="object-contain object-top"
-            aria-hidden
-          />
+        {/* Right: large illustration overflowing top and bottom */}
+        <div className="hidden md:block relative shrink-0 select-none" style={{ width: '42%' }}>
+          <div className="absolute left-0 right-0" style={{ top: '-180px', bottom: '-60px' }}>
+            <Image
+              src="/ilustra_contato.png"
+              alt=""
+              fill
+              className="object-contain object-bottom"
+              aria-hidden
+            />
+          </div>
         </div>
 
       </div>
