@@ -111,13 +111,13 @@ export function ExperienceTimeline() {
   const exp = EXPERIENCES[selected]
 
   return (
-    <div id="experiencia" className="experience-section bg-[#0a0a0a] lg:bg-[#faf9f7]">
+    <div id="experiencia" className="experience-section bg-[#111111] lg:bg-[#faf9f7]">
 
       {/* ── DESKTOP: two-panel layout ── */}
       <div className="hidden lg:flex items-start gap-8 xl:gap-12 px-12 xl:px-20 py-16 xl:py-20">
 
         {/* Left — company list (dark card) */}
-        <div className="w-[38%] bg-[#0a0a0a] text-white flex flex-col justify-center px-10 xl:px-14 py-14 overflow-y-auto shrink-0">
+        <div className="w-[38%] bg-[#111111] text-white flex flex-col justify-center px-10 xl:px-14 py-14 overflow-y-auto shrink-0">
           <div className="mb-8">
             <h2 className="text-[1.6rem] xl:text-[2rem] font-black tracking-tight uppercase text-white leading-none mb-2">
               EXPERIÊNCIAS<span className="text-red-500">.</span>

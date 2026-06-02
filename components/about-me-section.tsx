@@ -71,7 +71,7 @@ export function AboutMeSection() {
 
 	if (isMobile) {
 		return (
-			<div ref={sectionRef} className='w-full bg-[#faf9f7] relative'>
+			<div id="sobre" ref={sectionRef} className='w-full bg-[#faf9f7] relative'>
 				<div className='px-8 pt-20 pb-[480px]'>
 					<div className='mb-10 text-right'>
 						<div className='flex items-baseline justify-end gap-2'>
@@ -139,10 +139,10 @@ export function AboutMeSection() {
 	}
 
 	return (
-		<div id="sobre" ref={sectionRef} className='w-full min-h-screen lg:min-h-[115vh] bg-[#faf9f7] overflow-hidden relative'>
+		<div id="sobre" ref={sectionRef} className='w-full min-h-screen bg-[#faf9f7] overflow-hidden relative'>
 			{/* Title — top right */}
 			<div
-				className='absolute top-14 right-8 md:right-14 lg:right-20 z-10 text-right select-none'
+				className='absolute top-14 lg:top-24 right-8 md:right-14 lg:right-20 z-10 text-right select-none'
 				style={{ fontFamily: 'var(--font-fira-code), monospace' }}
 			>
 				<div className='flex items-baseline justify-end gap-3'>

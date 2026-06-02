@@ -42,7 +42,7 @@ function NaipesPattern() {
 
 export function ResumeCTAStrip() {
   return (
-    <div className="relative bg-[#0a0a0a] overflow-hidden">
+    <div className="relative bg-[#111111] overflow-hidden">
       <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 px-8 md:px-16 lg:px-24 py-10 md:py-12">
 
         {/* Left: heading */}

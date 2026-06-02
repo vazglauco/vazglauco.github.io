@@ -114,7 +114,7 @@ export function SkillsMarquee() {
 			>
 				<div
 					className='overflow-hidden'
-					style={{ gridArea: '1/1', background: '#0a0a0a', clipPath: 'inset(0 50vw 0 0)' }}
+					style={{ gridArea: '1/1', background: '#111111', clipPath: 'inset(0 50vw 0 0)' }}
 				>
 					<Strip textColor='white' darkIcons={true} />
 				</div>

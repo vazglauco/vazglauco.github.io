@@ -14,7 +14,7 @@ export default function Home() {
 
 	return (
 		<>
-			<div className="md:h-screen relative md:overflow-hidden">
+			<div data-hero className="md:h-screen relative md:overflow-hidden">
 				<SplitHome />
 				<div className="hidden md:block">
 					<SkillsMarquee />

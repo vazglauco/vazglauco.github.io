@@ -136,7 +136,7 @@ export function SplitHome() {
 			<div className='w-screen flex flex-col relative'>
 				{/* Painel escuro — 70vh */}
 				<div
-					className='relative bg-[#0a0a0a] flex flex-col px-7 pt-[96px]'
+					className='relative bg-[#111111] flex flex-col px-7 pt-[96px]'
 					style={{ minHeight: '80svh', flex: '0 0 auto', paddingBottom: 'clamp(95px, 13svh, 115px)' }}
 				>
 					{/*<PatternBackground variant='dark' />*/}
@@ -266,7 +266,7 @@ export function SplitHome() {
 
 	/* ───── DESKTOP LAYOUT (original) ───── */
 	return (
-		<div className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
+		<div data-hero className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
 			{/* ===== Card — fixed at center boundary ===== */}
 			<div
 				className='hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none'
@@ -287,7 +287,7 @@ export function SplitHome() {
 			</div>
 
 			{/* ===== LEFT PANEL — Dark ===== */}
-			<div className='relative flex-1 min-h-[55vh] lg:min-h-0 bg-[#0a0a0a] flex items-center justify-center overflow-hidden'>
+			<div className='relative flex-1 min-h-[55vh] lg:min-h-0 bg-[#111111] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='dark' />*/}
 
 				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full'>
