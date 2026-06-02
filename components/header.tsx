@@ -188,6 +188,9 @@ export function Header() {
     const cleanups: (() => void)[] = [() => headerTween.kill()]
     let cancelled = false
 
+    const STEPS = 10, MS = 38
+    const OVERLAP = Math.floor(STEPS * 0.75) * MS  // start next when current is ~75% done
+
     const runNext = (index: number) => {
       if (cancelled) return
       if (index >= items.length) {
@@ -199,8 +202,10 @@ export function Header() {
       const el = ref.current as HTMLElement | null
       if (!el) { runNext(index + 1); return }
       el.style.opacity = '1'
-      const cancel = scramble(el, text, () => runNext(index + 1), 10, 28)
+      const cancel = scramble(el, text, undefined, STEPS, MS)
       cleanups.push(cancel)
+      const tid = setTimeout(() => runNext(index + 1), OVERLAP)
+      cleanups.push(() => clearTimeout(tid))
     }
 
     cleanups.push(() => { cancelled = true })

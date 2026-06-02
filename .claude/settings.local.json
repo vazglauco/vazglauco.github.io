@@ -27,7 +27,9 @@
       "Bash(node scripts/capture-projects.mjs)",
       "Bash(node -e \"require\\('@playwright/test'\\)\")",
       "PowerShell(ls C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\\\\public\\\\ | Where-Object {$_.Name -match \"mila\"})",
-      "PowerShell(ls C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\\\\public\\\\ | Where-Object {$_.Name -match \"angela\"})"
+      "PowerShell(ls C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\\\\public\\\\ | Where-Object {$_.Name -match \"angela\"})",
+      "Bash(Get-ChildItem -Path \"C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\" -Recurse -Depth 2)",
+      "Bash(Select-Object -First 30)"
     ],
     "deny": [],
     "ask": []
