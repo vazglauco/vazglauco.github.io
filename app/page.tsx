@@ -3,7 +3,7 @@ import { AboutMeSection } from '@/components/about-me-section'
 import { SkillsServicesSection } from '@/components/skills-services-section'
 import { SkillsMarquee } from '@/components/skills-marquee'
 import { ExperienceTimeline } from '@/components/experience-timeline'
-import { ProjectsSection } from '@/components/projects-section'
+import { ProjectsBento } from '@/components/projects-bento'
 import { LatestPostsSection } from '@/components/latest-posts-section'
 import { ResumeCTAStrip } from '@/components/resume-cta-strip'
 import { ContactFooter } from '@/components/contact-footer'
@@ -25,7 +25,7 @@ export default function Home() {
 			</div>
 			<AboutMeSection />
 			<SkillsServicesSection />
-			<ProjectsSection />
+			<ProjectsBento />
 			<ExperienceTimeline />
 			<LatestPostsSection posts={latestPosts} />
 

@@ -21,7 +21,13 @@
       "Bash(Get-ChildItem -Recurse -File)",
       "Bash(Select-Object FullName)",
       "Bash(Sort-Object FullName)",
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "Bash(npx next *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3333)",
+      "Bash(node scripts/capture-projects.mjs)",
+      "Bash(node -e \"require\\('@playwright/test'\\)\")",
+      "PowerShell(ls C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\\\\public\\\\ | Where-Object {$_.Name -match \"mila\"})",
+      "PowerShell(ls C:\\\\apps\\\\portfolios\\\\vazglauco.github.io\\\\public\\\\ | Where-Object {$_.Name -match \"angela\"})"
     ],
     "deny": [],
     "ask": []
