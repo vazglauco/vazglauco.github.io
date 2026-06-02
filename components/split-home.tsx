@@ -266,7 +266,7 @@ export function SplitHome() {
 
 	/* ───── DESKTOP LAYOUT (original) ───── */
 	return (
-		<div data-hero className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
+		<div id="inicio" data-hero className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
 			{/* ===== Card — fixed at center boundary ===== */}
 			<div
 				className='hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none'

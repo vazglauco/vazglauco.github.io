@@ -47,10 +47,13 @@ export function Header() {
   const [lm, setLm] = useState<Record<string, boolean>>({})
   const [isPastHero, setIsPastHero] = useState(false)
   const [sectionIsLight, setSectionIsLight] = useState(false)
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
 
   const pathname   = usePathname()
   const headerRef  = useRef<HTMLElement>(null)
+  const navRef     = useRef<HTMLElement>(null)
   const logoRef    = useRef<HTMLSpanElement>(null)
+  const inicioRef   = useRef<HTMLAnchorElement>(null)
   const aboutRef    = useRef<HTMLAnchorElement>(null)
   const servRef     = useRef<HTMLAnchorElement>(null)
   const projRef     = useRef<HTMLAnchorElement>(null)
@@ -94,7 +97,7 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY + 100
-      for (const id of ["sobre", "skills", "projetos", "experiencia", "blog", "contato"]) {
+      for (const id of ["inicio", "sobre", "skills", "projetos", "experiencia", "blog", "contato"]) {
         const el = document.getElementById(id)
         if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
           setActiveSection(id)
@@ -132,6 +135,7 @@ export function Header() {
 
     const refs: [string, React.RefObject<Element | null>][] = [
       ["logo",    logoRef    as React.RefObject<Element | null>],
+      ["inicio",  inicioRef  as React.RefObject<Element | null>],
       ["sobre",   aboutRef   as React.RefObject<Element | null>],
       ["serv",    servRef    as React.RefObject<Element | null>],
       ["proj",    projRef    as React.RefObject<Element | null>],
@@ -163,7 +167,7 @@ export function Header() {
 
   // Entrance + typewriter
   useEffect(() => {
-    const all = [logoRef, aboutRef, servRef, projRef, expRef, blogRef, contatoRef, liRef, ghRef]
+    const all = [logoRef, inicioRef, aboutRef, servRef, projRef, expRef, blogRef, contatoRef, liRef, ghRef]
       .map(r => r.current)
 
     gsap.set(all, { opacity: 0 })
@@ -171,6 +175,7 @@ export function Header() {
     const tl = gsap.timeline({ delay: 0.3 })
     tl.fromTo(headerRef.current, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" })
     tl.to(logoRef.current,    { duration: 0.7, text: { value: "glauco.vaz();" }, opacity: 1, ease: "none" }, "-=0.1")
+    tl.to(inicioRef.current,  { duration: 0.3, text: { value: ".inicio()" },      opacity: 1, ease: "none" }, "+=0.06")
     tl.to(aboutRef.current,   { duration: 0.3, text: { value: ".sobre()" },       opacity: 1, ease: "none" }, "+=0.06")
     tl.to(servRef.current,    { duration: 0.4, text: { value: ".serviços()" },    opacity: 1, ease: "none" }, "+=0.06")
     tl.to(projRef.current,    { duration: 0.4, text: { value: ".projetos()" },    opacity: 1, ease: "none" }, "+=0.06")
@@ -182,12 +187,33 @@ export function Header() {
     return () => tl.kill()
   }, [])
 
+  // Sliding indicator
+  useEffect(() => {
+    const sectionMap: Record<string, React.RefObject<HTMLAnchorElement | null>> = {
+      inicio: inicioRef,
+      sobre: aboutRef,
+      skills: servRef,
+      projetos: projRef,
+      experiencia: expRef,
+      contato: contatoRef,
+    }
+    const ref = sectionMap[activeSection]
+    if (!ref?.current || !navRef.current) {
+      setIndicator(s => ({ ...s, opacity: 0 }))
+      return
+    }
+    const navRect = navRef.current.getBoundingClientRect()
+    const itemRect = ref.current.getBoundingClientRect()
+    setIndicator({ left: itemRect.left - navRect.left, width: itemRect.width, opacity: 1 })
+  }, [activeSection])
+
   const menuItems = [
-    { href: "#sobre",       ref: aboutRef,  text: ".sobre()"       },
-    { href: "#skills",      ref: servRef,   text: ".serviços()"    },
-    { href: "#projetos",    ref: projRef,   text: ".projetos()"    },
-    { href: "#experiencia", ref: expRef,    text: ".experiência()" },
-    { href: "#contato",     ref: contatoRef, text: ".contato()"   },
+    { href: "#inicio",      ref: inicioRef,  text: ".inicio()"      },
+    { href: "#sobre",       ref: aboutRef,   text: ".sobre()"       },
+    { href: "#skills",      ref: servRef,    text: ".serviços()"    },
+    { href: "#projetos",    ref: projRef,    text: ".projetos()"    },
+    { href: "#experiencia", ref: expRef,     text: ".experiência()" },
+    { href: "#contato",     ref: contatoRef, text: ".contato()"     },
   ]
 
   const cancelRefs = useRef<Map<string, () => void>>(new Map())
@@ -199,15 +225,13 @@ export function Header() {
     cancelRefs.current.set(key, cancel)
   }
 
-  const c          = isPastHero && sectionIsLight
+  const c              = isPastHero && sectionIsLight
     ? "text-black/55 hover:text-black/85"
     : "text-white/65 hover:text-white/90"
-  const cFull      = isPastHero && sectionIsLight ? "text-black/90" : "text-white/90"
-  const activeLine = isPastHero
-    ? sectionIsLight
-      ? "border-b-2 border-red-500 !text-red-500"
-      : "border-b-2 border-red-400 !text-red-400"
-    : "border-b-2 border-white !text-white"
+  const cFull          = isPastHero && sectionIsLight ? "text-black/90" : "text-white/90"
+  const indicatorColor = isPastHero
+    ? sectionIsLight ? "bg-red-500" : "bg-red-400"
+    : "bg-white"
 
   const headerBg = isPastHero
     ? sectionIsLight
@@ -217,12 +241,13 @@ export function Header() {
 
   return (
     <>
+      {/* Header — logo + nav com blend mode */}
       <header
         ref={headerRef}
         className="fixed top-0 left-0 right-0 z-[9999] transition-all duration-300"
         style={headerBg}
       >
-        <div className="flex items-center justify-between h-14 px-10 md:px-16">
+        <div className="relative flex items-center h-14 px-10 md:px-16">
 
           {/* Logo */}
           <Link href="/"
@@ -234,8 +259,13 @@ export function Header() {
             />
           </Link>
 
-          {/* Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          {/* Nav — centralizado absoluto */}
+          <nav ref={navRef} className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 pb-px">
+            {/* Indicador deslizante */}
+            <span
+              className={`absolute -bottom-px h-[2px] pointer-events-none transition-[left,width] duration-300 ease-out ${indicatorColor}`}
+              style={{ left: indicator.left, width: indicator.width, opacity: indicator.opacity, transition: 'left 300ms ease-out, width 300ms ease-out, opacity 200ms ease-out' }}
+            />
             {menuItems.map((item) => {
               const hrefKey = item.href.startsWith('/') ? item.href.slice(1) : item.href.slice(1)
               const key = hrefKey === "experiencia" ? "exp"
@@ -251,55 +281,55 @@ export function Header() {
                   ref={item.ref}
                   href={item.href}
                   onMouseEnter={() => handleHover(key, item.ref.current, item.text)}
-                  className={`text-xs font-light tracking-wide whitespace-nowrap pb-px ${
-                    isActive
-                      ? `${cFull} ${activeLine}`
-                      : `${c} border-b border-transparent`
+                  className={`text-[13px] font-light tracking-wide whitespace-nowrap transition-colors duration-200 ${
+                    isActive ? cFull : c
                   }`}
                 />
               )
             })}
           </nav>
 
-          {/* Blog + Socials + mobile */}
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-3">
-              {/* Blog — separado, destacado */}
-              <Link
-                ref={blogRef}
-                href="/blog"
-                onMouseEnter={() => handleHover("blog", blogRef.current, ".blog()")}
-                className={`text-xs font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 ${
-                  pathname.startsWith('/blog')
-                    ? `${cFull} border-current`
-                    : `${c} border-current/30 hover:border-current/70`
-                }`}
-              />
-
-              <span className={`text-[10px] opacity-20 select-none ${cFull}`}>|</span>
-
-              <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
-                rel="noopener noreferrer" aria-label="LinkedIn"
-                className={`w-7 h-7 flex items-center justify-center ${c}`}>
-                <Linkedin className="h-3.5 w-3.5" />
-              </a>
-              <a ref={ghRef} href="https://github.com/vazglauco" target="_blank"
-                rel="noopener noreferrer" aria-label="GitHub"
-                className={`w-7 h-7 flex items-center justify-center ${c}`}>
-                <Github className="h-3.5 w-3.5" />
-              </a>
-            </div>
-
-            <button
-              className={`md:hidden w-8 h-8 flex items-center justify-center ${c}`}
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </button>
-          </div>
+          {/* Mobile toggle */}
+          <button
+            className={`md:hidden ml-auto w-8 h-8 flex items-center justify-center ${c}`}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
       </header>
+
+      {/* Blog + Socials — fixed separado, sem blend mode, sempre vermelho */}
+      <div className="hidden md:flex fixed top-0 right-0 z-[10000] h-14 items-center gap-3 px-10 md:px-16">
+        <Link
+          ref={blogRef}
+          href="/blog"
+          onMouseEnter={() => handleHover("blog", blogRef.current, ".blog()")}
+          className={`text-[13px] font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 group ${
+            pathname.startsWith('/blog')
+              ? "text-white bg-red-600 border-red-600"
+              : "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
+          }`}
+        />
+
+        <span className="text-[10px] text-black/20 select-none">|</span>
+
+        <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
+          rel="noopener noreferrer" aria-label="LinkedIn"
+          className={`w-7 h-7 flex items-center justify-center ${
+            isPastHero && sectionIsLight ? "text-black/50 hover:text-black/80" : "text-black/35 hover:text-black/60"
+          }`}>
+          <Linkedin className="h-3.5 w-3.5" />
+        </a>
+        <a ref={ghRef} href="https://github.com/vazglauco" target="_blank"
+          rel="noopener noreferrer" aria-label="GitHub"
+          className={`w-7 h-7 flex items-center justify-center ${
+            isPastHero && sectionIsLight ? "text-black/50 hover:text-black/80" : "text-black/35 hover:text-black/60"
+          }`}>
+          <Github className="h-3.5 w-3.5" />
+        </a>
+      </div>
 
       {/* Mobile dropdown */}
       {isMenuOpen && (

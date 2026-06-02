@@ -110,7 +110,7 @@ export function SkillsMarquee() {
 
 			{/* Desktop — split half dark / half light, colado no bottom do hero */}
 			<div
-				className='hidden md:grid md:absolute md:bottom-0 md:left-0 md:right-0 z-20 border-t border-neutral-500/30'
+				className='hidden md:grid md:absolute md:bottom-0 md:left-0 md:right-0 z-20'
 			>
 				<div
 					className='overflow-hidden'
