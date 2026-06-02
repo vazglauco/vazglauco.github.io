@@ -5,15 +5,10 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, Linkedin, Github } from "lucide-react"
 import { gsap } from "gsap"
-import { TextPlugin } from "gsap/TextPlugin"
-
-gsap.registerPlugin(TextPlugin)
 
 const POOL = '!<>-_/[]{}=+*^?#@$%~'
 
-function scramble(el: HTMLElement, text: string, onDone?: () => void): () => void {
-  const steps = 10
-  const ms    = 30
+function scramble(el: HTMLElement, text: string, onDone?: () => void, steps = 10, ms = 60): () => void {
   let step = 0
 
   const id = setInterval(() => {
@@ -165,26 +160,52 @@ export function Header() {
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  // Entrance + typewriter
+  // Entrance — scramble (same effect as hover, fast stagger)
   useEffect(() => {
-    const all = [logoRef, inicioRef, aboutRef, servRef, projRef, expRef, blogRef, contatoRef, liRef, ghRef]
+    const items = [
+      { ref: logoRef,    text: "glauco.vaz();" },
+      { ref: inicioRef,  text: ".inicio()"      },
+      { ref: aboutRef,   text: ".sobre()"       },
+      { ref: servRef,    text: ".serviços()"    },
+      { ref: projRef,    text: ".projetos()"    },
+      { ref: expRef,     text: ".experiência()" },
+      { ref: contatoRef, text: ".contato()"     },
+      { ref: blogRef,    text: ".blog()"        },
+    ]
+
+    // Pre-set text so widths are reserved — no layout shift as items appear
+    items.forEach(({ ref, text }) => { if (ref.current) ref.current.textContent = text })
+
+    const allEls = [logoRef, inicioRef, aboutRef, servRef, projRef, expRef, blogRef, contatoRef, liRef, ghRef]
       .map(r => r.current)
+    allEls.forEach(el => { if (el) el.style.opacity = '0' })
 
-    gsap.set(all, { opacity: 0 })
+    const headerTween = gsap.fromTo(headerRef.current,
+      { opacity: 0, y: -8 },
+      { opacity: 1, y: 0, duration: 0.2, ease: "power3.out", onComplete: () => runNext(0) }
+    )
 
-    const tl = gsap.timeline({ delay: 0.3 })
-    tl.fromTo(headerRef.current, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" })
-    tl.to(logoRef.current,    { duration: 0.7, text: { value: "glauco.vaz();" }, opacity: 1, ease: "none" }, "-=0.1")
-    tl.to(inicioRef.current,  { duration: 0.3, text: { value: ".inicio()" },      opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(aboutRef.current,   { duration: 0.3, text: { value: ".sobre()" },       opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(servRef.current,    { duration: 0.4, text: { value: ".serviços()" },    opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(projRef.current,    { duration: 0.4, text: { value: ".projetos()" },    opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(expRef.current,     { duration: 0.4, text: { value: ".experiência()" }, opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(blogRef.current,    { duration: 0.3, text: { value: ".blog()" },        opacity: 1, ease: "none" }, "+=0.06")
-    tl.to(contatoRef.current, { duration: 0.3, text: { value: ".contato()" },     opacity: 1, ease: "none" }, "+=0.06")
-    tl.to([liRef.current, ghRef.current], { opacity: 1, duration: 0.3, stagger: 0.08 }, "+=0.06")
+    const cleanups: (() => void)[] = [() => headerTween.kill()]
+    let cancelled = false
 
-    return () => tl.kill()
+    const runNext = (index: number) => {
+      if (cancelled) return
+      if (index >= items.length) {
+        const socialEls = [liRef.current, ghRef.current].filter(Boolean) as HTMLElement[]
+        gsap.to(socialEls, { opacity: 1, duration: 0.3, stagger: 0.1 })
+        return
+      }
+      const { ref, text } = items[index]
+      const el = ref.current as HTMLElement | null
+      if (!el) { runNext(index + 1); return }
+      el.style.opacity = '1'
+      const cancel = scramble(el, text, () => runNext(index + 1), 10, 28)
+      cleanups.push(cancel)
+    }
+
+    cleanups.push(() => { cancelled = true })
+
+    return () => cleanups.forEach(c => c())
   }, [])
 
   // Sliding indicator
