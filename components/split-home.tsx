@@ -206,14 +206,14 @@ export function SplitHome() {
 					<div className='relative z-10 text-right'>
 						{/* Title */}
 						<h2 className='font-black text-neutral-900 text-[1.3rem] leading-[1.05] mb-1 whitespace-nowrap'>
-							Fullstack Engineer<span className='text-[rgb(200,30,20)]'>.</span>
+							Dev Fullstack<span className='text-[rgb(200,30,20)]'>.</span>
 						</h2>
 
 						{/* Stats */}
 						<div className='flex gap-5 justify-end mb-2'>
 							{[
 								{ value: '10', label: 'ANOS' },
-								{ value: '9', label: 'EMPRESAS' },
+								{ value: '25+', label: 'PROJETOS' },
 								{ value: '∞', label: 'COMMITS' },
 							].map(({ value, label }) => (
 								<div key={label} className='text-right'>
@@ -299,7 +299,7 @@ export function SplitHome() {
 						<span className='text-neutral-500'>{'}'}</span>
 					</p>
 
-					<h1 className='font-black tracking-tight leading-[0.88] text-white text-4xl md:text-5xl lg:text-6xl'>
+					<h1 className='font-black tracking-tight leading-[0.88] text-white text-4xl md:text-5xl lg:text-6xl my-14'>
 						<span className='block'>glauco</span>
 						<span className='block'>
 							<span className='invisible'>gla</span>
@@ -307,17 +307,6 @@ export function SplitHome() {
 							<span className='text-[rgb(200,30,20)]'>();</span>
 						</span>
 					</h1>
-
-					<div className='mt-7 font-mono text-lg text-neutral-400 leading-relaxed'>
-						<p>
-							<span className='text-neutral-300'>{'// '}</span>
-							construo sistemas, sites e aplicativos
-						</p>
-						<p>
-							<span className='text-neutral-300'>{'// '}</span>
-							do planejamento ao deploy
-						</p>
-					</div>
 
 					<div className='mt-7 flex flex-col gap-4'>
 						<div className='flex gap-3'>
@@ -359,7 +348,7 @@ export function SplitHome() {
 						className='font-black text-neutral-900 leading-[1.05] mb-1 whitespace-nowrap'
 						style={{ fontSize: 'clamp(1.6rem, 3vw, 2.6rem)' }}
 					>
-						Fullstack Engineer<span className='text-[rgb(200,30,20)]'>.</span>
+						Dev Fullstack<span className='text-[rgb(200,30,20)]'>.</span>
 					</h2>
 
 					{/* Subtitle */}
@@ -373,7 +362,7 @@ export function SplitHome() {
 					<div className='flex gap-8 justify-end mb-10'>
 						{[
 							{ value: '10', label: 'ANOS' },
-							{ value: '9', label: 'EMPRESAS' },
+							{ value: '25+', label: 'PROJETOS' },
 							{ value: '∞', label: 'COMMITS' },
 						].map(({ value, label }) => (
 							<div key={label} className='text-right'>
@@ -404,14 +393,13 @@ export function SplitHome() {
 					</p>
 
 					{/* Quote */}
-					<blockquote
-						className='italic font-light text-neutral-600 leading-relaxed tracking-wide -ml-16 text-right'
+					<div
+						className='font-mono text-neutral-600 leading-relaxed -ml-16 text-right'
 						style={{ fontSize: 'clamp(0.82rem, 1.4vw, 1.1rem)' }}
 					>
-						Acredito que programação seja a arte de transformar pensamentos em realidade
-						<span className='text-[rgb(200,30,20)]'>.</span>
-						<br />é o que eu acho<span className='text-[rgb(200,30,20)]'>.</span>
-					</blockquote>
+						<div><span className='text-[rgb(200,30,20)]'>// </span>construo sistemas, sites e aplicativos</div>
+						<div><span className='text-[rgb(200,30,20)]'>// </span>do planejamento ao deploy</div>
+					</div>
 				</div>
 			</div>
 		</div>
