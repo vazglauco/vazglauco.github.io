@@ -1,5 +1,8 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
+import { gsap } from 'gsap'
+
 const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons'
 
 type Skill = { name: string; icon: string; darkInvert?: boolean }
@@ -69,8 +72,17 @@ function Strip({ textColor, darkIcons, iconsOnly }: { textColor: string; darkIco
 }
 
 export function SkillsMarquee() {
+	const wrapRef = useRef<HTMLDivElement>(null)
+
+	useEffect(() => {
+		const el = wrapRef.current
+		if (!el) return
+		const t = gsap.to(el, { opacity: 1, duration: 2.5, ease: 'power1.out', delay: 4.0 })
+		return () => { t.kill() }
+	}, [])
+
 	return (
-		<>
+		<div ref={wrapRef} style={{ opacity: 0 }}>
 			<style>{`
 				@keyframes skm-left {
 					from { transform: translateX(0); }
@@ -125,6 +137,6 @@ export function SkillsMarquee() {
 					<Strip textColor='#111111' darkIcons={false} />
 				</div>
 			</div>
-		</>
+		</div>
 	)
 }

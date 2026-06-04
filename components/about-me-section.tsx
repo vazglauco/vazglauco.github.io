@@ -17,19 +17,19 @@ function LineContent({ index }: { index: number }) {
 			</>
 		)
 	if (index === 2)
-		return (
-			<>
-				Atualmente vivo em <strong>São Paulo</strong>, movido pela curiosidade constante de
-				descobrir e experimentar o novo. Fora do código, gosto de drama e suspense. Escuto
-				muito <strong>Rap, Funk e Samba</strong>.{' '}
-				<strong>Feijoada e bolo de cenoura</strong>.
-			</>
+		return (null
+		// 	<>
+		// 		Atualmente vivo em <strong>São Paulo</strong>, movido pela curiosidade constante de
+		// 		descobrir e experimentar o novo. Fora do código, gosto de drama e suspense. Escuto
+		// 		muito <strong>Rap, Funk e Samba</strong>.{' '}
+		// 		<strong>Feijoada e bolo de cenoura</strong>.
+		// 	</>
 		)
-	return (
-		<>
-			<em className='font-semibold'>Omo Orisa e Omo Ifa.</em> Trago comigo a disciplina e
-			postura que aprendi com quem veio antes.
-		</>
+	return (null
+		// <>
+		// 	<em className='font-semibold'>Omo Orisa e Omo Ifa.</em> Trago comigo a disciplina e
+		// 	postura que aprendi com quem veio antes.
+		// </>
 	)
 }
 

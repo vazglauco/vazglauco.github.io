@@ -38,9 +38,7 @@ const PROJECTS: Project[] = [
 
 const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
-// Desktop: 3-column grid, single row
-// [Mila: col-span-2] [Angela: col-span-1]
-const BENTO_SPANS = ["col-span-3", "col-span-2"]
+const BENTO_SPANS = ["col-span-1", "col-span-1"]
 const BENTO_HEIGHTS = ["h-[480px]", "h-[480px]"]
 
 function CardBg({ project, index }: { project: Project; index: number }) {
@@ -78,7 +76,7 @@ export function ProjectsBento() {
       </div>
 
       {/* Desktop bento grid */}
-      <div className="hidden md:grid grid-cols-5 gap-[4px] px-8 md:px-16 lg:px-24">
+      <div className="hidden md:grid grid-cols-3 gap-[4px] px-8 md:px-16 lg:px-24">
         {PROJECTS.map((project, i) => {
           const isLive = project.url !== "#"
           return (
@@ -96,7 +94,7 @@ export function ProjectsBento() {
                   </span>
                   <h3
                     className="font-black tracking-tight leading-none uppercase text-white"
-                    style={{ fontSize: i === 0 ? "clamp(1.1rem, 1.8vw, 1.5rem)" : "clamp(1rem, 1.4vw, 1.2rem)" }}
+                    style={{ fontSize: "clamp(1rem, 1.4vw, 1.2rem)" }}
                   >
                     {project.title}
                   </h3>

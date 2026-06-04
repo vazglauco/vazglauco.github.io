@@ -57,6 +57,17 @@ export function SkillsServicesSection() {
 	const [translates, setTranslates] = useState<number[]>([0, 9999, 9999, 9999])
 	const [clipHeights, setClipHeights] = useState<(number | string)[]>(['auto', 'auto', 'auto'])
 	const [isMobile, setIsMobile] = useState(false)
+	const [visible, setVisible] = useState(false)
+
+	useEffect(() => {
+		const el = outerRef.current
+		if (!el) return
+		const io = new IntersectionObserver(([entry]) => {
+			if (entry.isIntersecting) { setVisible(true); io.disconnect() }
+		}, { threshold: 0.05 })
+		io.observe(el)
+		return () => io.disconnect()
+	}, [])
 
 	useEffect(() => {
 		// Use the actual rendered height of the sticky container (= 100svh in px)
@@ -152,7 +163,7 @@ export function SkillsServicesSection() {
 	}, [])
 
 	return (
-		<div id="skills" ref={outerRef} style={{ height: outerHeight }} className='bg-[#111111] text-white'>
+		<div id="skills" ref={outerRef} style={{ height: outerHeight, opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease' }} className='bg-[#111111] text-white'>
 			{/* Single sticky container — all cards exit together when outer div ends */}
 			<div
 				ref={stickyRef}

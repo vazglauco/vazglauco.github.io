@@ -170,7 +170,7 @@ export function Header() {
       { ref: projRef,    text: ".projetos()"    },
       { ref: expRef,     text: ".experiência()" },
       { ref: contatoRef, text: ".contato()"     },
-      { ref: blogRef,    text: ".blog()"        },
+      { ref: blogRef,    text: pathname.startsWith('/blog') ? ".portfolio()" : ".blog()" },
     ]
 
     // Pre-set text so widths are reserved — no layout shift as items appear
@@ -211,7 +211,7 @@ export function Header() {
     cleanups.push(() => { cancelled = true })
 
     return () => cleanups.forEach(c => c())
-  }, [])
+  }, [pathname])
 
   // Sliding indicator
   useEffect(() => {
@@ -285,8 +285,8 @@ export function Header() {
             />
           </Link>
 
-          {/* Nav — centralizado absoluto */}
-          <nav ref={navRef} className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-8 pb-px">
+          {/* Nav — centralizado absoluto, escondido no blog */}
+          <nav ref={navRef} className={`hidden absolute left-1/2 -translate-x-1/2 items-center gap-8 pb-px ${pathname.startsWith('/blog') ? '' : 'md:flex'}`}>
             {/* Indicador deslizante */}
             <span
               className={`absolute -bottom-px h-[2px] pointer-events-none transition-[left,width] duration-300 ease-out ${indicatorColor}`}
@@ -326,32 +326,34 @@ export function Header() {
         </div>
       </header>
 
-      {/* Blog + Socials — fixed separado, sem blend mode, sempre vermelho */}
+      {/* Blog + Socials — fixed separado, sem blend mode */}
       <div className="hidden md:flex fixed top-0 right-0 z-[10000] h-14 items-center gap-3 px-10 md:px-16">
         <Link
           ref={blogRef}
-          href="/blog"
-          onMouseEnter={() => handleHover("blog", blogRef.current, ".blog()")}
+          href={pathname.startsWith('/blog') ? "/" : "/blog"}
+          onMouseEnter={() => handleHover("blog", blogRef.current, pathname.startsWith('/blog') ? ".portfolio()" : ".blog()")}
           className={`text-[13px] font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 group ${
             pathname.startsWith('/blog')
               ? "text-white bg-red-600 border-red-600"
-              : "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
+              : lm["blog"]
+                ? "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
+                : "text-white/70 border-white/30 hover:text-white hover:border-white"
           }`}
         />
 
-        <span className="text-[10px] text-black/20 select-none">|</span>
+        <span className={`text-[10px] select-none ${lm["li"] ? "text-black/20" : "text-white/20"}`}>|</span>
 
         <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
           rel="noopener noreferrer" aria-label="LinkedIn"
           className={`w-7 h-7 flex items-center justify-center ${
-            isPastHero && sectionIsLight ? "text-black/50 hover:text-black/80" : "text-black/35 hover:text-black/60"
+            lm["li"] ? "text-black/50 hover:text-black/80" : "text-white/50 hover:text-white/80"
           }`}>
           <Linkedin className="h-3.5 w-3.5" />
         </a>
         <a ref={ghRef} href="https://github.com/vazglauco" target="_blank"
           rel="noopener noreferrer" aria-label="GitHub"
           className={`w-7 h-7 flex items-center justify-center ${
-            isPastHero && sectionIsLight ? "text-black/50 hover:text-black/80" : "text-black/35 hover:text-black/60"
+            lm["gh"] ? "text-black/50 hover:text-black/80" : "text-white/50 hover:text-white/80"
           }`}>
           <Github className="h-3.5 w-3.5" />
         </a>

@@ -57,9 +57,12 @@ function PatternBackground({ variant }: { variant: 'dark' | 'light' }) {
 }
 
 export function SplitHome() {
-	const cardRef = useRef<HTMLDivElement>(null)
-	const breathRef = useRef<HTMLDivElement>(null)
-	const glowRef = useRef<HTMLDivElement>(null)
+	const cardRef         = useRef<HTMLDivElement>(null)
+	const breathRef       = useRef<HTMLDivElement>(null)
+	const glowRef         = useRef<HTMLDivElement>(null)
+	const cardWrapRef     = useRef<HTMLDivElement>(null)
+	const leftContentRef  = useRef<HTMLDivElement>(null)
+	const rightContentRef = useRef<HTMLDivElement>(null)
 
 	const lootTlRef = useRef<gsap.core.Timeline | null>(null)
 	const isBreathingRef = useRef(false)
@@ -97,9 +100,9 @@ export function SplitHome() {
 			},
 		}) as unknown as gsap.core.Timeline
 
-		// spin periódico a cada 8s via GSAP (sincronizado com rAF)
+		// spin periódico a cada 6s via GSAP (sincronizado com rAF)
 		const scheduleSpin = () => {
-			spinIntervalRef.current = gsap.delayedCall(8, () => {
+			spinIntervalRef.current = gsap.delayedCall(6, () => {
 				const tl = lootTlRef.current
 				const c = cardRef.current
 				if (!tl || !c || !isBreathingRef.current) return
@@ -129,6 +132,17 @@ export function SplitHome() {
 			if (lootTlRef.current) lootTlRef.current.kill()
 		}
 	}, [startBreathing])
+
+	// Entrada da hero — só o conteúdo e o card, o fundo já aparece
+	useEffect(() => {
+		const lc   = leftContentRef.current
+		const rc   = rightContentRef.current
+		const card = cardWrapRef.current
+		if (!lc || !rc || !card) return
+		const tl = gsap.timeline({ delay: 2.6 })
+		tl.to([lc, rc], { opacity: 1, duration: 0.6, ease: 'power2.out' })
+		return () => { tl.kill() }
+	}, [])
 
 	/* ───── MOBILE LAYOUT ───── */
 	if (isMobile) {
@@ -269,6 +283,7 @@ export function SplitHome() {
 		<div id="inicio" data-hero className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
 			{/* ===== Card — fixed at center boundary ===== */}
 			<div
+				ref={cardWrapRef}
 				className='hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none'
 				style={{ perspective: '1000px' }}
 			>
@@ -290,7 +305,7 @@ export function SplitHome() {
 			<div className='relative flex-1 min-h-[55vh] lg:min-h-0 bg-[#111111] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='dark' />*/}
 
-				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full'>
+				<div ref={leftContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full' style={{ opacity: 0 }}>
 					<p className='font-mono text-lg text-neutral-400 mb-7 tracking-wide leading-relaxed'>
 						<span className='text-neutral-500'>{'{ '}</span>
 						location
@@ -342,7 +357,7 @@ export function SplitHome() {
 			<div className='relative flex-1 min-h-[45vh] lg:min-h-0 bg-[#faf9f7] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='light' />*/}
 
-				<div className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full text-right'>
+				<div ref={rightContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full text-right' style={{ opacity: 0 }}>
 					{/* Title */}
 					<h2
 						className='font-black text-neutral-900 leading-[1.05] mb-1 whitespace-nowrap'
