@@ -4,32 +4,33 @@ import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
 function LineContent({ index }: { index: number }) {
-	if (index === 0) return <>Salve.</>
+	if (index === 0) return <>Olá! Sou Glauco, desenvolvedor full stack com foco em front-end</>
 	if (index === 1)
 		return (
 			<>
-				Atuo no desenvolvimento de sistemas e sites desde <strong>2016</strong>. Construí
-				minha carreira com forte atuação em aplicações Front End, e atualmente atuo também
-				desenvolvendo APIs e soluções Back End, sendo um{' '}
-				<strong>Full Stack &ldquo;coringa&rdquo;</strong>, que joga em diversas posições do
-				desenvolvimento de software, desde o planejamento estratégico, definição de
-				arquitetura e requisitos, até a entrega final.
+				Há mais de nove anos construo produtos digitais, criando desde interfaces até a
+				arquitetura que sustenta aplicações escaláveis. Gosto de transformar problemas
+				complexos em soluções simples, intuitivas e fáceis de evoluir.
 			</>
 		)
 	if (index === 2)
-		return (null
-		// 	<>
-		// 		Atualmente vivo em <strong>São Paulo</strong>, movido pela curiosidade constante de
-		// 		descobrir e experimentar o novo. Fora do código, gosto de drama e suspense. Escuto
-		// 		muito <strong>Rap, Funk e Samba</strong>.{' '}
-		// 		<strong>Feijoada e bolo de cenoura</strong>.
-		// 	</>
+		return (
+			<>
+				No front-end, meu foco está em criar interfaces que pareçam naturais de usar.
+				Valorizo consistência, acessibilidade, performance e sistemas de componentes que
+				permitam a evolução do produto sem aumentar sua complexidade. No back-end, gosto de
+				desenhar APIs bem definidas, integrações confiáveis e arquiteturas distribuídas que
+				permaneçam simples de manter mesmo à medida que o sistema cresce.
+			</>
 		)
-	return (null
-		// <>
-		// 	<em className='font-semibold'>Omo Orisa e Omo Ifa.</em> Trago comigo a disciplina e
-		// 	postura que aprendi com quem veio antes.
-		// </>
+	return (
+		<>
+			Ao longo da carreira participei da evolução de produtos utilizados por milhões de
+			pessoas e empresas, passando por fintechs, mercado financeiro, seguros e educação.
+			Trabalhei em projetos para empresas como Santander, Sinqia, Porto Seguro e Serasa
+			Experian, sempre envolvido em desafios de modernização de sistemas, arquitetura de
+			aplicações, migração de legados e construção de novas experiências digitais.
+		</>
 	)
 }
 
@@ -109,9 +110,9 @@ export function AboutMeSection() {
 										<LineContent index={i} />
 									</p>
 								</div>
-								{i === 0 && <div className='w-12 h-[2px] bg-red-500 mt-5 ml-9' />}
-							</div>
-						))}
+{i === 0 && <div className='w-12 h-[2px] bg-red-500 mt-5 ml-9' />}
+						</div>
+					))}
 
 						{/* Parágrafo 04 */}
 						<div className='flex items-start gap-3'>
