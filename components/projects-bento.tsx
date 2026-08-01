@@ -18,7 +18,8 @@ interface Project {
 const PROJECTS: Project[] = [
   {
     title: "Mila",
-    description: "App de organização de rotina para quem quer mais clareza no dia a dia. Hábitos, tarefas e agenda reunidos em uma experiência simples e consistente.",
+    description:
+      "App de organização de rotina para quem quer mais clareza no dia a dia. Hábitos, tarefas e agenda reunidos em uma experiência simples e consistente.",
     stack: ["React Native", "Next.js", "NestJS", "Node.js"],
     url: "https://usemila.app",
     label: "Visitar",
@@ -27,7 +28,8 @@ const PROJECTS: Project[] = [
   },
   {
     title: "Angela das Reis",
-    description: "Portfolio de Angela das Reis, redatora especializada em arte, moda e narrativas digitais. Design limpo com identidade visual forte.",
+    description:
+      "Portfolio de Angela das Reis, redatora especializada em arte, moda e narrativas digitais. Design limpo com identidade visual forte.",
     stack: ["Next.js", "React"],
     url: "https://angeladasreis.com.br",
     label: "Visitar",
@@ -38,144 +40,127 @@ const PROJECTS: Project[] = [
 
 const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
-const BENTO_SPANS = ["col-span-1", "col-span-1"]
-const BENTO_HEIGHTS = ["h-[480px]", "h-[480px]"]
-
-function CardBg({ project, index }: { project: Project; index: number }) {
-  const suit = SUIT_CHARS[index % SUIT_CHARS.length]
+function ProjectImage({ project, index }: { project: Project; index: number }) {
   if (project.image) {
-    return <Image src={project.image} alt={project.title} fill className="object-cover object-left-top" />
+    return (
+      <div className="relative aspect-[16/11] overflow-hidden bg-[#111111] md:aspect-[4/3]">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className="object-cover object-left-top transition-transform duration-700 group-hover:scale-[1.025]"
+          sizes="(min-width: 1024px) 42vw, 100vw"
+        />
+      </div>
+    )
   }
+
   return (
-    <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
+    <div className="relative aspect-[16/11] overflow-hidden bg-[#111111] md:aspect-[4/3]">
       <span
-        className="font-black text-neutral-800 pointer-events-none select-none"
-        style={{ fontSize: "clamp(4rem, 8vw, 8rem)" }}
+        className="absolute inset-0 flex items-center justify-center text-[7rem] font-black text-neutral-800"
         aria-hidden
       >
-        {suit}
+        {SUIT_CHARS[index % SUIT_CHARS.length]}
       </span>
     </div>
   )
 }
 
+function ProjectCase({ project, index }: { project: Project; index: number }) {
+  const isLive = project.url !== "#"
+  const reverse = index % 2 === 1
+
+  return (
+    <article className="group border-t border-neutral-200 py-12 last:border-b md:py-16">
+      <div
+        className={`grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14 ${
+          reverse ? "lg:grid-cols-[1.1fr_0.9fr]" : ""
+        }`}
+      >
+        <div className={reverse ? "lg:order-2" : ""}>
+          <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-400">
+            <span className="text-red-500">({String(index + 1).padStart(2, "0")})</span>
+            <span className="h-px flex-1 bg-neutral-200" />
+            <span>{project.categories.join(" / ")}</span>
+          </div>
+
+          <h3 className="text-3xl font-black uppercase leading-none tracking-tight text-black md:text-4xl lg:text-[2.75rem]">
+            {project.title}
+            <span className="text-red-500">.</span>
+          </h3>
+
+          <p className="mt-6 max-w-[48rem] text-base leading-loose text-neutral-500 md:text-lg">
+            <span className="font-mono text-sm text-red-500">// </span>
+            {project.description}
+          </p>
+
+          <div className="mt-7 flex flex-wrap gap-2">
+            {project.stack.map((tech) => (
+              <span
+                key={tech}
+                className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-500"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-9">
+            {isLive ? (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 border-2 border-black px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-black transition-colors hover:bg-black hover:text-white"
+              >
+                {project.label || "Visitar"}
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              </a>
+            ) : (
+              <span className="inline-flex border border-neutral-300 px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-neutral-400">
+                {project.label}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className={reverse ? "lg:order-1" : ""}>
+          <div className="border border-neutral-200 bg-white p-2 shadow-[0_24px_80px_rgba(0,0,0,0.08)] transition-transform duration-500 group-hover:-translate-y-1">
+            <ProjectImage project={project} index={index} />
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+
 export function ProjectsBento() {
   return (
-    <section id="projetos" className="bg-[#faf9f7] py-16">
-      {/* Header */}
-      <div className="px-8 md:px-16 lg:px-24 flex items-center justify-between mb-8">
-        <div className="flex items-center gap-4">
-          <span className="block w-[3px] h-10 bg-red-500 shrink-0" />
-          <h2 className="text-[2.5rem] md:text-[3.5rem] lg:text-[4.5rem] font-black tracking-tight leading-none text-black uppercase">
-            PROJETOS<span className="text-neutral-300">/</span>
-          </h2>
+    <section id="projetos" className="scroll-mt-24 bg-[#faf9f7] px-6 py-20 md:px-12 md:py-28 lg:px-20">
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div>
+            <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-400">
+              <span className="text-red-500">// </span>
+              cases recentes
+            </p>
+            <h2 className="text-[2.5rem] font-black uppercase leading-none tracking-tight text-black md:text-[3.5rem] lg:text-[4.5rem]">
+              projetos
+              <span className="text-neutral-300">/</span>
+            </h2>
+          </div>
+
+          <p className="max-w-[44rem] text-base leading-loose text-neutral-500 md:text-lg lg:justify-self-end">
+            Alguns produtos que mostram meu ponto de encontro entre engenharia, interface e decisão de produto.
+          </p>
+        </header>
+
+        <div>
+          {PROJECTS.map((project, index) => (
+            <ProjectCase key={project.title} project={project} index={index} />
+          ))}
         </div>
-        <span className="font-mono text-xs text-neutral-400 tracking-widest hidden md:block">
-          {PROJECTS.length} projetos
-        </span>
-      </div>
-
-      {/* Desktop bento grid */}
-      <div className="hidden md:grid grid-cols-3 gap-[4px] px-8 md:px-16 lg:px-24">
-        {PROJECTS.map((project, i) => {
-          const isLive = project.url !== "#"
-          return (
-            <div
-              key={project.title}
-              className={`${BENTO_SPANS[i]} ${BENTO_HEIGHTS[i]} relative overflow-hidden group cursor-pointer`}
-            >
-              <CardBg project={project} index={i} />
-
-              {/* info panel — always visible */}
-              <div className="absolute inset-x-0 bottom-0 bg-[#111111] border-t border-neutral-800 p-5 z-10">
-                <div className="flex items-baseline gap-3 mb-2">
-                  <span className="font-mono text-[0.6rem] text-red-500 leading-none shrink-0">
-                    ({String(i + 1).padStart(2, "0")})
-                  </span>
-                  <h3
-                    className="font-black tracking-tight leading-none uppercase text-white"
-                    style={{ fontSize: "clamp(1rem, 1.4vw, 1.2rem)" }}
-                  >
-                    {project.title}
-                  </h3>
-                  <span className="font-mono text-[0.55rem] text-neutral-600 tracking-widest uppercase leading-none ml-auto shrink-0">
-                    {project.categories[0]}
-                  </span>
-                </div>
-                <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-                  <span className="text-red-500 font-mono text-xs">// </span>
-                  {project.description}
-                </p>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.stack.slice(0, 3).map((t) => (
-                      <span key={t} className="font-mono text-[0.55rem] text-neutral-500 border border-neutral-800 px-2 py-0.5 leading-none">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                  {isLive ? (
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 font-mono text-[0.6rem] font-bold border border-white text-white px-3 py-1.5 hover:bg-white hover:text-black transition-colors shrink-0"
-                    >
-                      {project.label || "Visitar"}
-                      <ArrowUpRight className="w-3 h-3" />
-                    </a>
-                  ) : (
-                    <span className="font-mono text-[0.6rem] text-neutral-600 border border-neutral-800 px-3 py-1.5 shrink-0">
-                      {project.label}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Mobile: dois cards empilhados */}
-      <div className="md:hidden flex flex-col gap-[4px]">
-        {PROJECTS.map((project, i) => {
-          const isLive = project.url !== "#"
-          return (
-            <div key={project.title} className="relative h-[280px] overflow-hidden">
-              <CardBg project={project} index={i} />
-              <div className="absolute bottom-0 left-0 right-0 bg-[#111111] border-t border-neutral-800 p-4 z-10">
-                <div className="flex items-baseline gap-2 mb-1.5">
-                  <span className="font-mono text-[0.55rem] text-red-500 leading-none shrink-0">
-                    ({String(i + 1).padStart(2, "0")})
-                  </span>
-                  <h3 className="font-black tracking-tight leading-none uppercase text-white text-[1rem]">
-                    {project.title}
-                  </h3>
-                  <span className="font-mono text-[0.5rem] text-neutral-600 tracking-widest uppercase leading-none ml-auto shrink-0">
-                    {project.categories[0]}
-                  </span>
-                </div>
-                <p className="font-mono text-[0.6rem] text-neutral-400 leading-relaxed mb-2">
-                  <span className="text-red-500">// </span>
-                  {project.description}
-                </p>
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex gap-1.5 flex-wrap">
-                    {project.stack.slice(0, 3).map((t) => (
-                      <span key={t} className="font-mono text-[0.5rem] text-neutral-500 border border-neutral-800 px-1.5 py-0.5 leading-none">{t}</span>
-                    ))}
-                  </div>
-                  {isLive && (
-                    <a href={project.url} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 font-mono text-[0.55rem] font-bold border border-white text-white px-2.5 py-1 shrink-0">
-                      {project.label} <ArrowUpRight className="w-2.5 h-2.5" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          )
-        })}
       </div>
     </section>
   )

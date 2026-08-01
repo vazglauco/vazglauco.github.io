@@ -139,7 +139,7 @@ export function SplitHome() {
 		const rc   = rightContentRef.current
 		const card = cardWrapRef.current
 		if (!lc || !rc || !card) return
-		const tl = gsap.timeline({ delay: 2.6 })
+		const tl = gsap.timeline({ delay: 0.6 })
 		tl.to([lc, rc], { opacity: 1, duration: 0.6, ease: 'power2.out' })
 		return () => { tl.kill() }
 	}, [])
@@ -147,7 +147,7 @@ export function SplitHome() {
 	/* ───── MOBILE LAYOUT ───── */
 	if (isMobile) {
 		return (
-			<div className='w-screen flex flex-col relative'>
+			<div className='w-full flex flex-col relative'>
 				{/* Painel escuro — 70vh */}
 				<div
 					className='relative bg-[#111111] flex flex-col px-7 pt-[96px]'
@@ -185,7 +185,7 @@ export function SplitHome() {
 						</div>
 
 						<div className='flex flex-col gap-3 mt-1'>
-							<div className='flex gap-3'>
+							<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
 								<a
 									href='/blog'
 									className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
@@ -280,7 +280,7 @@ export function SplitHome() {
 
 	/* ───── DESKTOP LAYOUT (original) ───── */
 	return (
-		<div id="inicio" data-hero className='h-full w-screen flex flex-col lg:flex-row overflow-hidden relative'>
+		<div id="inicio" data-hero className='min-h-screen w-full flex flex-col lg:flex-row overflow-hidden relative'>
 			{/* ===== Card — fixed at center boundary ===== */}
 			<div
 				ref={cardWrapRef}
@@ -294,7 +294,7 @@ export function SplitHome() {
 							alt='Glauco Vaz Card'
 							width={280}
 							height={400}
-							className='object-contain drop-shadow-2xl'
+							className='object-contain drop-shadow-2xl w-[clamp(190px,20vw,280px)] h-auto'
 							priority
 						/>
 					</div>
@@ -305,8 +305,8 @@ export function SplitHome() {
 			<div className='relative flex-1 min-h-[55vh] lg:min-h-0 bg-[#111111] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='dark' />*/}
 
-				<div ref={leftContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full' style={{ opacity: 0 }}>
-					<p className='font-mono text-lg text-neutral-400 mb-7 tracking-wide leading-relaxed'>
+				<div ref={leftContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full py-24 md:py-28 lg:py-32' style={{ opacity: 0 }}>
+					<p className='font-mono text-base xl:text-lg text-neutral-400 mb-6 lg:mb-7 tracking-wide leading-relaxed'>
 						<span className='text-neutral-500'>{'{ '}</span>
 						location
 						<span className='text-neutral-500'>{': '}</span>
@@ -314,7 +314,7 @@ export function SplitHome() {
 						<span className='text-neutral-500'>{'}'}</span>
 					</p>
 
-					<h1 className='font-black tracking-tight leading-[0.88] text-white text-4xl md:text-5xl lg:text-6xl my-14'>
+					<h1 className='font-black tracking-tight leading-[0.88] text-white text-4xl md:text-5xl lg:text-6xl my-10 xl:my-14'>
 						<span className='block'>glauco</span>
 						<span className='block'>
 							<span className='invisible'>gla</span>
@@ -324,7 +324,7 @@ export function SplitHome() {
 					</h1>
 
 					<div className='mt-7 flex flex-col gap-4'>
-						<div className='flex gap-3'>
+						<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
 							<a
 								href='/blog'
 								className='whitespace-nowrap bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
@@ -357,7 +357,7 @@ export function SplitHome() {
 			<div className='relative flex-1 min-h-[45vh] lg:min-h-0 bg-[#faf9f7] flex items-center justify-center overflow-hidden'>
 				{/*<PatternBackground variant='light' />*/}
 
-				<div ref={rightContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full text-right' style={{ opacity: 0 }}>
+				<div ref={rightContentRef} className='relative z-10 px-8 md:px-12 lg:px-14 max-w-xl w-full py-24 md:py-28 lg:py-32 text-right' style={{ opacity: 0 }}>
 					{/* Title */}
 					<h2
 						className='font-black text-neutral-900 leading-[1.05] mb-1 whitespace-nowrap'
@@ -367,14 +367,14 @@ export function SplitHome() {
 					</h2>
 
 					{/* Subtitle */}
-					<p className='font-mono text-[13px] text-neutral-400 tracking-wide mb-10'>
+					<p className='font-mono text-[13px] text-neutral-400 tracking-wide mb-8 lg:mb-10'>
 						desde <span className='text-neutral-700 font-bold'>2016</span>
 						<span className='mx-2 text-neutral-300'>·</span>
 						freela &amp; CLT
 					</p>
 
 					{/* Stats */}
-					<div className='flex gap-8 justify-end mb-10'>
+					<div className='flex gap-6 xl:gap-8 justify-end mb-8 lg:mb-10'>
 						{[
 							{ value: '10', label: 'ANOS' },
 							{ value: '25+', label: 'PROJETOS' },

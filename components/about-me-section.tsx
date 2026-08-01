@@ -38,6 +38,7 @@ const LINE_NUMS = ['01', '02', '03', '04']
 
 export function AboutMeSection() {
 	const sectionRef = useRef<HTMLDivElement>(null)
+	const visualRef = useRef<HTMLDivElement>(null)
 	const linesRef = useRef<(HTMLDivElement | null)[]>([])
 	const [visible, setVisible] = useState(false)
 	const [isMobile, setIsMobile] = useState(false)
@@ -70,29 +71,38 @@ export function AboutMeSection() {
 		return () => observer.disconnect()
 	}, [])
 
+	useEffect(() => {
+		if (isMobile) return
+
+		const updateVisualPosition = () => {
+			const section = sectionRef.current
+			const visual = visualRef.current
+			if (!section || !visual) return
+
+			const sectionRect = section.getBoundingClientRect()
+			const sectionTop = window.scrollY + sectionRect.top
+			const visualHeight = visual.offsetHeight
+			const desiredTop = window.scrollY + window.innerHeight - visualHeight - sectionTop
+			const maxTop = Math.max(0, section.offsetHeight - visualHeight)
+			const clampedTop = Math.max(0, Math.min(desiredTop, maxTop))
+
+			visual.style.transform = `translateY(${clampedTop}px)`
+		}
+
+		updateVisualPosition()
+		window.addEventListener('scroll', updateVisualPosition, { passive: true })
+		window.addEventListener('resize', updateVisualPosition)
+
+		return () => {
+			window.removeEventListener('scroll', updateVisualPosition)
+			window.removeEventListener('resize', updateVisualPosition)
+		}
+	}, [isMobile])
+
 	if (isMobile) {
 		return (
-			<div id="sobre" ref={sectionRef} className='w-full bg-[#faf9f7] relative'>
-				<div className='px-8 pt-20 pb-[480px]'>
-					<div className='mb-10 text-right'>
-						<div className='flex items-baseline justify-end gap-2'>
-							<span className='text-[2rem] font-black tracking-tight leading-none text-black uppercase'>
-								SOBRE
-							</span>
-							<span className='text-[2rem] font-black text-red-500 leading-none'>
-								|
-							</span>
-						</div>
-						<div className='flex items-baseline justify-end gap-2'>
-							<span className='text-[2rem] font-black tracking-tight leading-none text-black uppercase'>
-								MIM
-							</span>
-							<span className='text-[1.75rem] font-black text-red-500 leading-none'>
-								/
-							</span>
-						</div>
-					</div>
-
+			<div id="sobre" ref={sectionRef} className='w-full scroll-mt-24 bg-[#faf9f7] relative'>
+				<div className='px-8 pt-28 pb-[560px]'>
 					<div className='flex flex-col gap-7'>
 						{[0, 1, 2].map((i) => (
 							<div key={i}>
@@ -140,39 +150,16 @@ export function AboutMeSection() {
 	}
 
 	return (
-		<div id="sobre" ref={sectionRef} className='w-full min-h-screen bg-[#faf9f7] overflow-hidden relative'>
-			{/* Title — top right */}
-			<div
-				className='absolute top-14 lg:top-24 right-8 md:right-14 lg:right-20 z-10 text-right select-none'
-				style={{ fontFamily: 'var(--font-fira-code), monospace' }}
-			>
-				<div className='flex items-baseline justify-end gap-3'>
-					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-none text-black uppercase'>
-						SOBRE
-					</span>
-					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black text-red-500 leading-none'>
-						|
-					</span>
-				</div>
-				<div className='flex items-baseline justify-end gap-3'>
-					<span className='text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-none text-black uppercase'>
-						MIM
-					</span>
-					<span className='text-[2rem] md:text-[2.8rem] lg:text-[3.2rem] font-black text-red-500 leading-none'>
-						/
-					</span>
-				</div>
-			</div>
-
+		<div id="sobre" ref={sectionRef} className='grid w-full scroll-mt-24 grid-cols-[minmax(0,1fr)_clamp(26rem,36vw,34rem)] bg-[#faf9f7] relative'>
 			{/* Text block — left side, vertically centered */}
-			<div className='absolute inset-y-0 left-0 right-[36%] flex flex-col justify-center px-8 md:px-16 lg:px-24'>
+			<div className='relative z-10 col-start-1 row-start-1 flex flex-col justify-center px-8 py-32 md:px-16 md:py-36 lg:px-20 xl:px-24 xl:py-44 min-[1500px]:mx-auto min-[1500px]:my-32 min-[1500px]:max-w-[980px] min-[1500px]:px-0 min-[1500px]:py-12'>
 				{LINE_NUMS.map((num, i) => (
 					<div key={i}>
 						<div
 							ref={(el) => {
 								linesRef.current[i] = el
 							}}
-							className='flex items-start gap-4 mb-10'
+							className='flex items-start gap-4 mb-5 xl:mb-7'
 							style={{
 								color: '#1a1a1a',
 								opacity: visible ? 1 : 0,
@@ -186,10 +173,10 @@ export function AboutMeSection() {
 							<p
 								className={
 									i === 0
-										? 'text-3xl md:text-4xl lg:text-[2.6rem] font-black italic leading-tight'
+										? 'text-3xl md:text-4xl lg:text-[clamp(2rem,3vw,2.6rem)] font-black italic leading-tight'
 										: i === 3
-											? 'text-base md:text-lg lg:text-xl font-medium leading-loose tracking-wide italic text-neutral-600'
-											: 'text-base md:text-lg lg:text-xl font-medium leading-loose tracking-wide'
+											? 'text-base md:text-lg lg:text-[clamp(0.95rem,1.35vw,1.18rem)] font-medium leading-relaxed xl:leading-loose tracking-wide italic text-neutral-600'
+											: 'text-base md:text-lg lg:text-[clamp(0.95rem,1.35vw,1.18rem)] font-medium leading-relaxed xl:leading-loose tracking-wide'
 								}
 							>
 								<LineContent index={i} />
@@ -197,7 +184,7 @@ export function AboutMeSection() {
 						</div>
 						{i === 0 && (
 							<div
-								className='w-14 h-[2px] bg-red-500 mb-10 ml-7'
+								className='w-14 h-[2px] bg-red-500 mb-6 xl:mb-8 ml-7'
 								style={{
 									opacity: visible ? 1 : 0,
 									transition: 'opacity 0.4s ease 0.05s',
@@ -210,21 +197,21 @@ export function AboutMeSection() {
 
 			{/* Illustration — bottom right */}
 			<div
-				className='absolute top-[30%] bottom-0 right-0 z-0 w-64 md:w-80 lg:w-[26rem] pointer-events-none select-none border-l-2 border-neutral-300 flex flex-col justify-end'
-				style={{
-					opacity: visible ? 1 : 0,
-					transform: visible ? 'translateY(0)' : 'translateY(24px)',
-					transition: 'opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s',
-				}}
+				className='relative col-start-2 row-start-1 z-0 border-l-2 border-neutral-300 pointer-events-none select-none'
 			>
+				<div
+					ref={visualRef}
+					className='absolute right-0 top-0 ml-auto flex h-[clamp(26rem,36vw,34rem)] max-h-[calc(100svh-5rem)] w-full max-w-[clamp(26rem,36vw,34rem)] items-end justify-end'
+				>
 				<Image
 					src='/ilustra_about.png'
 					alt='Ilustração Glauco'
 					width={480}
 					height={560}
-					className='object-contain w-full h-auto'
+					className='object-contain w-full h-auto max-h-full'
 					priority
 				/>
+				</div>
 			</div>
 		</div>
 	)

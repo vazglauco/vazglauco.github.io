@@ -111,7 +111,7 @@ export function ExperienceTimeline() {
   const exp = EXPERIENCES[selected]
 
   return (
-    <div id="experiencia" className="experience-section bg-[#111111] lg:bg-[#faf9f7]">
+    <div id="experiencia" className="experience-section scroll-mt-24 bg-[#111111] lg:bg-[#faf9f7]">
 
       {/* ── DESKTOP: two-panel layout ── */}
       <div className="hidden lg:flex items-start gap-8 xl:gap-12 px-12 xl:px-20 py-16 xl:py-20">

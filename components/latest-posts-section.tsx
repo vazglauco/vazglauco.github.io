@@ -11,7 +11,7 @@ export function LatestPostsSection({ posts }: Props) {
   if (posts.length === 0) return null
 
   return (
-    <section id="blog" className="bg-[#faf9f7] py-40 md:py-52 relative overflow-visible">
+    <section id="blog" className="scroll-mt-24 bg-[#faf9f7] py-40 md:py-52 relative overflow-visible">
 
       {/* Ilustração flutuando entre experiência e blog */}
       <div className="hidden md:block absolute select-none pointer-events-none" style={{ top: '-260px', right: '2%', width: '36%', height: '520px' }}>

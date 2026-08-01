@@ -188,8 +188,8 @@ export function Header() {
     const cleanups: (() => void)[] = [() => headerTween.kill()]
     let cancelled = false
 
-    const STEPS = 10, MS = 38
-    const OVERLAP = Math.floor(STEPS * 0.75) * MS  // start next when current is ~75% done
+    const STEPS = 8, MS = 32
+    const OVERLAP = 140
 
     const runNext = (index: number) => {
       if (cancelled) return

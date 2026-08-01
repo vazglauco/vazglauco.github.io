@@ -3,35 +3,30 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 
-const SERVICES = [
+const AREAS = [
 	{
 		number: '01',
+		label: 'construir',
 		title: 'Desenvolvimento Full Stack',
 		description:
-			'Da interface ao servidor, construo soluções completas. Trabalho com stacks modernas no frontend e no backend, entregando aplicações escaláveis, mantíveis e prontas para o mundo real.',
-		skills: [
-			'React, Angular, Next.js',
-			'Node.js, NestJS, Express',
-			'REST APIs, GraphQL, WebSockets',
-		],
+			'Transformo ideia em produto funcionando: interface, aplicação, servidor e integração conversando como uma coisa só.',
+		items: ['React, Angular, Next.js', 'Node.js, NestJS, Express', 'REST, GraphQL, WebSockets'],
 	},
 	{
 		number: '02',
+		label: 'organizar',
 		title: 'Visão de Produto',
 		description:
-			'Entendo o negócio antes de escrever a primeira linha. Participo da definição de escopo, priorização de funcionalidades e alinhamento com stakeholders. Transformo requisitos difusos em decisões claras e entregas com propósito.',
-		skills: [
-			'Definição de escopo e requisitos',
-			'Priorização e roadmap',
-			'Alinhamento com stakeholders',
-		],
+			'Ajudo a clarear escopo, prioridade e direção técnica antes da execução virar custo desnecessário.',
+		items: ['Definição de escopo', 'Priorização e roadmap', 'Alinhamento com stakeholders'],
 	},
 	{
 		number: '03',
+		label: 'colaborar',
 		title: 'Colaboração no Time',
 		description:
-			'Trabalho bem com pessoas. Organizo backlogs, participo de cerimônias ágeis, facilito discussões entre áreas e oriento outros desenvolvedores. Acredito que um time alinhado entrega mais do que qualquer talento individual.',
-		skills: ['Gestão de backlog e tasks', 'Discussão entre áreas', 'Orientação e code review'],
+			'Conecto contexto, pessoas e execução para reduzir ruído, destravar decisões e melhorar a qualidade da entrega.',
+		items: ['Backlog e tasks', 'Discussões entre áreas', 'Code review e orientação'],
 	},
 ]
 
@@ -40,97 +35,118 @@ export function SkillsServicesSection() {
 	const [visible, setVisible] = useState(false)
 
 	useEffect(() => {
-		const el = sectionRef.current
-		if (!el) return
-		const io = new IntersectionObserver(([entry]) => {
-			if (entry.isIntersecting) { setVisible(true); io.disconnect() }
-		}, { threshold: 0.1 })
-		io.observe(el)
-		return () => io.disconnect()
+		const section = sectionRef.current
+		if (!section) return
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setVisible(true)
+					observer.disconnect()
+				}
+			},
+			{ threshold: 0.18 },
+		)
+
+		observer.observe(section)
+		return () => observer.disconnect()
 	}, [])
 
 	return (
-		<div
-			id="skills"
+		<section
+			id='skills'
 			ref={sectionRef}
-			className='bg-[#111111] text-white py-20 md:py-28 lg:py-32'
-			style={{ opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease' }}
+			className='relative scroll-mt-24 overflow-hidden bg-[#111111] px-6 py-20 text-white md:px-12 md:py-28 lg:px-20'
 		>
-			<h2 className='text-center font-black tracking-tight leading-none uppercase text-white text-[2rem] md:text-[2.5rem] lg:text-[3rem] mb-12 md:mb-16'>
-				como posso te ajudar
-				<span className='text-red-600'>.</span>
-			</h2>
+			<div
+				className='pointer-events-none absolute bottom-8 left-0 hidden h-[46%] w-[18%] select-none opacity-45 md:block lg:w-[16%]'
+				aria-hidden='true'
+			>
+				<Image
+					src='/ilustra_trampos.png'
+					alt=''
+					fill
+					className='object-contain object-left-bottom'
+					sizes='18vw'
+				/>
+			</div>
 
-			<div className='flex items-stretch min-h-[60vh] px-6 md:px-10 lg:px-14 gap-4 lg:gap-6'>
-				{/* Left image column */}
-				<div className='hidden md:flex w-[22%] items-center justify-center shrink-0'>
-					<div className='relative w-full h-[70%]'>
-						<Image
-							src='/ilustra_trampos.png'
-							alt='Ilustração de trabalho'
-							fill
-							className='object-contain'
-						/>
+			<div
+				className='pointer-events-none absolute right-0 top-14 hidden h-[48%] w-[18%] select-none opacity-45 md:block lg:w-[16%]'
+				aria-hidden='true'
+			>
+				<Image
+					src='/ilustra_trampos_2.png'
+					alt=''
+					fill
+					className='object-contain object-right-top'
+					sizes='18vw'
+				/>
+			</div>
+
+			<div className='mx-auto max-w-7xl'>
+				<div className='mb-14 grid gap-6 md:mb-18 lg:grid-cols-[0.9fr_1.1fr] lg:items-end'>
+					<div>
+						<p className='mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-500'>
+							<span className='text-red-500'>// </span>
+							serviços
+						</p>
+						<h2 className='max-w-[11ch] text-[2.7rem] font-black uppercase leading-[0.88] tracking-tight text-white md:text-[4rem] lg:text-[5.25rem]'>
+							como posso te ajudar
+							<span className='text-red-500'>.</span>
+						</h2>
 					</div>
+
+					<p className='max-w-[48rem] text-base leading-loose text-neutral-400 md:text-lg lg:justify-self-end'>
+						Atuo onde produto e engenharia se encontram: construindo interfaces, organizando decisões e colaborando para transformar escopo em entrega real.
+					</p>
 				</div>
 
-				{/* Center cards area */}
-				<div className='flex-1 grid md:grid-cols-3 gap-6 lg:gap-8'>
-					{SERVICES.map((service, i) => (
-						<div
-							key={i}
-							className='border border-neutral-800 bg-[#111111] p-6 md:p-8 flex flex-col'
+				<div className='grid gap-px overflow-hidden border border-neutral-800 bg-neutral-800 md:grid-cols-3'>
+					{AREAS.map((area, index) => (
+						<article
+							key={area.title}
+							className='group bg-[#111111] p-6 transition-colors duration-300 hover:bg-[#151515] md:p-8 lg:p-10'
 							style={{
 								opacity: visible ? 1 : 0,
-								transform: visible ? 'translateY(0)' : 'translateY(16px)',
-								transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.5s ease ${i * 0.1}s`,
+								transform: visible ? 'translateY(0)' : 'translateY(18px)',
+								transition: `opacity 0.55s ease ${index * 0.1}s, transform 0.55s ease ${index * 0.1}s, background-color 0.3s ease`,
 							}}
 						>
-							<div className='flex items-baseline gap-3 mb-5'>
-								<span className='text-lg font-bold text-neutral-600 shrink-0'>
-									({service.number})
+							<div className='mb-8 flex items-center gap-4 font-mono text-[0.66rem] uppercase tracking-[0.22em] text-neutral-500'>
+								<span>
+									<span className='text-red-500'>(</span>
+									{area.number}
+									<span className='text-red-500'>)</span>
 								</span>
-								<h3
-									className='text-xl md:text-2xl font-bold italic tracking-tight'
-									style={{ color: 'rgb(235 189 51)' }}
-								>
-									{service.title}
-								</h3>
+								<span className='h-px flex-1 bg-neutral-800 transition-colors group-hover:bg-neutral-700' />
+								<span className='text-amber-200/80'>{area.label}</span>
 							</div>
 
-							<p className='text-sm text-neutral-500 leading-relaxed mb-6'>
-								{service.description}
-							</p>
+							<h3 className='mb-5 min-h-[4rem] text-2xl font-black italic leading-none tracking-tight text-white md:text-3xl'>
+								{area.title}
+								<span className='text-red-500'>.</span>
+							</h3>
 
-							<div className='mt-auto flex flex-col divide-y divide-neutral-800/60'>
-								{service.skills.map((skill, j) => (
-									<span
-										key={j}
-										className='flex items-start gap-4 py-2.5 font-bold text-amber-100/80 text-sm'
+							<p className='mb-8 text-sm leading-relaxed text-neutral-500'>{area.description}</p>
+
+							<div className='mt-auto flex flex-col divide-y divide-neutral-800'>
+								{area.items.map((item, itemIndex) => (
+									<div
+										key={item}
+										className='flex gap-4 py-3 text-sm font-bold leading-snug text-amber-100/80'
 									>
-										<span className='font-mono text-xs font-medium leading-[200%] text-neutral-500'>
-											0{j + 1}
+										<span className='font-mono text-[0.62rem] font-medium leading-5 text-neutral-600'>
+											{String(itemIndex + 1).padStart(2, '0')}
 										</span>
-										{skill}
-									</span>
-									))}
-								</div>
+										<span>{item}</span>
+									</div>
+								))}
 							</div>
-						))}
-					</div>
-
-				{/* Right image column */}
-				<div className='hidden md:flex w-[22%] items-center justify-center shrink-0'>
-					<div className='relative w-full h-[70%]'>
-						<Image
-							src='/ilustra_trampos_2.png'
-							alt='Ilustração de trabalho 2'
-							fill
-							className='object-contain'
-						/>
-					</div>
+						</article>
+					))}
 				</div>
 			</div>
-		</div>
+		</section>
 	)
 }

@@ -13,7 +13,7 @@ const LINKS = [
 
 export function ContactFooter() {
   return (
-    <section id="contato" className="bg-white overflow-visible relative z-10">
+    <section id="contato" className="scroll-mt-24 bg-white overflow-visible relative z-10">
 
       {/* Main — 2 cols: content left, image right */}
       <div className="flex items-stretch min-h-[420px]">
