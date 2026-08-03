@@ -4,10 +4,12 @@ import { useRef, useEffect, useCallback, useState } from 'react'
 import { gsap } from 'gsap'
 import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
+import { BLOG_ENABLED } from '@/lib/features'
 
 /* ───── background pattern suits ───── */
 
 const hash = (a: number, b: number) => (a * 31 + b * 17 + a * b * 7) % 97
+const BREATH_START_ROTATE_X = Math.sin(1.0) * 14
 
 function PatternBackground({ variant }: { variant: 'dark' | 'light' }) {
 	const isDark = variant === 'dark'
@@ -84,6 +86,7 @@ export function SplitHome() {
 		if (!card) return
 
 		isBreathingRef.current = true
+		gsap.set(card, { autoAlpha: 1, scale: 1, z: 0 })
 
 		const proxy = { t: 0 }
 		lootTlRef.current = gsap.to(proxy, {
@@ -124,25 +127,55 @@ export function SplitHome() {
 	}, [])
 
 	useEffect(() => {
+		if (!isMobile) return
 		startBreathing()
 
 		return () => {
 			if (spinIntervalRef.current)
 				(spinIntervalRef.current as unknown as gsap.core.Tween).kill()
 			if (lootTlRef.current) lootTlRef.current.kill()
+			isBreathingRef.current = false
 		}
-	}, [startBreathing])
+	}, [isMobile, startBreathing])
 
 	// Entrada da hero — só o conteúdo e o card, o fundo já aparece
 	useEffect(() => {
 		const lc   = leftContentRef.current
 		const rc   = rightContentRef.current
-		const card = cardWrapRef.current
+		const card = cardRef.current
 		if (!lc || !rc || !card) return
 		const tl = gsap.timeline({ delay: 0.6 })
-		tl.to([lc, rc], { opacity: 1, duration: 0.6, ease: 'power2.out' })
-		return () => { tl.kill() }
-	}, [])
+		tl.fromTo(
+			card,
+			{
+				autoAlpha: 0,
+				scale: 0.28,
+				z: -700,
+				rotateX: 34,
+				rotateY: -540,
+				rotateZ: -18,
+			},
+			{
+				autoAlpha: 1,
+				scale: 1,
+				z: 0,
+				rotateX: BREATH_START_ROTATE_X,
+				rotateY: 0,
+				rotateZ: 0,
+				duration: 1.15,
+				ease: 'power3.out',
+				onComplete: startBreathing,
+			},
+		)
+		tl.to([lc, rc], { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.55')
+		return () => {
+			tl.kill()
+			if (spinIntervalRef.current)
+				(spinIntervalRef.current as unknown as gsap.core.Tween).kill()
+			if (lootTlRef.current) lootTlRef.current.kill()
+			isBreathingRef.current = false
+		}
+	}, [startBreathing])
 
 	/* ───── MOBILE LAYOUT ───── */
 	if (isMobile) {
@@ -186,12 +219,14 @@ export function SplitHome() {
 
 						<div className='flex flex-col gap-3 mt-1'>
 							<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
-								<a
-									href='/blog'
-									className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
-								>
-									✦ Leia meu blog
-								</a>
+								{BLOG_ENABLED && (
+									<a
+										href='/blog'
+										className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
+									>
+										✦ Leia meu blog
+									</a>
+								)}
 								<a
 									href='mailto:ext.glaucobaptista@mentesnotaveis.com.br'
 									className='inline-block border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
@@ -261,7 +296,7 @@ export function SplitHome() {
 					}}
 				>
 					<div ref={breathRef}>
-						<div ref={cardRef} style={{ backfaceVisibility: 'hidden' }}>
+						<div ref={cardRef} style={{ backfaceVisibility: 'hidden', opacity: 0, visibility: 'hidden' }}>
 							<Image
 								src='/FINAL_CARTA GLAUCO.png'
 								alt='Glauco Vaz Card'
@@ -288,7 +323,7 @@ export function SplitHome() {
 				style={{ perspective: '1000px' }}
 			>
 				<div ref={breathRef}>
-					<div ref={cardRef} style={{ backfaceVisibility: 'hidden' }}>
+					<div ref={cardRef} style={{ backfaceVisibility: 'hidden', opacity: 0, visibility: 'hidden' }}>
 						<Image
 							src='/FINAL_CARTA GLAUCO.png'
 							alt='Glauco Vaz Card'
@@ -325,12 +360,14 @@ export function SplitHome() {
 
 					<div className='mt-7 flex flex-col gap-4'>
 						<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
-							<a
-								href='/blog'
-								className='whitespace-nowrap bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
-							>
-								✦ Leia meu blog
-							</a>
+							{BLOG_ENABLED && (
+								<a
+									href='/blog'
+									className='whitespace-nowrap bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
+								>
+									✦ Leia meu blog
+								</a>
+							)}
 							<a
 								href='mailto:ext.glaucobaptista@mentesnotaveis.com.br'
 								className='whitespace-nowrap border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'

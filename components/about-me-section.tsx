@@ -152,7 +152,7 @@ export function AboutMeSection() {
 	return (
 		<div id="sobre" ref={sectionRef} className='grid w-full scroll-mt-24 grid-cols-[minmax(0,1fr)_clamp(26rem,36vw,34rem)] bg-[#faf9f7] relative'>
 			{/* Text block — left side, vertically centered */}
-			<div className='relative z-10 col-start-1 row-start-1 flex flex-col justify-center px-8 py-32 md:px-16 md:py-36 lg:px-20 xl:px-24 xl:py-44 min-[1500px]:mx-auto min-[1500px]:my-32 min-[1500px]:max-w-[980px] min-[1500px]:px-0 min-[1500px]:py-12'>
+			<div className='relative z-10 col-start-1 row-start-1 flex flex-col justify-center px-8 py-32 md:px-16 md:py-36 lg:px-20 xl:px-24 xl:py-44 min-[1500px]:mx-auto min-[1500px]:my-44 min-[1500px]:max-w-[980px] min-[1500px]:px-0 min-[1500px]:py-12'>
 				{LINE_NUMS.map((num, i) => (
 					<div key={i}>
 						<div

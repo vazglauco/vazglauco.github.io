@@ -8,9 +8,10 @@ import { LatestPostsSection } from '@/components/latest-posts-section'
 import { ResumeCTAStrip } from '@/components/resume-cta-strip'
 import { ContactFooter } from '@/components/contact-footer'
 import { getAllPosts } from '@/lib/blog'
+import { BLOG_ENABLED } from '@/lib/features'
 
 export default function Home() {
-	const latestPosts = getAllPosts().slice(0, 3)
+	const latestPosts = BLOG_ENABLED ? getAllPosts().slice(0, 3) : []
 
 	return (
 		<>
@@ -27,7 +28,7 @@ export default function Home() {
 			<SkillsServicesSection />
 			<ProjectsBento />
 			<ExperienceTimeline />
-			<LatestPostsSection posts={latestPosts} />
+			{BLOG_ENABLED && <LatestPostsSection posts={latestPosts} />}
 
 			<ResumeCTAStrip />
 		<div className="post-snap-section">

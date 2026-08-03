@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
 type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
@@ -12,7 +11,7 @@ interface Project {
   url: string
   label?: string
   categories: Category[]
-  image: string | null
+  previewVideo: string | null
 }
 
 const PROJECTS: Project[] = [
@@ -24,7 +23,7 @@ const PROJECTS: Project[] = [
     url: "https://usemila.app",
     label: "Visitar",
     categories: ["Aplicativo"],
-    image: "/mila.png",
+    previewVideo: "/projects/preview_usemila.mp4",
   },
   {
     title: "Angela das Reis",
@@ -34,29 +33,32 @@ const PROJECTS: Project[] = [
     url: "https://angeladasreis.com.br",
     label: "Visitar",
     categories: ["Portfolio", "Landing page"],
-    image: "/angela.png",
+    previewVideo: "/projects/preview_angela.mp4",
   },
 ]
 
 const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
-function ProjectImage({ project, index }: { project: Project; index: number }) {
-  if (project.image) {
+function ProjectPreview({ project, index }: { project: Project; index: number }) {
+  if (project.previewVideo) {
     return (
-      <div className="relative aspect-[16/11] overflow-hidden bg-[#111111] md:aspect-[4/3]">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover object-left-top transition-transform duration-700 group-hover:scale-[1.025]"
-          sizes="(min-width: 1024px) 42vw, 100vw"
+      <div className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
+        <video
+          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
+          src={project.previewVideo}
+          title={project.title}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
         />
       </div>
     )
   }
 
   return (
-    <div className="relative aspect-[16/11] overflow-hidden bg-[#111111] md:aspect-[4/3]">
+    <div className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
       <span
         className="absolute inset-0 flex items-center justify-center text-[7rem] font-black text-neutral-800"
         aria-hidden
@@ -127,7 +129,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
 
         <div className={reverse ? "lg:order-1" : ""}>
           <div className="border border-neutral-200 bg-white p-2 shadow-[0_24px_80px_rgba(0,0,0,0.08)] transition-transform duration-500 group-hover:-translate-y-1">
-            <ProjectImage project={project} index={index} />
+            <ProjectPreview project={project} index={index} />
           </div>
         </div>
       </div>

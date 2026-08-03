@@ -16,11 +16,8 @@ const ALL_SKILLS: Skill[] = [
 	{ name: 'Tailwind CSS', icon: `${DEVICON_BASE}/tailwindcss/tailwindcss-original.svg` },
 	{ name: 'HTML5', icon: `${DEVICON_BASE}/html5/html5-original.svg` },
 	{ name: 'CSS3', icon: `${DEVICON_BASE}/css3/css3-original.svg` },
-	{ name: 'Sass', icon: `${DEVICON_BASE}/sass/sass-original.svg` },
-	{ name: 'Redux', icon: `${DEVICON_BASE}/redux/redux-original.svg` },
 	{ name: 'Node.js', icon: `${DEVICON_BASE}/nodejs/nodejs-original.svg` },
 	{ name: 'NestJS', icon: `${DEVICON_BASE}/nestjs/nestjs-original.svg` },
-	{ name: 'Express.js', icon: `${DEVICON_BASE}/express/express-original.svg`, darkInvert: true },
 	{ name: 'GraphQL', icon: `${DEVICON_BASE}/graphql/graphql-plain.svg` },
 	{ name: 'PostgreSQL', icon: `${DEVICON_BASE}/postgresql/postgresql-original.svg` },
 	{ name: 'MongoDB', icon: `${DEVICON_BASE}/mongodb/mongodb-original.svg` },
@@ -33,9 +30,6 @@ const ALL_SKILLS: Skill[] = [
 		icon: `${DEVICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
 		darkInvert: true,
 	},
-	{ name: 'Linux', icon: `${DEVICON_BASE}/linux/linux-original.svg` },
-	{ name: 'Nginx', icon: `${DEVICON_BASE}/nginx/nginx-original.svg` },
-	{ name: 'Webpack', icon: `${DEVICON_BASE}/webpack/webpack-original.svg` },
 ]
 
 const tripled = [...ALL_SKILLS, ...ALL_SKILLS, ...ALL_SKILLS]

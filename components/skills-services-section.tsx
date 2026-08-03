@@ -56,31 +56,31 @@ export function SkillsServicesSection() {
 		<section
 			id='skills'
 			ref={sectionRef}
-			className='relative scroll-mt-24 overflow-hidden bg-[#111111] px-6 py-20 text-white md:px-12 md:py-28 lg:px-20'
+			className='relative scroll-mt-24 overflow-hidden bg-[#111111] px-6 py-40 text-white md:px-12 md:py-52 lg:px-20 lg:py-64'
 		>
 			<div
-				className='pointer-events-none absolute bottom-8 left-0 hidden h-[46%] w-[18%] select-none opacity-45 md:block lg:w-[16%]'
+				className='pointer-events-none absolute left-0 top-20 hidden h-[58%] w-[26%] select-none opacity-65 md:block lg:w-[24%]'
 				aria-hidden='true'
 			>
 				<Image
 					src='/ilustra_trampos.png'
 					alt=''
 					fill
-					className='object-contain object-left-bottom'
-					sizes='18vw'
+					className='object-contain object-left-top'
+					sizes='26vw'
 				/>
 			</div>
 
 			<div
-				className='pointer-events-none absolute right-0 top-14 hidden h-[48%] w-[18%] select-none opacity-45 md:block lg:w-[16%]'
+				className='pointer-events-none absolute bottom-8 right-0 hidden h-[60%] w-[26%] select-none opacity-65 md:block lg:w-[24%]'
 				aria-hidden='true'
 			>
 				<Image
 					src='/ilustra_trampos_2.png'
 					alt=''
 					fill
-					className='object-contain object-right-top'
-					sizes='18vw'
+					className='object-contain object-right-bottom'
+					sizes='26vw'
 				/>
 			</div>
 
@@ -97,7 +97,7 @@ export function SkillsServicesSection() {
 						</h2>
 					</div>
 
-					<p className='max-w-[48rem] text-base leading-loose text-neutral-400 md:text-lg lg:justify-self-end'>
+					<p className='max-w-[48rem] text-base leading-loose text-neutral-300 md:text-lg lg:justify-self-end'>
 						Atuo onde produto e engenharia se encontram: construindo interfaces, organizando decisões e colaborando para transformar escopo em entrega real.
 					</p>
 				</div>
@@ -128,7 +128,7 @@ export function SkillsServicesSection() {
 								<span className='text-red-500'>.</span>
 							</h3>
 
-							<p className='mb-8 text-sm leading-relaxed text-neutral-500'>{area.description}</p>
+							<p className='mb-8 text-sm leading-relaxed text-neutral-300'>{area.description}</p>
 
 							<div className='mt-auto flex flex-col divide-y divide-neutral-800'>
 								{area.items.map((item, itemIndex) => (

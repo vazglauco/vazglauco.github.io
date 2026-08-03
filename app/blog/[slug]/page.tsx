@@ -1,4 +1,5 @@
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
+import { BLOG_ENABLED } from '@/lib/features'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -8,6 +9,10 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  if (!BLOG_ENABLED) {
+    return { title: 'glauco.vaz()' }
+  }
+
   const { slug } = await params
   try {
     const post = getPostBySlug(slug)
@@ -18,6 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!BLOG_ENABLED) notFound()
+
   const { slug } = await params
 
   let post

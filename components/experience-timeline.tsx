@@ -1,7 +1,3 @@
-"use client"
-
-import { useState } from "react"
-
 const EXPERIENCES = [
   {
     period: "out 2025 — presente",
@@ -97,6 +93,7 @@ const EXPERIENCES = [
 
 function Period({ text }: { text: string }) {
   const [start, end] = text.split("—").map((s) => s.trim())
+
   return (
     <span>
       {start} <span className="text-red-500">→</span> {end}
@@ -105,222 +102,95 @@ function Period({ text }: { text: string }) {
 }
 
 export function ExperienceTimeline() {
-  const [selected, setSelected] = useState(0)
-  const [openMobile, setOpenMobile] = useState<number | null>(0)
-
-  const exp = EXPERIENCES[selected]
-
   return (
-    <div id="experiencia" className="experience-section scroll-mt-24 bg-[#111111] lg:bg-[#faf9f7]">
-
-      {/* ── DESKTOP: two-panel layout ── */}
-      <div className="hidden lg:flex items-start gap-8 xl:gap-12 px-12 xl:px-20 py-16 xl:py-20">
-
-        {/* Left — company list (dark card) */}
-        <div className="w-[38%] bg-[#111111] text-white flex flex-col justify-center px-10 xl:px-14 py-14 overflow-y-auto shrink-0">
-          <div className="mb-8">
-            <h2 className="text-[1.6rem] xl:text-[2rem] font-black tracking-tight uppercase text-white leading-none mb-2">
-              EXPERIÊNCIAS<span className="text-red-500">.</span>
-            </h2>
-            <span className="font-mono text-sm text-neutral-400">
-              {EXPERIENCES.length} empresas{" "}
-              <span className="text-red-500">·</span>{" "}
-              2017<span className="text-red-500">→</span>2025
-            </span>
-          </div>
-
-          <nav className="flex flex-col">
-            {EXPERIENCES.map((e, i) => (
-              <button
-                key={i}
-                onClick={() => setSelected(i)}
-                className="text-left py-3 border-b border-neutral-900 group flex items-center gap-3 focus:outline-none"
-              >
-                <span
-                  className={`font-mono text-[0.6rem] w-4 shrink-0 transition-colors ${
-                    selected === i ? "text-red-500" : "text-transparent"
-                  }`}
-                >
-                  →
-                </span>
-                <span
-                  className={`font-black tracking-tight transition-all duration-150 ${
-                    selected === i
-                      ? "text-white text-[1.1rem]"
-                      : "text-neutral-400 text-[0.95rem] group-hover:text-neutral-100"
-                  }`}
-                >
-                  {e.client ?? e.company}
-                </span>
-                <span className="font-mono text-[0.65rem] text-neutral-400 ml-auto shrink-0 group-hover:text-white transition-colors">
-                  {e.client
-                    ? <><span className="text-red-500">via</span> {e.company}</>
-                    : null
-                  }
-                </span>
-              </button>
-            ))}
-          </nav>
-        </div>
-
-        {/* Right — detail panel */}
-        <div className="flex-1 flex flex-col justify-center px-4 xl:px-8 py-14">
-          <div key={selected} className="flex flex-col gap-5" style={{
-            animation: "fadeIn 0.25s ease"
-          }}>
-            <span className="font-mono text-[0.62rem] text-neutral-400 tracking-widest">
-              <Period text={exp.period} />
-            </span>
-
+    <section
+      id="experiencia"
+      className="experience-section scroll-mt-24 bg-[#faf9f7] px-6 py-20 md:px-12 md:py-28 lg:px-20"
+    >
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-10 flex justify-end">
+          <div className="flex items-center gap-4 text-right">
             <div>
-              <h3 className="text-[2.8rem] xl:text-[3.5rem] font-black tracking-tight leading-none text-black">
-                {exp.company}
-                <span className="text-red-500">.</span>
-              </h3>
-              <p className="text-base font-light italic text-neutral-500 mt-2">
-                {exp.role}
+              <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-400">
+                {EXPERIENCES.length} empresas
+                <span className="mx-2 text-red-500">·</span>
+                2017<span className="text-red-500">→</span>2025
               </p>
+              <h2 className="text-[2.5rem] font-black uppercase leading-none tracking-tight text-black md:text-[3.5rem] lg:text-[4.5rem]">
+                experiências
+                <span className="text-neutral-300">/</span>
+              </h2>
             </div>
-
-            <div className="w-10 h-[2px] bg-red-500" />
-
-            <p className="text-[0.85rem] text-neutral-500 leading-relaxed max-w-[54ch]">
-              <span className="text-red-500 font-mono text-xs">// </span>
-              {exp.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {exp.stack.map((tech, j) => (
-                <span
-                  key={j}
-                  className="px-3 py-1 text-[0.62rem] font-mono text-neutral-400 border border-neutral-200"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            {(exp.client || exp.location) && (
-              <p className="text-[0.62rem] font-mono text-neutral-400">
-                {exp.client && (
-                  <>
-                    <span className="text-red-500">via</span> {exp.client}{" "}
-                    <span className="text-red-500">·</span>{" "}
-                  </>
-                )}
-                {exp.location}
-              </p>
-            )}
-
-            <span className="font-mono text-[0.58rem] text-neutral-400 mt-2">
-              ({String(selected + 1).padStart(2, "0")}/
-              {String(EXPERIENCES.length).padStart(2, "0")})
-            </span>
+            <span className="block h-10 w-[3px] shrink-0 bg-red-500" />
           </div>
-        </div>
-      </div>
+        </header>
 
-      {/* ── MOBILE: accordion ── */}
-      <div className="lg:hidden py-12">
-        <div className="px-8 mb-6 flex items-center gap-4">
-          <span className="block w-[3px] h-10 bg-red-500 shrink-0" />
-          <div>
-            <h2 className="text-[2.5rem] font-black tracking-tight leading-none text-white uppercase">
-              EXPERIÊNCIAS<span className="text-red-500">.</span>
-            </h2>
-            <span className="font-mono text-xs text-neutral-500 tracking-widest">
-              {EXPERIENCES.length} empresas
-            </span>
-          </div>
-        </div>
+        <div>
+          {EXPERIENCES.map((exp, index) => {
+            const title = exp.client ?? exp.company
+            const reverse = index % 2 === 1
 
-        <div className="border-t border-neutral-700/40 mx-8">
-          {EXPERIENCES.map((e, i) => {
-            const isActive = openMobile === i
             return (
-              <div key={i} className="border-b border-neutral-700/40">
-                <button
-                  onClick={() => setOpenMobile(isActive ? null : i)}
-                  className={`w-full text-left px-0 py-3.5 flex items-center gap-4 transition-colors group focus:outline-none ${
-                    isActive ? "bg-white/[0.04]" : "hover:bg-white/[0.06]"
-                  }`}
-                >
-                  <span className="font-mono text-[0.58rem] shrink-0 w-9 text-neutral-500 select-none">
-                    <span className="text-red-500">(</span>
-                    {String(i + 1).padStart(2, "0")}
-                    <span className="text-red-500">)</span>
-                  </span>
-                  <span
-                    className={`font-black text-sm tracking-tight shrink-0 transition-colors leading-none ${
-                      isActive
-                        ? "text-white"
-                        : "text-neutral-400 group-hover:text-white"
-                    }`}
-                  >
-                    {e.company}
-                  </span>
-                  <span className="text-red-500 text-xs shrink-0 select-none hidden sm:block">·</span>
-                  <span
-                    className={`text-[0.72rem] font-light italic transition-colors hidden sm:block leading-none ${
-                      isActive
-                        ? "text-neutral-300"
-                        : "text-neutral-600 group-hover:text-neutral-400"
-                    }`}
-                  >
-                    {e.role}
-                  </span>
-                  <span
-                    className={`ml-auto font-mono text-base font-semibold shrink-0 transition-colors select-none leading-none ${
-                      isActive
-                        ? "text-red-500"
-                        : "text-neutral-600 group-hover:text-neutral-400"
-                    }`}
-                  >
-                    {isActive ? "−" : "+"}
-                  </span>
-                </button>
-
+              <article
+                key={`${exp.company}-${exp.period}`}
+                className="border-t border-neutral-200 py-14 last:border-b md:py-20"
+              >
                 <div
-                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                    isActive ? "max-h-64" : "max-h-0"
+                  className={`grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-14 ${
+                    reverse ? "lg:grid-cols-[1.1fr_0.9fr]" : ""
                   }`}
                 >
-                  <div className="pb-5 pt-1 pl-[52px]">
-                    <p className="font-mono text-[0.58rem] text-neutral-500 mb-2">
-                      <Period text={e.period} />
+                  <div className={reverse ? "lg:order-2" : ""}>
+                    <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-400">
+                      <span className="text-red-500">
+                        ({String(index + 1).padStart(2, "0")})
+                      </span>
+                      <span className="h-px flex-1 bg-neutral-200" />
+                      <span>{exp.role}</span>
+                    </div>
+
+                    <h3 className="text-3xl font-black uppercase leading-none tracking-tight text-black md:text-4xl lg:text-[2.75rem]">
+                      {title}
+                      <span className="text-red-500">.</span>
+                    </h3>
+
+                    <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-400">
+                      <span>
+                        <Period text={exp.period} />
+                      </span>
+                      <span>{exp.location}</span>
+                    </div>
+
+                    {exp.client && (
+                      <p className="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-400">
+                        <span className="text-red-500">via</span> {exp.company}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className={reverse ? "lg:order-1" : ""}>
+                    <p className="max-w-[52rem] text-base leading-loose text-neutral-500 md:text-lg">
+                      <span className="font-mono text-sm text-red-500">// </span>
+                      {exp.description}
                     </p>
-                    <p className="text-[0.72rem] text-neutral-400 leading-relaxed max-w-[62ch] mb-3">
-                      <span className="text-red-500 font-mono">// </span>
-                      {e.description}
-                    </p>
-                    <div className="flex flex-wrap gap-1.5 mb-2">
-                      {e.stack.map((tech, j) => (
+
+                    <div className="mt-7 flex flex-wrap gap-2">
+                      {exp.stack.map((tech) => (
                         <span
-                          key={j}
-                          className="px-2 py-0.5 text-[0.56rem] font-mono text-neutral-400 border border-neutral-700"
+                          key={tech}
+                          className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-500"
                         >
                           {tech}
                         </span>
                       ))}
                     </div>
-                    {(e.client || e.location) && (
-                      <p className="text-[0.58rem] font-mono text-neutral-500">
-                        {e.client && (
-                          <>
-                            via {e.client}
-                            <span className="text-red-500"> · </span>
-                          </>
-                        )}
-                        {e.location}
-                      </p>
-                    )}
                   </div>
                 </div>
-              </div>
+              </article>
             )
           })}
         </div>
       </div>
-    </div>
+    </section>
   )
 }

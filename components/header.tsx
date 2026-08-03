@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X, Linkedin, Github } from "lucide-react"
 import { gsap } from "gsap"
+import { BLOG_ENABLED } from "@/lib/features"
 
 const POOL = '!<>-_/[]{}=+*^?#@$%~'
 
@@ -92,7 +93,7 @@ export function Header() {
   useEffect(() => {
     const onScroll = () => {
       const scrollY = window.scrollY + 100
-      for (const id of ["inicio", "sobre", "skills", "projetos", "experiencia", "blog", "contato"]) {
+      for (const id of ["inicio", "sobre", "skills", "projetos", "experiencia", ...(BLOG_ENABLED ? ["blog"] : []), "contato"]) {
         const el = document.getElementById(id)
         if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
           setActiveSection(id)
@@ -170,7 +171,7 @@ export function Header() {
       { ref: projRef,    text: ".projetos()"    },
       { ref: expRef,     text: ".experiência()" },
       { ref: contatoRef, text: ".contato()"     },
-      { ref: blogRef,    text: pathname.startsWith('/blog') ? ".portfolio()" : ".blog()" },
+      ...(BLOG_ENABLED ? [{ ref: blogRef, text: pathname.startsWith('/blog') ? ".portfolio()" : ".blog()" }] : []),
     ]
 
     // Pre-set text so widths are reserved — no layout shift as items appear
@@ -188,8 +189,8 @@ export function Header() {
     const cleanups: (() => void)[] = [() => headerTween.kill()]
     let cancelled = false
 
-    const STEPS = 8, MS = 32
-    const OVERLAP = 140
+    const STEPS = 9, MS = 36
+    const OVERLAP = 165
 
     const runNext = (index: number) => {
       if (cancelled) return
@@ -328,20 +329,24 @@ export function Header() {
 
       {/* Blog + Socials — fixed separado, sem blend mode */}
       <div className="hidden md:flex fixed top-0 right-0 z-[10000] h-14 items-center gap-3 px-10 md:px-16">
-        <Link
-          ref={blogRef}
-          href={pathname.startsWith('/blog') ? "/" : "/blog"}
-          onMouseEnter={() => handleHover("blog", blogRef.current, pathname.startsWith('/blog') ? ".portfolio()" : ".blog()")}
-          className={`text-[13px] font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 group ${
-            pathname.startsWith('/blog')
-              ? "text-white bg-red-600 border-red-600"
-              : lm["blog"]
-                ? "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
-                : "text-white/70 border-white/30 hover:text-white hover:border-white"
-          }`}
-        />
+        {BLOG_ENABLED && (
+          <Link
+            ref={blogRef}
+            href={pathname.startsWith('/blog') ? "/" : "/blog"}
+            onMouseEnter={() => handleHover("blog", blogRef.current, pathname.startsWith('/blog') ? ".portfolio()" : ".blog()")}
+            className={`text-[13px] font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 group ${
+              pathname.startsWith('/blog')
+                ? "text-white bg-red-600 border-red-600"
+                : lm["blog"]
+                  ? "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
+                  : "text-white/70 border-white/30 hover:text-white hover:border-white"
+            }`}
+          />
+        )}
 
-        <span className={`text-[10px] select-none ${lm["li"] ? "text-black/20" : "text-white/20"}`}>|</span>
+        {BLOG_ENABLED && (
+          <span className={`text-[10px] select-none ${lm["li"] ? "text-black/20" : "text-white/20"}`}>|</span>
+        )}
 
         <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
           rel="noopener noreferrer" aria-label="LinkedIn"
@@ -379,14 +384,16 @@ export function Header() {
             })}
           </nav>
           <div className="mt-4 pt-4 border-t border-black/8 flex flex-col gap-3">
-            <Link href="/blog" onClick={() => setIsMenuOpen(false)}
-              className={`self-start text-sm font-light tracking-wide border px-3 py-1.5 rounded-sm transition-colors ${
-                pathname.startsWith('/blog')
-                  ? "text-black/90 border-black/40"
-                  : "text-black/50 border-black/20 hover:text-black/75 hover:border-black/40"
-              }`}>
-              .blog()
-            </Link>
+            {BLOG_ENABLED && (
+              <Link href="/blog" onClick={() => setIsMenuOpen(false)}
+                className={`self-start text-sm font-light tracking-wide border px-3 py-1.5 rounded-sm transition-colors ${
+                  pathname.startsWith('/blog')
+                    ? "text-black/90 border-black/40"
+                    : "text-black/50 border-black/20 hover:text-black/75 hover:border-black/40"
+                }`}>
+                .blog()
+              </Link>
+            )}
             <div className="flex gap-4">
               <a href="https://linkedin.com/in/glaucovaz" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs text-black/45 hover:text-black/70 transition-colors">

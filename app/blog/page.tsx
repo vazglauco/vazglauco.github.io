@@ -1,6 +1,8 @@
 import { getAllPosts } from '@/lib/blog'
+import { BLOG_ENABLED } from '@/lib/features'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { notFound } from 'next/navigation'
 
 export const metadata = {
   title: 'blog — glauco.vaz()',
@@ -8,6 +10,8 @@ export const metadata = {
 }
 
 export default function BlogPage({ searchParams }: { searchParams: { tag?: string; order?: string } }) {
+  if (!BLOG_ENABLED) notFound()
+
   const allPosts = getAllPosts()
   const activeTag = searchParams.tag ?? null
   const order = searchParams.order === 'asc' ? 'asc' : 'desc'
