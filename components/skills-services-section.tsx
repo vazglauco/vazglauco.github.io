@@ -84,7 +84,7 @@ export function SkillsServicesSection() {
 				/>
 			</div>
 
-			<div className='mx-auto max-w-7xl'>
+			<div className='relative z-10 mx-auto max-w-7xl'>
 				<div className='mb-14 grid gap-6 md:mb-18 lg:grid-cols-[0.9fr_1.1fr] lg:items-end'>
 					<div>
 						<p className='mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-500'>

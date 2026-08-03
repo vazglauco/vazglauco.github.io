@@ -43,10 +43,10 @@ function NaipesPattern() {
 export function ResumeCTAStrip() {
   return (
     <div className="relative bg-[#111111] overflow-hidden">
-      <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-12 px-8 md:px-16 lg:px-24 py-10 md:py-12">
+      <div className="w-full flex flex-col items-center justify-center gap-6 px-8 md:px-16 lg:px-24 py-10 md:py-12">
 
-        {/* Left: heading */}
-        <div className="flex flex-col gap-1">
+        {/* heading */}
+        <div className="flex flex-col items-center gap-1 text-center">
           <span className="font-mono text-[0.58rem] text-neutral-500 tracking-[0.3em] uppercase">
             // próximo passo
           </span>
@@ -59,7 +59,7 @@ export function ResumeCTAStrip() {
           </span>
         </div>
 
-        {/* Right: CTA */}
+        {/* CTA */}
         <a
           href="/curriculo-glauco-vaz.pdf"
           download="Curriculo-Glauco-Vaz.pdf"

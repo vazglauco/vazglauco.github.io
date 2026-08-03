@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import type { PostMeta } from '@/lib/blog'
 
@@ -12,17 +11,6 @@ export function LatestPostsSection({ posts }: Props) {
 
   return (
     <section id="blog" className="scroll-mt-24 bg-[#faf9f7] py-40 md:py-52 relative overflow-visible">
-
-      {/* Ilustração flutuando entre experiência e blog */}
-      <div className="hidden md:block absolute select-none pointer-events-none" style={{ top: '-260px', right: '2%', width: '36%', height: '520px' }}>
-        <Image
-          src="/ilustra_blog.png"
-          alt=""
-          fill
-          className="object-contain object-bottom"
-          aria-hidden
-        />
-      </div>
 
       <div className="max-w-5xl mx-auto px-8 md:px-12 lg:px-14">
 

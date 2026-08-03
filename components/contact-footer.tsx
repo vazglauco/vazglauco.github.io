@@ -53,7 +53,7 @@ export function ContactFooter() {
 
         {/* Right: large illustration overflowing top and bottom */}
         <div className="hidden md:block relative shrink-0 select-none" style={{ width: '42%' }}>
-          <div className="absolute left-0 right-0" style={{ top: '-180px', bottom: '-60px' }}>
+          <div className="absolute left-0 right-0 pointer-events-none" style={{ top: '-180px', bottom: '24px' }}>
             <Image
               src="/ilustra_contato.png"
               alt=""
