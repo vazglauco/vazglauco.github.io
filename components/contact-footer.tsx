@@ -21,7 +21,7 @@ export function ContactFooter() {
         {/* Left: heading + links */}
         <div className="flex-1 px-8 md:px-16 lg:px-24 pt-14 pb-10 flex flex-col gap-8">
           <div className="flex flex-col gap-3">
-            <span className="font-mono text-[0.6rem] text-neutral-400 tracking-[0.3em] uppercase">
+            <span className="font-mono text-[0.6rem] text-neutral-500 tracking-[0.3em] uppercase">
               // entre em contato
             </span>
             <h2 className="font-black tracking-tight leading-[0.88] uppercase text-black text-[2.8rem] md:text-[3rem] lg:text-[4.5rem]">
@@ -55,7 +55,7 @@ export function ContactFooter() {
         <div className="hidden md:block relative shrink-0 select-none" style={{ width: '42%' }}>
           <div className="absolute left-0 right-0 pointer-events-none" style={{ top: '-180px', bottom: '24px' }}>
             <Image
-              src="/ilustra_contato.png"
+              src="/ilustra_contato.webp"
               alt=""
               fill
               className="object-contain object-bottom"
@@ -68,14 +68,15 @@ export function ContactFooter() {
 
       {/* Footer bottom */}
       <div className="px-8 md:px-16 lg:px-24 py-6 border-t border-black/10 flex items-center justify-between">
-        <p className="text-[0.6rem] font-mono text-neutral-400">
+        <p className="text-[0.6rem] font-mono text-neutral-500">
           © {new Date().getFullYear()} Glauco Vaz
           <span className="text-red-600"> · </span>
           Todos os direitos reservados.
         </p>
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="group flex items-center gap-2 text-[0.6rem] font-mono text-neutral-400 hover:text-black transition-colors tracking-widest uppercase"
+          aria-label="Voltar ao topo da página"
+          className="group flex items-center gap-2 text-[0.6rem] font-mono text-neutral-500 hover:text-black transition-colors tracking-widest uppercase"
         >
           Voltar ao topo
           <span className="group-hover:text-red-600 transition-colors">↑</span>

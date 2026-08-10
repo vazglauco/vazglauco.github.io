@@ -37,7 +37,7 @@ export function LatestPostsSection({ posts }: Props) {
                 <h3 className="font-black tracking-tight leading-none text-neutral-800 text-[1.1rem] md:text-[1.4rem] group-hover:underline underline-offset-4 decoration-neutral-300">
                   {post.title}
                 </h3>
-                <span className="font-mono text-xs text-neutral-400 ml-auto shrink-0">
+                <span className="font-mono text-xs text-neutral-500 ml-auto shrink-0">
                   {new Date(post.date + 'T12:00:00').toLocaleDateString('pt-BR', {
                     year: 'numeric',
                     month: 'short',
@@ -50,7 +50,7 @@ export function LatestPostsSection({ posts }: Props) {
                   {post.tags.map(tag => (
                     <span
                       key={tag}
-                      className="font-mono text-[0.58rem] text-neutral-400 border border-neutral-200 px-2 py-1 leading-none"
+                      className="font-mono text-[0.58rem] text-neutral-500 border border-neutral-200 px-2 py-1 leading-none"
                     >
                       {tag}
                     </span>

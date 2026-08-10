@@ -111,7 +111,7 @@ export function ExperienceTimeline() {
         <header className="mb-10 flex justify-end">
           <div className="flex items-center gap-4 text-right">
             <div>
-              <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-400">
+                    <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-500">
                 {EXPERIENCES.length} empresas
                 <span className="mx-2 text-red-500">·</span>
                 2017<span className="text-red-500">→</span>2025
@@ -141,7 +141,7 @@ export function ExperienceTimeline() {
                   }`}
                 >
                   <div className={reverse ? "lg:order-2" : ""}>
-                    <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-400">
+                    <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-500">
                       <span className="text-red-500">
                         ({String(index + 1).padStart(2, "0")})
                       </span>
@@ -154,22 +154,22 @@ export function ExperienceTimeline() {
                       <span className="text-red-500">.</span>
                     </h3>
 
-                    <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-400">
+                    <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-500">
                       <span>
                         <Period text={exp.period} />
                       </span>
                       <span>{exp.location}</span>
                     </div>
 
-                    {exp.client && (
-                      <p className="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-400">
+                      {exp.client && (
+                        <p className="mt-3 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-neutral-500">
                         <span className="text-red-500">via</span> {exp.company}
                       </p>
                     )}
                   </div>
 
                   <div className={reverse ? "lg:order-1" : ""}>
-                    <p className="max-w-[52rem] text-base leading-loose text-neutral-500 md:text-lg">
+                    <p className="max-w-[52rem] text-base leading-loose text-neutral-600 md:text-lg">
                       <span className="font-mono text-sm text-red-500">// </span>
                       {exp.description}
                     </p>
@@ -178,7 +178,7 @@ export function ExperienceTimeline() {
                       {exp.stack.map((tech) => (
                         <span
                           key={tech}
-                          className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-500"
+                          className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-600"
                         >
                           {tech}
                         </span>

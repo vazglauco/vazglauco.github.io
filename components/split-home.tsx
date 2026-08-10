@@ -298,7 +298,7 @@ export function SplitHome() {
 					<div ref={breathRef}>
 						<div ref={cardRef} style={{ backfaceVisibility: 'hidden', opacity: 0, visibility: 'hidden' }}>
 							<Image
-								src='/FINAL_CARTA GLAUCO.png'
+								src='/FINAL_CARTA GLAUCO.webp'
 								alt='Glauco Vaz Card'
 								width={280}
 								height={400}
@@ -325,7 +325,7 @@ export function SplitHome() {
 				<div ref={breathRef}>
 					<div ref={cardRef} style={{ backfaceVisibility: 'hidden', opacity: 0, visibility: 'hidden' }}>
 						<Image
-							src='/FINAL_CARTA GLAUCO.png'
+							src='/FINAL_CARTA GLAUCO.webp'
 							alt='Glauco Vaz Card'
 							width={280}
 							height={400}

@@ -76,9 +76,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Hide scrollbar */
-html, body { scrollbar-width: none; }
-::-webkit-scrollbar { display: none; }
+
 
 /* Image rotation animation */
 @keyframes rotate-180 {
@@ -180,4 +178,15 @@ html, body { scrollbar-width: none; }
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, 0.5),
     inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

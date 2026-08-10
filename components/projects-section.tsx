@@ -145,6 +145,7 @@ export function ProjectsSection() {
     <div className="px-8 md:px-16 lg:px-24 mb-0 flex gap-1 flex-wrap">
       <button
         onClick={() => { setSelected(new Set()); setCurrentIndex(0) }}
+        aria-label="Mostrar todos os projetos"
         className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
           selected.size === 0
             ? "border-black bg-black text-white"
@@ -157,6 +158,8 @@ export function ProjectsSection() {
         <button
           key={cat}
           onClick={() => toggle(cat)}
+          aria-label={`Filtrar por ${cat}`}
+          aria-pressed={selected.has(cat)}
           className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
             selected.has(cat)
               ? "border-red-500 text-red-500"
@@ -203,6 +206,8 @@ export function ProjectsSection() {
                 <button
                   className="w-full flex items-center justify-between py-4 text-left"
                   onClick={() => setOpenIndex(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  aria-label={`Ver detalhes do projeto ${project.title}`}
                 >
                   <div className="flex items-baseline gap-3">
                     <span className="font-mono text-[0.6rem] text-red-500 shrink-0">

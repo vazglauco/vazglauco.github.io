@@ -47,14 +47,14 @@ export function ResumeCTAStrip() {
 
         {/* heading */}
         <div className="flex flex-col items-center gap-1 text-center">
-          <span className="font-mono text-[0.58rem] text-neutral-500 tracking-[0.3em] uppercase">
+          <span className="font-mono text-[0.58rem] text-neutral-400 tracking-[0.3em] uppercase">
             // próximo passo
           </span>
           <h2 className="font-black tracking-tight leading-none uppercase text-white text-[1.8rem] md:text-[2.4rem] lg:text-[3rem]">
             BAIXE MEU CURRÍCULO
             <span className="text-red-600">.</span>
           </h2>
-          <span className="font-mono text-[0.58rem] text-neutral-500 tracking-widest">
+          <span className="font-mono text-[0.58rem] text-neutral-400 tracking-widest">
             glauco-vaz-2025.pdf
           </span>
         </div>
@@ -63,6 +63,7 @@ export function ResumeCTAStrip() {
         <a
           href="/curriculo-glauco-vaz.pdf"
           download="Curriculo-Glauco-Vaz.pdf"
+          aria-label="Baixar currículo em PDF"
           className="group flex items-center gap-3 px-7 py-3.5 border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-200 font-bold text-sm uppercase tracking-widest shrink-0"
         >
           <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />

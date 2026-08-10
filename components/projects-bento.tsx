@@ -1,5 +1,6 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 
 type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
@@ -41,20 +42,7 @@ const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
 function ProjectPreview({ project, index }: { project: Project; index: number }) {
   if (project.previewVideo) {
-    return (
-      <div className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
-        <video
-          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
-          src={project.previewVideo}
-          title={project.title}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
-      </div>
-    )
+    return <LazyVideo src={project.previewVideo} title={project.title} />
   }
 
   return (
@@ -65,6 +53,49 @@ function ProjectPreview({ project, index }: { project: Project; index: number })
       >
         {SUIT_CHARS[index % SUIT_CHARS.length]}
       </span>
+    </div>
+  )
+}
+
+function LazyVideo({ src, title }: { src: string; title: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div ref={ref} className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
+      {isVisible ? (
+        <video
+          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
+          src={src}
+          title={title}
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-neutral-800 text-sm font-mono">loading...</span>
+        </div>
+      )}
     </div>
   )
 }
@@ -81,7 +112,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
         }`}
       >
         <div className={reverse ? "lg:order-2" : ""}>
-          <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-400">
+          <div className="mb-6 flex items-center gap-4 font-mono text-[0.68rem] uppercase tracking-[0.24em] text-neutral-500">
             <span className="text-red-500">({String(index + 1).padStart(2, "0")})</span>
             <span className="h-px flex-1 bg-neutral-200" />
             <span>{project.categories.join(" / ")}</span>
@@ -92,7 +123,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
             <span className="text-red-500">.</span>
           </h3>
 
-          <p className="mt-6 max-w-[48rem] text-base leading-loose text-neutral-500 md:text-lg">
+          <p className="mt-6 max-w-[48rem] text-base leading-loose text-neutral-600 md:text-lg">
             <span className="font-mono text-sm text-red-500">// </span>
             {project.description}
           </p>
@@ -101,7 +132,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
             {project.stack.map((tech) => (
               <span
                 key={tech}
-                className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-500"
+                className="border border-neutral-200 px-3 py-1.5 font-mono text-[0.62rem] font-bold uppercase tracking-wide text-neutral-600"
               >
                 {tech}
               </span>
@@ -120,7 +151,7 @@ function ProjectCase({ project, index }: { project: Project; index: number }) {
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             ) : (
-              <span className="inline-flex border border-neutral-300 px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-neutral-400">
+                <span className="inline-flex border border-neutral-300 px-6 py-3 font-mono text-xs font-bold uppercase tracking-widest text-neutral-500">
                 {project.label}
               </span>
             )}
@@ -143,7 +174,7 @@ export function ProjectsBento() {
       <div className="mx-auto max-w-7xl">
         <header className="mb-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div>
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-400">
+            <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-500">
               <span className="text-red-500">// </span>
               cases recentes
             </p>
@@ -153,7 +184,7 @@ export function ProjectsBento() {
             </h2>
           </div>
 
-          <p className="max-w-[44rem] text-base leading-loose text-neutral-500 md:text-lg lg:justify-self-end">
+          <p className="max-w-[44rem] text-base leading-loose text-neutral-600 md:text-lg lg:justify-self-end">
             Alguns produtos que mostram meu ponto de encontro entre engenharia, interface e decisão de produto.
           </p>
         </header>

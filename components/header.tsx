@@ -144,7 +144,7 @@ export function Header() {
 
     const loop = (ts: number) => {
       raf = requestAnimationFrame(loop)
-      if (ts - last < 80) return
+      if (ts - last < 200) return
       last = ts
       const next: Record<string, boolean> = {}
       for (const [k, r] of refs) {
@@ -253,9 +253,9 @@ export function Header() {
   }
 
   const c              = isPastHero && sectionIsLight
-    ? "text-black/55 hover:text-black/85"
-    : "text-white/65 hover:text-white/90"
-  const cFull          = isPastHero && sectionIsLight ? "text-black/90" : "text-white/90"
+    ? "text-black/70 hover:text-black/90"
+    : "text-white/80 hover:text-white/95"
+  const cFull          = isPastHero && sectionIsLight ? "text-black/90" : "text-white/95"
   const indicatorColor = isPastHero
     ? sectionIsLight ? "bg-red-500" : "bg-red-400"
     : "bg-white"
@@ -321,6 +321,7 @@ export function Header() {
             className={`md:hidden ml-auto w-8 h-8 flex items-center justify-center ${c}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
           >
             {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -350,17 +351,17 @@ export function Header() {
 
         <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
           rel="noopener noreferrer" aria-label="LinkedIn"
-          className={`w-7 h-7 flex items-center justify-center ${
-            lm["li"] ? "text-black/50 hover:text-black/80" : "text-white/50 hover:text-white/80"
+          className={`w-11 h-11 flex items-center justify-center ${
+            lm["li"] ? "text-black/60 hover:text-black/90" : "text-white/60 hover:text-white/90"
           }`}>
-          <Linkedin className="h-3.5 w-3.5" />
+          <Linkedin className="h-4 w-4" />
         </a>
         <a ref={ghRef} href="https://github.com/vazglauco" target="_blank"
           rel="noopener noreferrer" aria-label="GitHub"
-          className={`w-7 h-7 flex items-center justify-center ${
-            lm["gh"] ? "text-black/50 hover:text-black/80" : "text-white/50 hover:text-white/80"
+          className={`w-11 h-11 flex items-center justify-center ${
+            lm["gh"] ? "text-black/60 hover:text-black/90" : "text-white/60 hover:text-white/90"
           }`}>
-          <Github className="h-3.5 w-3.5" />
+          <Github className="h-4 w-4" />
         </a>
       </div>
 

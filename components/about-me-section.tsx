@@ -107,14 +107,14 @@ export function AboutMeSection() {
 						{[0, 1, 2].map((i) => (
 							<div key={i}>
 								<div className='flex items-start gap-3'>
-									<span className='text-[10px] font-mono text-neutral-400 mt-1 shrink-0 w-6'>
+									<span className='text-[10px] font-mono text-neutral-500 mt-1 shrink-0 w-6'>
 										{LINE_NUMS[i]}.
 									</span>
 									<p
 										className={
 											i === 0
 												? 'text-xl font-black italic font-serif leading-tight text-neutral-800'
-												: 'text-base leading-relaxed text-neutral-700 font-medium'
+												: 'text-base leading-relaxed text-neutral-600 font-medium'
 										}
 									>
 										<LineContent index={i} />
@@ -126,10 +126,10 @@ export function AboutMeSection() {
 
 						{/* Parágrafo 04 */}
 						<div className='flex items-start gap-3'>
-							<span className='text-[10px] font-mono text-neutral-400 mt-1 shrink-0 w-6'>
+							<span className='text-[10px] font-mono text-neutral-500 mt-1 shrink-0 w-6'>
 								{LINE_NUMS[3]}.
 							</span>
-							<p className='text-base leading-relaxed text-neutral-700 italic'>
+							<p className='text-base leading-relaxed text-neutral-600 italic'>
 								<LineContent index={3} />
 							</p>
 						</div>
@@ -138,7 +138,7 @@ export function AboutMeSection() {
 
 				<div className='absolute bottom-0 left-0 pointer-events-none select-none'>
 					<Image
-						src='/ilustra_about.png'
+						src='/ilustra_about.webp'
 						alt='Ilustração Glauco'
 						width={280}
 						height={320}
@@ -167,7 +167,7 @@ export function AboutMeSection() {
 								transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.5s ease ${i * 0.12}s`,
 							}}
 						>
-							<span className='text-[11px] font-mono mt-[0.35em] shrink-0 text- neutral-400'>
+							<span className='text-[11px] font-mono mt-[0.35em] shrink-0 text-neutral-500'>
 								{num}.
 							</span>
 							<p
@@ -175,7 +175,7 @@ export function AboutMeSection() {
 									i === 0
 										? 'text-3xl md:text-4xl lg:text-[clamp(2rem,3vw,2.6rem)] font-black italic leading-tight'
 										: i === 3
-											? 'text-base md:text-lg lg:text-[clamp(0.95rem,1.35vw,1.18rem)] font-medium leading-relaxed xl:leading-loose tracking-wide italic text-neutral-600'
+											? 'text-base md:text-lg lg:text-[clamp(0.95rem,1.35vw,1.18rem)] font-medium leading-relaxed xl:leading-loose tracking-wide italic text-neutral-500'
 											: 'text-base md:text-lg lg:text-[clamp(0.95rem,1.35vw,1.18rem)] font-medium leading-relaxed xl:leading-loose tracking-wide'
 								}
 							>
@@ -204,12 +204,11 @@ export function AboutMeSection() {
 					className='absolute right-0 top-0 ml-auto flex h-[clamp(26rem,36vw,34rem)] max-h-[calc(100svh-5rem)] w-full max-w-[clamp(26rem,36vw,34rem)] items-end justify-end'
 				>
 				<Image
-					src='/ilustra_about.png'
+					src='/ilustra_about.webp'
 					alt='Ilustração Glauco'
 					width={480}
 					height={560}
 					className='object-contain w-full h-auto max-h-full'
-					priority
 				/>
 				</div>
 			</div>

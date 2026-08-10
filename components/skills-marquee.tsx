@@ -3,31 +3,29 @@
 import { useRef, useEffect } from 'react'
 import { gsap } from 'gsap'
 
-const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons'
-
 type Skill = { name: string; icon: string; darkInvert?: boolean }
 
 const ALL_SKILLS: Skill[] = [
-	{ name: 'JavaScript', icon: `${DEVICON_BASE}/javascript/javascript-original.svg` },
-	{ name: 'TypeScript', icon: `${DEVICON_BASE}/typescript/typescript-original.svg` },
-	{ name: 'React', icon: `${DEVICON_BASE}/react/react-original.svg` },
-	{ name: 'Angular', icon: `${DEVICON_BASE}/angular/angular-original.svg` },
-	{ name: 'Next.js', icon: `${DEVICON_BASE}/nextjs/nextjs-original.svg`, darkInvert: true },
-	{ name: 'Tailwind CSS', icon: `${DEVICON_BASE}/tailwindcss/tailwindcss-original.svg` },
-	{ name: 'HTML5', icon: `${DEVICON_BASE}/html5/html5-original.svg` },
-	{ name: 'CSS3', icon: `${DEVICON_BASE}/css3/css3-original.svg` },
-	{ name: 'Node.js', icon: `${DEVICON_BASE}/nodejs/nodejs-original.svg` },
-	{ name: 'NestJS', icon: `${DEVICON_BASE}/nestjs/nestjs-original.svg` },
-	{ name: 'GraphQL', icon: `${DEVICON_BASE}/graphql/graphql-plain.svg` },
-	{ name: 'PostgreSQL', icon: `${DEVICON_BASE}/postgresql/postgresql-original.svg` },
-	{ name: 'MongoDB', icon: `${DEVICON_BASE}/mongodb/mongodb-original.svg` },
-	{ name: 'Redis', icon: `${DEVICON_BASE}/redis/redis-original.svg` },
-	{ name: 'MySQL', icon: `${DEVICON_BASE}/mysql/mysql-original.svg` },
-	{ name: 'Git', icon: `${DEVICON_BASE}/git/git-original.svg` },
-	{ name: 'Docker', icon: `${DEVICON_BASE}/docker/docker-original.svg` },
+	{ name: 'JavaScript', icon: '/icons/javascript.svg' },
+	{ name: 'TypeScript', icon: '/icons/typescript.svg' },
+	{ name: 'React', icon: '/icons/react.svg' },
+	{ name: 'Angular', icon: '/icons/angular.svg' },
+	{ name: 'Next.js', icon: '/icons/nextjs.svg', darkInvert: true },
+	{ name: 'Tailwind CSS', icon: '/icons/tailwindcss.svg' },
+	{ name: 'HTML5', icon: '/icons/html5.svg' },
+	{ name: 'CSS3', icon: '/icons/css3.svg' },
+	{ name: 'Node.js', icon: '/icons/nodejs.svg' },
+	{ name: 'NestJS', icon: '/icons/nestjs.svg' },
+	{ name: 'GraphQL', icon: '/icons/graphql.svg' },
+	{ name: 'PostgreSQL', icon: '/icons/postgresql.svg' },
+	{ name: 'MongoDB', icon: '/icons/mongodb.svg' },
+	{ name: 'Redis', icon: '/icons/redis.svg' },
+	{ name: 'MySQL', icon: '/icons/mysql.svg' },
+	{ name: 'Git', icon: '/icons/git.svg' },
+	{ name: 'Docker', icon: '/icons/docker.svg' },
 	{
 		name: 'AWS',
-		icon: `${DEVICON_BASE}/amazonwebservices/amazonwebservices-plain-wordmark.svg`,
+		icon: '/icons/aws.svg',
 		darkInvert: true,
 	},
 ]
@@ -44,12 +42,14 @@ function Strip({ textColor, darkIcons, iconsOnly }: { textColor: string; darkIco
 		>
 			{tripled.map((skill, i) => (
 				<div key={i} className='flex items-center gap-2.5 shrink-0'>
-					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img
 						src={skill.icon}
 						alt={skill.name}
 						className='w-8 h-8 object-contain'
 						style={darkIcons && skill.darkInvert ? { filter: 'brightness(0) invert(1)' } : undefined}
+						loading='lazy'
+						width={32}
+						height={32}
 					/>
 					{!iconsOnly && (
 						<>
@@ -102,11 +102,13 @@ export function SkillsMarquee() {
 					>
 						{[...ALL_SKILLS, ...ALL_SKILLS, ...ALL_SKILLS].map((skill, i) => (
 							<div key={i} className='flex items-center gap-2.5 shrink-0'>
-								{/* eslint-disable-next-line @next/next/no-img-element */}
 								<img
 									src={skill.icon}
 									alt={skill.name}
 									className='w-8 h-8 object-contain'
+									loading='lazy'
+									width={32}
+									height={32}
 								/>
 							</div>
 						))}
