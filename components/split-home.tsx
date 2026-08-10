@@ -237,7 +237,7 @@ export function SplitHome() {
 							<a
 								href='/curriculo-glauco-vaz.pdf'
 								download='Curriculo-Glauco-Vaz.pdf'
-								className='inline-block text-neutral-500 hover:text-neutral-300 text-[10px] font-mono tracking-wide transition-colors'
+								className='inline-block text-neutral-400 hover:text-neutral-200 text-[10px] font-mono tracking-wide transition-colors'
 							>
 								↓ baixar currículo (.pdf)
 							</a>
@@ -297,15 +297,17 @@ export function SplitHome() {
 				>
 					<div ref={breathRef}>
 						<div ref={cardRef} style={{ backfaceVisibility: 'hidden', opacity: 0, visibility: 'hidden' }}>
-							<Image
-								src='/FINAL_CARTA GLAUCO.webp'
-								alt='Glauco Vaz Card'
-								width={280}
-								height={400}
-								className='object-contain drop-shadow-2xl'
-								style={{ width: '58vw', height: 'auto', maxWidth: '220px' }}
-								priority
-							/>
+						<Image
+							src='/FINAL_CARTA GLAUCO.webp'
+							alt='Glauco Vaz Card'
+							width={280}
+							height={400}
+							className='object-contain drop-shadow-2xl'
+							style={{ width: '58vw', height: 'auto', maxWidth: '220px' }}
+							priority
+							fetchPriority="high"
+							sizes="(max-width: 1023px) 58vw, 20vw"
+						/>
 						</div>
 					</div>
 				</div>
@@ -331,6 +333,8 @@ export function SplitHome() {
 							height={400}
 							className='object-contain drop-shadow-2xl w-[clamp(190px,20vw,280px)] h-auto'
 							priority
+							fetchPriority="high"
+							sizes="(max-width: 1023px) 58vw, 20vw"
 						/>
 					</div>
 				</div>
@@ -378,7 +382,7 @@ export function SplitHome() {
 						<a
 							href='/curriculo-glauco-vaz.pdf'
 							download='Curriculo-Glauco-Vaz.pdf'
-							className='whitespace-nowrap inline-flex items-center gap-2 font-mono text-sm text-neutral-300 hover:text-white transition-colors group'
+							className='whitespace-nowrap inline-flex items-center gap-2 font-mono text-sm text-neutral-400 hover:text-neutral-200 transition-colors group'
 						>
 							<span className='text-[rgb(200,30,20)]'>↓</span>
 							<span className='underline underline-offset-4 decoration-neutral-600 group-hover:decoration-neutral-400 transition-colors'>

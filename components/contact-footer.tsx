@@ -60,6 +60,7 @@ export function ContactFooter() {
               fill
               className="object-contain object-bottom"
               aria-hidden
+              sizes="42vw"
             />
           </div>
         </div>

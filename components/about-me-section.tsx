@@ -143,6 +143,7 @@ export function AboutMeSection() {
 						width={280}
 						height={320}
 						className='object-contain w-full h-auto'
+						sizes="(max-width: 1023px) 100vw, 280px"
 					/>
 				</div>
 			</div>
@@ -209,6 +210,7 @@ export function AboutMeSection() {
 					width={480}
 					height={560}
 					className='object-contain w-full h-auto max-h-full'
+					sizes="(max-width: 1023px) 100vw, 36vw"
 				/>
 				</div>
 			</div>

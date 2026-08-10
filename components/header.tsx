@@ -89,24 +89,35 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  // Active section
+  // Active section — usando IntersectionObserver (sem reflow)
   useEffect(() => {
-    const onScroll = () => {
-      const scrollY = window.scrollY + 100
-      for (const id of ["inicio", "sobre", "skills", "projetos", "experiencia", ...(BLOG_ENABLED ? ["blog"] : []), "contato"]) {
-        const el = document.getElementById(id)
-        if (el && scrollY >= el.offsetTop && scrollY < el.offsetTop + el.offsetHeight) {
-          setActiveSection(id)
-          break
-        }
-      }
+    const ids = ["inicio", "sobre", "skills", "projetos", "experiencia", ...(BLOG_ENABLED ? ["blog"] : []), "contato"]
+    const observers: IntersectionObserver[] = []
+
+    for (const id of ids) {
+      const el = document.getElementById(id)
+      if (!el) continue
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id)
+          }
+        },
+        { rootMargin: '-40% 0px -60% 0px' }
+      )
+
+      observer.observe(el)
+      observers.push(observer)
     }
-    window.addEventListener("scroll", onScroll)
-    return () => window.removeEventListener("scroll", onScroll)
+
+    return () => observers.forEach(o => o.disconnect())
   }, [])
 
   // Per-element background luminance detection
   useEffect(() => {
+    if (!isPastHero) return
+
     let raf: number
     let last = 0
 
@@ -159,7 +170,7 @@ export function Header() {
 
     raf = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(raf)
-  }, [])
+  }, [isPastHero])
 
   // Entrance — scramble (same effect as hover, fast stagger)
   useEffect(() => {

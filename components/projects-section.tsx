@@ -260,7 +260,7 @@ export function ProjectsSection() {
                         <ArrowUpRight className="w-3 h-3" />
                       </a>
                     ) : (
-                      <span className="self-start font-mono text-xs text-neutral-300 border border-neutral-200 px-4 py-2">
+                      <span className="self-start font-mono text-xs text-neutral-500 border border-neutral-200 px-4 py-2">
                         {project.label}
                       </span>
                     )}
@@ -345,7 +345,7 @@ export function ProjectsSection() {
                       <ArrowUpRight className="w-3 h-3" />
                     </a>
                   ) : (
-                    <span className="font-mono text-xs text-neutral-300 border border-neutral-200 px-4 py-2 shrink-0">
+                    <span className="font-mono text-xs text-neutral-500 border border-neutral-200 px-4 py-2 shrink-0">
                       {project.label}
                     </span>
                   )}
