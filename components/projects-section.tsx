@@ -144,7 +144,7 @@ export function ProjectsSection() {
   const filters = (
     <div className="px-8 md:px-16 lg:px-24 mb-0 flex gap-1 flex-wrap">
       <button
-        onClick={() => { setSelected(new Set()); setCurrentIndex(0) }}
+        onClick={() => { setSelected(new Set()); setOpenIndex(0) }}
         aria-label="Mostrar todos os projetos"
         className={`font-mono text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors ${
           selected.size === 0
