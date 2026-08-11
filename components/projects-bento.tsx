@@ -1,6 +1,5 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 
 type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
@@ -42,7 +41,20 @@ const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
 function ProjectPreview({ project, index }: { project: Project; index: number }) {
   if (project.previewVideo) {
-    return <LazyVideo src={project.previewVideo} title={project.title} />
+    return (
+      <div className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
+        <video
+          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
+          src={project.previewVideo}
+          title={project.title}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+        />
+      </div>
+    )
   }
 
   return (
@@ -53,49 +65,6 @@ function ProjectPreview({ project, index }: { project: Project; index: number })
       >
         {SUIT_CHARS[index % SUIT_CHARS.length]}
       </span>
-    </div>
-  )
-}
-
-function LazyVideo({ src, title }: { src: string; title: string }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '200px' }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div ref={ref} className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
-      {isVisible ? (
-        <video
-          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
-          src={src}
-          title={title}
-          autoPlay
-          loop
-          muted
-          playsInline
-        />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-neutral-800 text-sm font-mono">loading...</span>
-        </div>
-      )}
     </div>
   )
 }
