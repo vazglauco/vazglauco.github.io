@@ -1,11 +1,10 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Linkedin, Github } from "lucide-react"
+import { Github, Linkedin, Menu, X } from "lucide-react"
 import { gsap } from "gsap"
-import { BLOG_ENABLED } from "@/lib/features"
 
 const POOL = '!<>-_/[]{}=+*^?#@$%~'
 
@@ -39,29 +38,35 @@ function scramble(el: HTMLElement, text: string, onDone?: () => void, steps = 10
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("")
   const [lm, setLm] = useState<Record<string, boolean>>({})
   const [isPastHero, setIsPastHero] = useState(false)
   const [sectionIsLight, setSectionIsLight] = useState(false)
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
 
-  const pathname   = usePathname()
-  const headerRef  = useRef<HTMLElement>(null)
-  const navRef     = useRef<HTMLElement>(null)
-  const logoRef    = useRef<HTMLSpanElement>(null)
-  const inicioRef   = useRef<HTMLAnchorElement>(null)
-  const aboutRef    = useRef<HTMLAnchorElement>(null)
-  const servRef     = useRef<HTMLAnchorElement>(null)
-  const projRef     = useRef<HTMLAnchorElement>(null)
-  const expRef      = useRef<HTMLAnchorElement>(null)
-  const blogRef     = useRef<HTMLAnchorElement>(null)
-  const contatoRef  = useRef<HTMLAnchorElement>(null)
-  const liRef      = useRef<HTMLAnchorElement>(null)
-  const ghRef      = useRef<HTMLAnchorElement>(null)
+  const pathname = usePathname()
+  const headerRef = useRef<HTMLElement>(null)
+  const navRef = useRef<HTMLElement>(null)
+  const logoRef = useRef<HTMLSpanElement>(null)
+  const inicioRef = useRef<HTMLAnchorElement>(null)
+  const sitesRef = useRef<HTMLAnchorElement>(null)
+  const blogRef = useRef<HTMLAnchorElement>(null)
+  const liRef = useRef<HTMLAnchorElement>(null)
+  const ghRef = useRef<HTMLAnchorElement>(null)
 
-  // Detect scroll past hero and sample background color behind header center
+  const activePage = pathname.startsWith('/sites')
+    ? 'sites'
+    : pathname.startsWith('/blog')
+      ? 'blog'
+      : 'inicio'
+
+  const menuItems = [
+    { href: '/', section: 'inicio', ref: inicioRef, text: '.inicio()' },
+    { href: '/sites', section: 'sites', ref: sitesRef, text: '.sites()' },
+    { href: '/blog', section: 'blog', ref: blogRef, text: '.blog()' },
+  ]
+
   useEffect(() => {
-    const lum = (r: number, g: number, b: number) => (0.299*r + 0.587*g + 0.114*b) / 255
+    const lum = (r: number, g: number, b: number) => (0.299 * r + 0.587 * g + 0.114 * b) / 255
 
     const sampleHeaderBg = () => {
       const x = window.innerWidth / 2
@@ -70,7 +75,7 @@ export function Header() {
         if (headerRef.current?.contains(el) || el === headerRef.current) continue
         if (el === document.documentElement || el === document.body) continue
         const bg = window.getComputedStyle(el).backgroundColor
-        const m  = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
+        const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
         if (!m) continue
         const alpha = bg.match(/rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)/)
         if (alpha && parseFloat(alpha[1]) < 0.05) continue
@@ -85,53 +90,27 @@ export function Header() {
       setIsPastHero(window.scrollY > threshold)
       sampleHeaderBg()
     }
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
 
-  // Active section — usando IntersectionObserver (sem reflow)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [pathname])
+
   useEffect(() => {
-    const ids = ["inicio", "sobre", "skills", "projetos", "experiencia", ...(BLOG_ENABLED ? ["blog"] : []), "contato"]
-    const observers: IntersectionObserver[] = []
-
-    for (const id of ids) {
-      const el = document.getElementById(id)
-      if (!el) continue
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setActiveSection(id)
-          }
-        },
-        { rootMargin: '-40% 0px -60% 0px' }
-      )
-
-      observer.observe(el)
-      observers.push(observer)
-    }
-
-    return () => observers.forEach(o => o.disconnect())
-  }, [])
-
-  // Per-element background luminance detection
-  useEffect(() => {
-    if (!isPastHero) return
-
     let raf: number
     let last = 0
 
-    const lum = (r: number, g: number, b: number) => (0.299*r + 0.587*g + 0.114*b) / 255
+    const lum = (r: number, g: number, b: number) => (0.299 * r + 0.587 * g + 0.114 * b) / 255
 
     const sample = (ref: React.RefObject<Element | null>): boolean | null => {
       if (!ref.current) return null
       const rect = ref.current.getBoundingClientRect()
       const x = rect.left + rect.width / 2
-      const y = rect.top  + rect.height / 2
+      const y = rect.top + rect.height / 2
       for (const el of document.elementsFromPoint(x, y)) {
         if (headerRef.current?.contains(el)) continue
         const bg = window.getComputedStyle(el).backgroundColor
-        const m  = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
+        const m = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/)
         if (!m) continue
         const alpha = bg.match(/rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)/)
         if (alpha && parseFloat(alpha[1]) < 0.05) continue
@@ -141,16 +120,12 @@ export function Header() {
     }
 
     const refs: [string, React.RefObject<Element | null>][] = [
-      ["logo",    logoRef    as React.RefObject<Element | null>],
-      ["inicio",  inicioRef  as React.RefObject<Element | null>],
-      ["sobre",   aboutRef   as React.RefObject<Element | null>],
-      ["serv",    servRef    as React.RefObject<Element | null>],
-      ["proj",    projRef    as React.RefObject<Element | null>],
-      ["exp",     expRef     as React.RefObject<Element | null>],
-      ["blog",    blogRef    as React.RefObject<Element | null>],
-      ["contato", contatoRef as React.RefObject<Element | null>],
-      ["li",      liRef      as React.RefObject<Element | null>],
-      ["gh",      ghRef      as React.RefObject<Element | null>],
+      ['logo', logoRef],
+      ['inicio', inicioRef],
+      ['sites', sitesRef],
+      ['blog', blogRef],
+      ['li', liRef],
+      ['gh', ghRef],
     ]
 
     const loop = (ts: number) => {
@@ -158,49 +133,45 @@ export function Header() {
       if (ts - last < 200) return
       last = ts
       const next: Record<string, boolean> = {}
-      for (const [k, r] of refs) {
-        const v = sample(r)
-        if (v !== null) next[k] = v
+      for (const [key, ref] of refs) {
+        const value = sample(ref)
+        if (value !== null) next[key] = value
       }
-      setLm(prev => {
-        const changed = refs.some(([k]) => next[k] !== undefined && next[k] !== prev[k])
-        return changed ? { ...prev, ...next } : prev
+      setLm((previous) => {
+        const changed = refs.some(([key]) => next[key] !== undefined && next[key] !== previous[key])
+        return changed ? { ...previous, ...next } : previous
       })
     }
 
     raf = requestAnimationFrame(loop)
     return () => cancelAnimationFrame(raf)
-  }, [isPastHero])
+  }, [isPastHero, pathname])
 
-  // Entrance — scramble (same effect as hover, fast stagger)
   useEffect(() => {
     const items = [
-      { ref: logoRef,    text: "glauco.vaz();" },
-      { ref: inicioRef,  text: ".inicio()"      },
-      { ref: aboutRef,   text: ".sobre()"       },
-      { ref: servRef,    text: ".serviços()"    },
-      { ref: projRef,    text: ".projetos()"    },
-      { ref: expRef,     text: ".experiência()" },
-      { ref: contatoRef, text: ".contato()"     },
-      ...(BLOG_ENABLED ? [{ ref: blogRef, text: pathname.startsWith('/blog') ? ".portfolio()" : ".blog()" }] : []),
+      { ref: logoRef, text: 'glauco.vaz();' },
+      ...menuItems.map(({ ref, text }) => ({ ref, text })),
     ]
 
-    // Pre-set text so widths are reserved — no layout shift as items appear
-    items.forEach(({ ref, text }) => { if (ref.current) ref.current.textContent = text })
+    items.forEach(({ ref, text }) => {
+      if (ref.current) ref.current.textContent = text
+    })
 
-    const allEls = [logoRef, inicioRef, aboutRef, servRef, projRef, expRef, blogRef, contatoRef, liRef, ghRef]
-      .map(r => r.current)
-    allEls.forEach(el => { if (el) el.style.opacity = '0' })
+    const allEls = [logoRef, inicioRef, sitesRef, blogRef, liRef, ghRef].map((ref) => ref.current)
+    allEls.forEach((el) => {
+      if (el) el.style.opacity = '0'
+    })
 
-    const headerTween = gsap.fromTo(headerRef.current,
+    const headerTween = gsap.fromTo(
+      headerRef.current,
       { opacity: 0, y: -8 },
-      { opacity: 1, y: 0, duration: 0.2, ease: "power3.out", onComplete: () => runNext(0) }
+      { opacity: 1, y: 0, duration: 0.2, ease: 'power3.out', onComplete: () => runNext(0) },
     )
 
     const cleanups: (() => void)[] = [() => headerTween.kill()]
     let cancelled = false
-
-    const STEPS = 9, MS = 36
+    const STEPS = 9
+    const MS = 36
     const OVERLAP = 165
 
     const runNext = (index: number) => {
@@ -212,47 +183,46 @@ export function Header() {
       }
       const { ref, text } = items[index]
       const el = ref.current as HTMLElement | null
-      if (!el) { runNext(index + 1); return }
+      if (!el) {
+        runNext(index + 1)
+        return
+      }
       el.style.opacity = '1'
       const cancel = scramble(el, text, undefined, STEPS, MS)
       cleanups.push(cancel)
-      const tid = setTimeout(() => runNext(index + 1), OVERLAP)
-      cleanups.push(() => clearTimeout(tid))
+      const timeout = setTimeout(() => runNext(index + 1), OVERLAP)
+      cleanups.push(() => clearTimeout(timeout))
     }
 
-    cleanups.push(() => { cancelled = true })
+    cleanups.push(() => {
+      cancelled = true
+    })
 
-    return () => cleanups.forEach(c => c())
+    return () => cleanups.forEach((cleanup) => cleanup())
   }, [pathname])
 
-  // Sliding indicator
   useEffect(() => {
-    const sectionMap: Record<string, React.RefObject<HTMLAnchorElement | null>> = {
+    const pageMap: Record<string, React.RefObject<HTMLAnchorElement | null>> = {
       inicio: inicioRef,
-      sobre: aboutRef,
-      skills: servRef,
-      projetos: projRef,
-      experiencia: expRef,
-      contato: contatoRef,
+      sites: sitesRef,
+      blog: blogRef,
     }
-    const ref = sectionMap[activeSection]
-    if (!ref?.current || !navRef.current) {
-      setIndicator(s => ({ ...s, opacity: 0 }))
-      return
-    }
-    const navRect = navRef.current.getBoundingClientRect()
-    const itemRect = ref.current.getBoundingClientRect()
-    setIndicator({ left: itemRect.left - navRect.left, width: itemRect.width, opacity: 1 })
-  }, [activeSection])
 
-  const menuItems = [
-    { href: "#inicio",      ref: inicioRef,  text: ".inicio()"      },
-    { href: "#sobre",       ref: aboutRef,   text: ".sobre()"       },
-    { href: "#skills",      ref: servRef,    text: ".serviços()"    },
-    { href: "#projetos",    ref: projRef,    text: ".projetos()"    },
-    { href: "#experiencia", ref: expRef,     text: ".experiência()" },
-    { href: "#contato",     ref: contatoRef, text: ".contato()"     },
-  ]
+    const updateIndicator = () => {
+      const ref = pageMap[activePage]
+      if (!ref?.current || !navRef.current) {
+        setIndicator((state) => ({ ...state, opacity: 0 }))
+        return
+      }
+      const navRect = navRef.current.getBoundingClientRect()
+      const itemRect = ref.current.getBoundingClientRect()
+      setIndicator({ left: itemRect.left - navRect.left, width: itemRect.width, opacity: 1 })
+    }
+
+    updateIndicator()
+    window.addEventListener('resize', updateIndicator)
+    return () => window.removeEventListener('resize', updateIndicator)
+  }, [activePage])
 
   const cancelRefs = useRef<Map<string, () => void>>(new Map())
 
@@ -263,63 +233,51 @@ export function Header() {
     cancelRefs.current.set(key, cancel)
   }
 
-  const c              = isPastHero && sectionIsLight
-    ? "text-black/70 hover:text-black/90"
-    : "text-white/80 hover:text-white/95"
-  const cFull          = isPastHero && sectionIsLight ? "text-black/90" : "text-white/95"
+  const c = isPastHero && sectionIsLight
+    ? 'text-black/70 hover:text-black/90'
+    : 'text-white/80 hover:text-white/95'
+  const cFull = isPastHero && sectionIsLight ? 'text-black/90' : 'text-white/95'
   const indicatorColor = isPastHero
-    ? sectionIsLight ? "bg-red-500" : "bg-red-400"
-    : "bg-white"
+    ? sectionIsLight ? 'bg-[#8f211b]' : 'bg-red-400'
+    : 'bg-white'
 
   const headerBg = isPastHero
     ? sectionIsLight
-      ? { background: "#faf9f7" }
-      : { background: "#111111" }
-    : { mixBlendMode: "difference" as const }
+      ? { background: '#faf9f7' }
+      : { background: '#111111' }
+    : { mixBlendMode: 'difference' as const }
 
   return (
     <>
-      {/* Header — logo + nav com blend mode */}
       <header
         ref={headerRef}
-        className="fixed top-0 left-0 right-0 z-[9999] transition-all duration-300"
+        className='fixed left-0 right-0 top-0 z-[9999] transition-all duration-300'
         style={headerBg}
       >
-        <div className="relative flex items-center h-14 px-10 md:px-16">
-
-          {/* Logo */}
-          <Link href="/"
-            onMouseEnter={() => handleHover("logo", logoRef.current, "glauco.vaz();")}
-          >
-            <span
-              ref={logoRef}
-              className={`font-light text-sm tracking-tight ${cFull}`}
-            />
+        <div className='relative flex h-14 items-center px-10 md:px-16'>
+          <Link href='/' onMouseEnter={() => handleHover('logo', logoRef.current, 'glauco.vaz();')}>
+            <span ref={logoRef} className={`text-sm font-light tracking-tight ${cFull}`} />
           </Link>
 
-          {/* Nav — centralizado absoluto, escondido no blog */}
-          <nav ref={navRef} className={`hidden absolute left-1/2 -translate-x-1/2 items-center gap-8 pb-px ${pathname.startsWith('/blog') ? '' : 'md:flex'}`}>
-            {/* Indicador deslizante */}
+          <nav ref={navRef} className='absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 pb-px md:flex'>
             <span
-              className={`absolute -bottom-px h-[2px] pointer-events-none transition-[left,width] duration-300 ease-out ${indicatorColor}`}
-              style={{ left: indicator.left, width: indicator.width, opacity: indicator.opacity, transition: 'left 300ms ease-out, width 300ms ease-out, opacity 200ms ease-out' }}
+              className={`pointer-events-none absolute -bottom-px h-[2px] ${indicatorColor}`}
+              style={{
+                left: indicator.left,
+                width: indicator.width,
+                opacity: indicator.opacity,
+                transition: 'left 300ms ease-out, width 300ms ease-out, opacity 200ms ease-out',
+              }}
             />
             {menuItems.map((item) => {
-              const hrefKey = item.href.startsWith('/') ? item.href.slice(1) : item.href.slice(1)
-              const key = hrefKey === "experiencia" ? "exp"
-                        : hrefKey === "skills"       ? "serv"
-                        : hrefKey === "projetos"     ? "proj"
-                        : hrefKey
-              const isActive = item.href.startsWith('/')
-                ? pathname.startsWith(item.href)
-                : activeSection === item.href.slice(1)
+              const isActive = activePage === item.section
               return (
                 <Link
                   key={item.href}
                   ref={item.ref}
                   href={item.href}
-                  onMouseEnter={() => handleHover(key, item.ref.current, item.text)}
-                  className={`text-[13px] font-light tracking-wide whitespace-nowrap transition-colors duration-200 ${
+                  onMouseEnter={() => handleHover(item.section, item.ref.current, item.text)}
+                  className={`whitespace-nowrap text-[13px] font-light tracking-wide transition-colors duration-200 ${
                     isActive ? cFull : c
                   }`}
                 />
@@ -327,95 +285,82 @@ export function Header() {
             })}
           </nav>
 
-          {/* Mobile toggle */}
           <button
-            className={`md:hidden ml-auto w-8 h-8 flex items-center justify-center ${c}`}
+            className={`ml-auto flex h-8 w-8 items-center justify-center md:hidden ${c}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            aria-label='Abrir menu'
             aria-expanded={isMenuOpen}
           >
-            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {isMenuOpen ? <X className='h-4 w-4' /> : <Menu className='h-4 w-4' />}
           </button>
         </div>
       </header>
 
-      {/* Blog + Socials — fixed separado, sem blend mode */}
-      <div className="hidden md:flex fixed top-0 right-0 z-[10000] h-14 items-center gap-3 px-10 md:px-16">
-        {BLOG_ENABLED && (
-          <Link
-            ref={blogRef}
-            href={pathname.startsWith('/blog') ? "/" : "/blog"}
-            onMouseEnter={() => handleHover("blog", blogRef.current, pathname.startsWith('/blog') ? ".portfolio()" : ".blog()")}
-            className={`text-[13px] font-light tracking-wide whitespace-nowrap border px-2.5 py-[3px] rounded-sm transition-all duration-200 group ${
-              pathname.startsWith('/blog')
-                ? "text-white bg-red-600 border-red-600"
-                : lm["blog"]
-                  ? "text-red-600 border-red-600 hover:text-white hover:bg-red-600"
-                  : "text-white/70 border-white/30 hover:text-white hover:border-white"
-            }`}
-          />
-        )}
-
-        {BLOG_ENABLED && (
-          <span className={`text-[10px] select-none ${lm["li"] ? "text-black/20" : "text-white/20"}`}>|</span>
-        )}
-
-        <a ref={liRef} href="https://linkedin.com/in/glaucovaz" target="_blank"
-          rel="noopener noreferrer" aria-label="LinkedIn"
-          className={`w-11 h-11 flex items-center justify-center ${
-            lm["li"] ? "text-black/60 hover:text-black/90" : "text-white/60 hover:text-white/90"
-          }`}>
-          <Linkedin className="h-4 w-4" />
+      <div className='fixed right-0 top-0 z-[10000] hidden h-14 items-center gap-3 px-10 md:flex md:px-16'>
+        <a
+          ref={liRef}
+          href='https://linkedin.com/in/glaucovaz'
+          target='_blank'
+          rel='noopener noreferrer'
+          aria-label='LinkedIn'
+          className={`flex h-11 w-11 items-center justify-center ${
+            lm.li ? 'text-black/60 hover:text-black/90' : 'text-white/60 hover:text-white/90'
+          }`}
+        >
+          <Linkedin className='h-4 w-4' />
         </a>
-        <a ref={ghRef} href="https://github.com/vazglauco" target="_blank"
-          rel="noopener noreferrer" aria-label="GitHub"
-          className={`w-11 h-11 flex items-center justify-center ${
-            lm["gh"] ? "text-black/60 hover:text-black/90" : "text-white/60 hover:text-white/90"
-          }`}>
-          <Github className="h-4 w-4" />
+        <a
+          ref={ghRef}
+          href='https://github.com/vazglauco'
+          target='_blank'
+          rel='noopener noreferrer'
+          aria-label='GitHub'
+          className={`flex h-11 w-11 items-center justify-center ${
+            lm.gh ? 'text-black/60 hover:text-black/90' : 'text-white/60 hover:text-white/90'
+          }`}
+        >
+          <Github className='h-4 w-4' />
         </a>
       </div>
 
-      {/* Mobile dropdown */}
       {isMenuOpen && (
-        <div className="md:hidden fixed top-14 left-0 right-0 z-[9998] bg-white border-b border-black/8 px-10 py-5">
-          <nav className="flex flex-col gap-1">
+        <div className='fixed left-0 right-0 top-14 z-[9998] border-b border-black/8 bg-white px-10 py-5 md:hidden'>
+          <nav className='flex flex-col gap-1'>
             {menuItems.map((item) => {
-              const isActive = activeSection === item.href.slice(1)
+              const isActive = activePage === item.section
               return (
-                <Link key={item.href} href={item.href}
-                  className={`py-2.5 text-sm font-light tracking-wide transition-colors duration-300 border-b ${
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`border-b py-2.5 text-sm font-light tracking-wide transition-colors duration-300 ${
                     isActive
-                      ? "text-black/85 border-black/20"
-                      : "text-black/45 border-transparent hover:text-black/70"
+                      ? 'border-black/20 text-black/85'
+                      : 'border-transparent text-black/45 hover:text-black/70'
                   }`}
-                  onClick={() => setIsMenuOpen(false)}>
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   {item.text}
                 </Link>
               )
             })}
           </nav>
-          <div className="mt-4 pt-4 border-t border-black/8 flex flex-col gap-3">
-            {BLOG_ENABLED && (
-              <Link href="/blog" onClick={() => setIsMenuOpen(false)}
-                className={`self-start text-sm font-light tracking-wide border px-3 py-1.5 rounded-sm transition-colors ${
-                  pathname.startsWith('/blog')
-                    ? "text-black/90 border-black/40"
-                    : "text-black/50 border-black/20 hover:text-black/75 hover:border-black/40"
-                }`}>
-                .blog()
-              </Link>
-            )}
-            <div className="flex gap-4">
-              <a href="https://linkedin.com/in/glaucovaz" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs text-black/45 hover:text-black/70 transition-colors">
-                <Linkedin className="h-3.5 w-3.5" /> LinkedIn
-              </a>
-              <a href="https://github.com/vazglauco" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 text-xs text-black/45 hover:text-black/70 transition-colors">
-                <Github className="h-3.5 w-3.5" /> GitHub
-              </a>
-            </div>
+          <div className='mt-4 flex gap-4 border-t border-black/8 pt-4'>
+            <a
+              href='https://linkedin.com/in/glaucovaz'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 text-xs text-black/45 transition-colors hover:text-black/70'
+            >
+              <Linkedin className='h-3.5 w-3.5' /> LinkedIn
+            </a>
+            <a
+              href='https://github.com/vazglauco'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2 text-xs text-black/45 transition-colors hover:text-black/70'
+            >
+              <Github className='h-3.5 w-3.5' /> GitHub
+            </a>
           </div>
         </div>
       )}

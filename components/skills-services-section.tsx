@@ -28,6 +28,14 @@ const AREAS = [
 			'Conecto contexto, pessoas e execução para reduzir ruído, destravar decisões e melhorar a qualidade da entrega.',
 		items: ['Backlog e tasks', 'Discussões entre áreas', 'Code review e orientação'],
 	},
+	{
+		number: '04',
+		label: 'entregar',
+		title: 'Serviços Freelance',
+		description:
+			'Precisou de um site ou sistema sob medida? Tiro do papel com escopo claro, prazo definido e código limpo.',
+		items: ['Sites institucionais', 'Landing pages', 'E-commerce', 'Sistemas'],
+	},
 ]
 
 export function SkillsServicesSection() {
@@ -102,11 +110,11 @@ export function SkillsServicesSection() {
 					</p>
 				</div>
 
-				<div className='grid gap-px overflow-hidden border border-neutral-800 bg-neutral-800 md:grid-cols-3'>
+				<div className='grid overflow-hidden border border-neutral-800 md:grid-cols-2'>
 					{AREAS.map((area, index) => (
 						<article
 							key={area.title}
-							className='group bg-[#111111] p-6 transition-colors duration-300 hover:bg-[#151515] md:p-8 lg:p-10'
+							className='group bg-transparent p-6 transition-colors duration-300 hover:bg-neutral-900/40 md:p-8 lg:p-10'
 							style={{
 								opacity: visible ? 1 : 0,
 								transform: visible ? 'translateY(0)' : 'translateY(18px)',

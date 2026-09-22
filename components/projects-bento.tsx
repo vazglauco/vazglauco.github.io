@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 
 type Category = "Landing page" | "Portfolio" | "E-commerce" | "Aplicativo" | "Sistema web"
@@ -40,19 +41,41 @@ const PROJECTS: Project[] = [
 const SUIT_CHARS = ["♠", "♣", "♥", "♦"]
 
 function ProjectPreview({ project, index }: { project: Project; index: number }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container || !project.previewVideo) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        setShouldLoadVideo(true)
+        observer.disconnect()
+      },
+      { rootMargin: "320px 0px" },
+    )
+
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [project.previewVideo])
+
   if (project.previewVideo) {
     return (
-      <div className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
-        <video
-          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
-          src={project.previewVideo}
-          title={project.title}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-        />
+      <div ref={containerRef} className="relative aspect-[15/8] overflow-hidden bg-[#111111]">
+        {shouldLoadVideo && (
+          <video
+            className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.025]"
+            src={project.previewVideo}
+            title={project.title}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          />
+        )}
       </div>
     )
   }
