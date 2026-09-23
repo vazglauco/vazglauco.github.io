@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Github, Linkedin, Menu, X } from "lucide-react"
-import { gsap } from "gsap"
 
 const POOL = '!<>-_/[]{}=+*^?#@$%~'
 
@@ -42,6 +41,7 @@ export function Header() {
   const [isPastHero, setIsPastHero] = useState(false)
   const [sectionIsLight, setSectionIsLight] = useState(false)
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
+  const [transitionPage, setTransitionPage] = useState<'inicio' | 'sites' | 'blog' | null>(null)
 
   const pathname = usePathname()
   const headerRef = useRef<HTMLElement>(null)
@@ -53,17 +53,33 @@ export function Header() {
   const liRef = useRef<HTMLAnchorElement>(null)
   const ghRef = useRef<HTMLAnchorElement>(null)
 
-  const activePage = pathname.startsWith('/sites')
+  const currentPage = pathname.startsWith('/sites')
     ? 'sites'
     : pathname.startsWith('/blog')
       ? 'blog'
       : 'inicio'
+  const activePage = transitionPage ?? currentPage
 
   const menuItems = [
     { href: '/sites', section: 'sites', ref: sitesRef, text: '.sites()' },
     { href: '/', section: 'inicio', ref: inicioRef, text: '.portfolio()' },
     { href: '/blog', section: 'blog', ref: blogRef, text: '.blog()' },
   ]
+
+  useEffect(() => {
+    const onTransitionStart = (event: Event) => {
+      const destination = (event as CustomEvent<{ pathname: string }>).detail.pathname
+      setTransitionPage(destination.startsWith('/sites') ? 'sites' : destination.startsWith('/blog') ? 'blog' : 'inicio')
+    }
+    const onTransitionEnd = () => setTransitionPage(null)
+
+    window.addEventListener('route-transition:start', onTransitionStart)
+    window.addEventListener('route-transition:end', onTransitionEnd)
+    return () => {
+      window.removeEventListener('route-transition:start', onTransitionStart)
+      window.removeEventListener('route-transition:end', onTransitionEnd)
+    }
+  }, [])
 
   useEffect(() => {
     const lum = (r: number, g: number, b: number) => (0.299 * r + 0.587 * g + 0.114 * b) / 255
@@ -148,60 +164,6 @@ export function Header() {
   }, [isPastHero, pathname])
 
   useEffect(() => {
-    const items = [
-      { ref: logoRef, text: 'glauco.vaz();' },
-      ...menuItems.map(({ ref, text }) => ({ ref, text })),
-    ]
-
-    items.forEach(({ ref, text }) => {
-      if (ref.current) ref.current.textContent = text
-    })
-
-    const allEls = [logoRef, inicioRef, sitesRef, blogRef, liRef, ghRef].map((ref) => ref.current)
-    allEls.forEach((el) => {
-      if (el) el.style.opacity = '0'
-    })
-
-    const headerTween = gsap.fromTo(
-      headerRef.current,
-      { opacity: 0, y: -8 },
-      { opacity: 1, y: 0, duration: 0.2, ease: 'power3.out', onComplete: () => runNext(0) },
-    )
-
-    const cleanups: (() => void)[] = [() => headerTween.kill()]
-    let cancelled = false
-    const STEPS = 9
-    const MS = 36
-    const OVERLAP = 165
-
-    const runNext = (index: number) => {
-      if (cancelled) return
-      if (index >= items.length) {
-        const socialEls = [liRef.current, ghRef.current].filter(Boolean) as HTMLElement[]
-        gsap.to(socialEls, { opacity: 1, duration: 0.3, stagger: 0.1 })
-        return
-      }
-      const { ref, text } = items[index]
-      const el = ref.current as HTMLElement | null
-      if (!el) {
-        runNext(index + 1)
-        return
-      }
-      el.style.opacity = '1'
-      const cancel = scramble(el, text, undefined, STEPS, MS)
-      cleanups.push(cancel)
-      const timeout = setTimeout(() => runNext(index + 1), OVERLAP)
-      cleanups.push(() => clearTimeout(timeout))
-    }
-
-    cleanups.push(() => {
-      cancelled = true
-    })
-
-    return () => cleanups.forEach((cleanup) => cleanup())
-  }, [pathname])
-
-  useEffect(() => {
     const pageMap: Record<string, React.RefObject<HTMLAnchorElement | null>> = {
       inicio: inicioRef,
       sites: sitesRef,
@@ -256,7 +218,7 @@ export function Header() {
       >
         <div className='relative flex h-14 items-center px-10 md:px-16'>
           <Link href='/' onMouseEnter={() => handleHover('logo', logoRef.current, 'glauco.vaz();')}>
-            <span ref={logoRef} className={`text-sm font-light tracking-tight ${cFull}`} />
+            <span ref={logoRef} className={`text-sm font-light tracking-tight ${cFull}`}>glauco.vaz();</span>
           </Link>
 
           <nav ref={navRef} className='absolute left-1/2 hidden -translate-x-1/2 items-center gap-10 pb-px md:flex'>
@@ -266,7 +228,7 @@ export function Header() {
                 left: indicator.left,
                 width: indicator.width,
                 opacity: indicator.opacity,
-                transition: 'left 300ms ease-out, width 300ms ease-out, opacity 200ms ease-out',
+                transition: 'left 680ms cubic-bezier(0.4, 0, 0.2, 1) 60ms, width 680ms cubic-bezier(0.4, 0, 0.2, 1) 60ms, opacity 200ms ease-out',
               }}
             />
             {menuItems.map((item) => {
@@ -280,7 +242,7 @@ export function Header() {
                   className={`whitespace-nowrap text-[13px] font-light tracking-wide transition-colors duration-200 ${
                     isActive ? cFull : c
                   }`}
-                />
+                >{item.text}</Link>
               )
             })}
           </nav>

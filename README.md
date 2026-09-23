@@ -54,6 +54,10 @@ Para habilitar comentários e avaliações compartilhados:
 
 Para desenvolvimento local, copie essas três variáveis para `.env.local`. Elas nunca devem usar o prefixo `NEXT_PUBLIC_`. A chave `SUPABASE_SECRET_KEY` só pode existir no servidor.
 
+## 🏥 Demo do template de clínicas
+
+A seção de templates em `/sites` usa uma captura da versão editorial em `public/templates/clinica-editorial.webp`. A imagem e o botão **Ver demo** abrem a [demonstração externa](https://demo-clinica-five.vercel.app/), onde há quatro direções visuais.
+
 ## ✍️ Publicando no blog
 
 Crie um arquivo `.mdx` em `content/blog`. O nome do arquivo vira a URL do artigo; por exemplo, `meu-artigo.mdx` será publicado em `/blog/meu-artigo/`.

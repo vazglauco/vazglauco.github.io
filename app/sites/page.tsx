@@ -136,6 +136,8 @@ const FAQ = [
 	},
 ]
 
+const clinicDemoHref = 'https://demo-clinica-five.vercel.app/'
+
 export default function SitesPage() {
 	return (
 		<>
@@ -183,6 +185,10 @@ export default function SitesPage() {
 								Ver possibilidades <ArrowDown className='h-4 w-4' />
 							</a>
 						</div>
+						<nav aria-label='Explorar criação de sites' className='mt-10 flex w-fit border border-white/20 font-mono text-[0.65rem] font-bold uppercase tracking-widest'>
+							<a href='#servicos-sites' className='border-r border-white/20 px-4 py-3 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'>Serviços</a>
+							<a href='#templates-sites' className='px-4 py-3 text-white transition-colors hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white'>Templates</a>
+						</nav>
 						<p className='mt-7 font-mono text-[0.65rem] uppercase tracking-wider text-neutral-500'>
 							Landing pages <span className='text-red-500'>·</span> Sites institucionais <span className='text-red-500'>·</span> E-commerce
 						</p>
@@ -229,6 +235,39 @@ export default function SitesPage() {
 							</article>
 						))}
 					</div>
+				</div>
+			</section>
+
+			<section id='templates-sites' className='scroll-mt-20 bg-[#f2f0ed] px-6 py-20 md:px-12 md:py-28 lg:px-20'>
+				<div className='mx-auto max-w-7xl'>
+					<header className='mb-12 grid gap-6 lg:grid-cols-2 lg:items-end'>
+						<div>
+							<p className='mb-4 font-mono text-xs uppercase tracking-[0.28em] text-neutral-500'><span className='text-red-500'>// </span>templates</p>
+							<h2 className='text-[2.7rem] font-black uppercase leading-[0.9] tracking-tight text-black md:text-[4.5rem]'>Uma base pronta para começar<span className='text-red-500'>.</span></h2>
+						</div>
+						<p className='max-w-[42rem] text-base leading-loose text-neutral-600 md:text-lg lg:justify-self-end'>
+							Conheça modelos de site que podem ser adaptados à identidade e às necessidades do seu negócio.
+						</p>
+					</header>
+
+					<article className='grid overflow-hidden border border-neutral-200 bg-white lg:grid-cols-[1.1fr_0.9fr]'>
+						<a href={clinicDemoHref} target='_blank' rel='noopener noreferrer' aria-label='Abrir a demonstração do template de clínicas' className='group relative block min-h-72 overflow-hidden bg-[#e8e7e4] md:min-h-[25rem]'>
+							<Image src='/templates/clinica-editorial.webp' alt='Prévia da versão editorial do site de clínica Lumina, com chamada sobre estética facial e imagem de atendimento' fill sizes='(max-width: 1024px) 100vw, 55vw' className='object-contain transition-transform duration-500 group-hover:scale-[1.02]' />
+							<span className='absolute bottom-4 left-4 bg-[#111111] px-3 py-2 font-mono text-[0.65rem] uppercase tracking-widest text-white md:bottom-6 md:left-6'>Prévia real · versão editorial</span>
+						</a>
+						<div className='flex flex-col justify-between p-7 md:p-10'>
+							<div>
+								<p className='font-mono text-[0.65rem] uppercase tracking-[0.24em] text-red-600'>Demo disponível</p>
+								<h3 className='mt-6 text-3xl font-black uppercase leading-none tracking-tight text-black md:text-4xl'>Um ponto de partida para sua clínica<span className='text-red-500'>.</span></h3>
+								<p className='mt-6 text-sm leading-loose text-neutral-600 md:text-base'>Explore quatro direções de site para clínicas e profissionais da saúde. A prévia mostra a versão editorial; a demo permite conhecer as outras opções.</p>
+							</div>
+							<div className='mt-10 border-t border-neutral-200 pt-6'>
+								<a href={clinicDemoHref} target='_blank' rel='noopener noreferrer' className='group inline-flex items-center gap-3 bg-[#8f211b] px-6 py-4 font-mono text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-500'>
+									Ver demo <ArrowUpRight className='h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5' />
+								</a>
+							</div>
+						</div>
+					</article>
 				</div>
 			</section>
 

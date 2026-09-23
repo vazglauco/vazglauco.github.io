@@ -137,7 +137,7 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 		})
 	}
 
-	const revealPage = (delay = 0.04) => {
+	const revealPage = (delay = 0) => {
 		if (!overlayRef.current || !contentRef.current) return
 		timelineRef.current?.kill()
 		if (fallbackRef.current) clearTimeout(fallbackRef.current)
@@ -149,10 +149,11 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 				gsap.set(contentRef.current, { clearProps: 'opacity' })
 				lockedRef.current = false
 				pendingPathRef.current = null
+				window.dispatchEvent(new Event('route-transition:end'))
 			},
 		})
-			.to(contentRef.current, { opacity: 1, duration: 0.32, ease: 'power2.out' }, 0)
-			.to(overlayRef.current, { autoAlpha: 0, duration: 0.34, ease: 'power2.out' }, 0)
+			.to(contentRef.current, { opacity: 1, duration: 0.48, ease: 'power2.out' }, 0)
+			.to(overlayRef.current, { autoAlpha: 0, duration: 0.48, ease: 'power2.inOut' }, 0)
 	}
 
 	useEffect(() => {
@@ -183,6 +184,7 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 			event.preventDefault()
 			lockedRef.current = true
 			pendingPathRef.current = url.pathname
+			window.dispatchEvent(new CustomEvent('route-transition:start', { detail: { pathname: url.pathname } }))
 			timelineRef.current?.kill()
 
 			const from = SPLIT_POSITION[fromSide]
@@ -208,21 +210,21 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 					fallbackRef.current = setTimeout(() => revealPage(0), 4000)
 				},
 			})
-				.to(overlayRef.current, { autoAlpha: 1, duration: useDestinationWipe ? 0.01 : 0.16, ease: 'power1.out' }, 0)
+				.to(overlayRef.current, { autoAlpha: 1, duration: 0.46, ease: 'power2.inOut' }, 0)
 				.to(contentRef.current, {
-					opacity: useDestinationWipe ? 1 : 0.18,
-					duration: 0.2,
-					ease: 'power1.out',
+					opacity: 0.45,
+					duration: 0.46,
+					ease: 'power2.inOut',
 				}, 0)
 				.to(useDestinationWipe ? wipe : split, {
 					value: useDestinationWipe ? 100 : to,
-					duration: 0.82,
-					ease: 'power3.inOut',
+					duration: 0.68,
+					ease: 'power2.inOut',
 					onUpdate: () => {
 						if (useDestinationWipe) setDestinationWipe(toSide, wipe.value)
 						else setSplit(split.value)
 					},
-				}, 0.12)
+				}, 0.06)
 		}
 
 		document.addEventListener('click', onDocumentClick, true)
@@ -241,26 +243,31 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 			revealPage()
 			return
 		}
+		if (pendingPathRef.current) {
+			timelineRef.current?.kill()
+			if (fallbackRef.current) clearTimeout(fallbackRef.current)
+			gsap.set(overlayRef.current, { autoAlpha: 0, pointerEvents: 'none' })
+			gsap.set(contentRef.current, { clearProps: 'opacity' })
+			pendingPathRef.current = null
+			lockedRef.current = false
+			window.dispatchEvent(new Event('route-transition:end'))
+		}
 
-		// Browser back/forward: recreate the same spatial movement before revealing
-		// the route that has already been committed by Next.js.
+		// The browser has already committed this route. Ease in the new content
+		// without briefly covering it with an overlay from the previous page.
 		if (
 			fromSide !== 'other' &&
 			toSide !== 'other' &&
 			fromSide !== toSide &&
 			!window.matchMedia('(prefers-reduced-motion: reduce)').matches
 		) {
-			lockedRef.current = true
 			timelineRef.current?.kill()
-			const split = { value: SPLIT_POSITION[fromSide] }
-			setSplit(split.value)
-			gsap.set(overlayRef.current, { autoAlpha: 1, pointerEvents: 'auto' })
-			gsap.set(contentRef.current, { opacity: 0.18 })
-			timelineRef.current = gsap.timeline({ onComplete: () => revealPage(0) }).to(split, {
-				value: SPLIT_POSITION[toSide],
-				duration: 0.72,
-				ease: 'power3.inOut',
-				onUpdate: () => setSplit(split.value),
+			gsap.set(overlayRef.current, { autoAlpha: 0, pointerEvents: 'none' })
+			timelineRef.current = gsap.timeline().fromTo(contentRef.current, { opacity: 0.6 }, {
+				opacity: 1,
+				duration: 0.4,
+				ease: 'power2.out',
+				clearProps: 'opacity',
 			})
 		}
 	}, [pathname])
@@ -278,7 +285,7 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 
 			<div
 				ref={overlayRef}
-				className='pointer-events-none fixed inset-0 z-[10000] invisible opacity-0'
+				className='pointer-events-none fixed inset-0 z-[9000] invisible opacity-0'
 				aria-hidden='true'
 			>
 				<div ref={blackPanelRef} className='absolute bg-[#111111]' />
