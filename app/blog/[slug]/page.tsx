@@ -3,6 +3,7 @@ import { BLOG_ENABLED } from '@/lib/features'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { ArticleInteractions } from '@/components/article-interactions'
 
 export function generateStaticParams() {
   return getAllPosts().map(p => ({ slug: p.slug }))
@@ -36,7 +37,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
   return (
     <main className="bg-[#faf9f7] min-h-screen pt-28 pb-24">
-      <div className="max-w-[72ch] mx-auto px-8">
+      <div className="max-w-4xl mx-auto px-5 sm:px-8">
 
         {/* Back */}
         <Link
@@ -71,6 +72,23 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
 
+        {post.coverImage && (
+          <figure className="mb-10">
+            <div className="overflow-hidden border border-neutral-200 bg-[#f0ede8]">
+              <img
+                src={post.coverImage}
+                alt={post.coverAlt || ''}
+                className="block max-h-[34rem] w-full object-cover object-[center_35%]"
+              />
+            </div>
+            {post.coverCaption && (
+              <figcaption className="mt-2 font-mono text-[0.62rem] leading-relaxed text-neutral-400">
+                {post.coverCaption}
+              </figcaption>
+            )}
+          </figure>
+        )}
+
         <hr className="border-neutral-200 mb-10" />
 
         {/* Body */}
@@ -92,6 +110,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         ">
           <MDXRemote source={post.content} />
         </article>
+
+        <ArticleInteractions slug={post.slug} />
 
         {/* Footer nav */}
         <div className="mt-16 pt-8 border-t border-neutral-200">

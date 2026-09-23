@@ -60,8 +60,8 @@ export function Header() {
       : 'inicio'
 
   const menuItems = [
-    { href: '/', section: 'inicio', ref: inicioRef, text: '.inicio()' },
     { href: '/sites', section: 'sites', ref: sitesRef, text: '.sites()' },
+    { href: '/', section: 'inicio', ref: inicioRef, text: '.portfolio()' },
     { href: '/blog', section: 'blog', ref: blogRef, text: '.blog()' },
   ]
 

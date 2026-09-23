@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { ProjectsBento } from '@/components/projects-bento'
 import { TrackedWhatsAppLink } from '@/components/tracked-whatsapp-link'
+import { SitesHeroCard } from '@/components/sites-hero-card'
 
 export const metadata: Metadata = {
 	title: 'Criação de sites para negócios — Glauco Vaz',
@@ -161,6 +162,9 @@ export default function SitesPage() {
 					</div>
 
 					<div className='lg:pb-2'>
+						<div className='relative mx-auto mb-8 h-64 w-44 md:h-72 md:w-52 lg:h-80 lg:w-56'>
+							<SitesHeroCard />
+						</div>
 						<p className='max-w-[42rem] text-base leading-loose text-neutral-300 md:text-lg'>
 							Crio sites profissionais do design à publicação, com clareza, desempenho e uma experiência que apresenta o valor do seu negócio.
 						</p>

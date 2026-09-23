@@ -5,7 +5,6 @@
 
 # next.js
 /.next/
-/out/
 /dist/
 
 # production
@@ -26,6 +25,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# GitHub Pages
-gh-pages
