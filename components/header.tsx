@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Github, Linkedin, Menu, X } from "lucide-react"
+import { BLOG_ENABLED } from "@/lib/features"
 
 const POOL = '!<>-_/[]{}=+*^?#@$%~'
 
@@ -41,35 +42,29 @@ export function Header() {
   const [isPastHero, setIsPastHero] = useState(false)
   const [sectionIsLight, setSectionIsLight] = useState(false)
   const [indicator, setIndicator] = useState({ left: 0, width: 0, opacity: 0 })
-  const [transitionPage, setTransitionPage] = useState<'inicio' | 'sites' | 'blog' | null>(null)
+  const [transitionPage, setTransitionPage] = useState<'inicio' | 'blog' | null>(null)
 
   const pathname = usePathname()
   const headerRef = useRef<HTMLElement>(null)
   const navRef = useRef<HTMLElement>(null)
   const logoRef = useRef<HTMLSpanElement>(null)
   const inicioRef = useRef<HTMLAnchorElement>(null)
-  const sitesRef = useRef<HTMLAnchorElement>(null)
   const blogRef = useRef<HTMLAnchorElement>(null)
   const liRef = useRef<HTMLAnchorElement>(null)
   const ghRef = useRef<HTMLAnchorElement>(null)
 
-  const currentPage = pathname.startsWith('/sites')
-    ? 'sites'
-    : pathname.startsWith('/blog')
-      ? 'blog'
-      : 'inicio'
+  const currentPage = pathname.startsWith('/blog') ? 'blog' : 'inicio'
   const activePage = transitionPage ?? currentPage
 
   const menuItems = [
-    { href: '/sites', section: 'sites', ref: sitesRef, text: '.sites()' },
     { href: '/', section: 'inicio', ref: inicioRef, text: '.portfolio()' },
-    { href: '/blog', section: 'blog', ref: blogRef, text: '.blog()' },
+    ...(BLOG_ENABLED ? [{ href: '/blog', section: 'blog', ref: blogRef, text: '.blog()' }] : []),
   ]
 
   useEffect(() => {
     const onTransitionStart = (event: Event) => {
       const destination = (event as CustomEvent<{ pathname: string }>).detail.pathname
-      setTransitionPage(destination.startsWith('/sites') ? 'sites' : destination.startsWith('/blog') ? 'blog' : 'inicio')
+      setTransitionPage(destination.startsWith('/blog') ? 'blog' : 'inicio')
     }
     const onTransitionEnd = () => setTransitionPage(null)
 
@@ -138,7 +133,6 @@ export function Header() {
     const refs: [string, React.RefObject<Element | null>][] = [
       ['logo', logoRef],
       ['inicio', inicioRef],
-      ['sites', sitesRef],
       ['blog', blogRef],
       ['li', liRef],
       ['gh', ghRef],
@@ -166,7 +160,6 @@ export function Header() {
   useEffect(() => {
     const pageMap: Record<string, React.RefObject<HTMLAnchorElement | null>> = {
       inicio: inicioRef,
-      sites: sitesRef,
       blog: blogRef,
     }
 

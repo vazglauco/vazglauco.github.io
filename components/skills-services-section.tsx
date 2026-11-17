@@ -30,11 +30,11 @@ const AREAS = [
 	},
 	{
 		number: '04',
-		label: 'entregar',
-		title: 'Serviços Freelance',
+		label: 'evoluir',
+		title: 'Arquitetura e Legado',
 		description:
-			'Precisou de um site ou sistema sob medida? Tiro do papel com escopo claro, prazo definido e código limpo.',
-		items: ['Sites institucionais', 'Landing pages', 'E-commerce', 'Sistemas'],
+			'Lidero decisões técnicas em sistemas críticos: migração incremental de legado, micro frontends e integrações de pagamento e Open Finance.',
+		items: ['Micro frontends', 'Migração de legado', 'Design de APIs', 'CI/CD e observabilidade'],
 	},
 ]
 

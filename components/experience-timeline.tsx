@@ -1,6 +1,6 @@
 const EXPERIENCES = [
   {
-    period: "out 2025 — presente",
+    period: "out 2025 — ago 2026",
     role: "Desenvolvedor Front-end",
     company: "DOMVS iT",
     client: "Mentes Notáveis",

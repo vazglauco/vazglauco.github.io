@@ -158,7 +158,6 @@ export function RouteTransition({ children }: { children: ReactNode }) {
 
 	useEffect(() => {
 		router.prefetch('/')
-		router.prefetch('/sites')
 		router.prefetch('/blog')
 	}, [router])
 

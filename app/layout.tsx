@@ -6,6 +6,7 @@ import Link from "next/link"
 import "./globals.css"
 import { Header } from "@/components/header"
 import { RouteTransition } from "@/components/route-transition"
+import { ClickTracker } from "@/components/click-tracker"
 
 const GA_ID = "G-PXMB866NT3"
 
@@ -17,14 +18,14 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: "Glauco Vaz - Desenvolvedor Full Stack",
+  title: "Glauco Vaz - Software Engineer Full Stack",
   description:
-    "Desenvolvedor Full Stack com 9 anos de experiência em projetos web de alta complexidade. Especialista em Angular, React, Node.js e arquitetura de software.",
-  keywords: "desenvolvedor, full stack, angular, react, nodejs, typescript, javascript, são paulo",
+    "Engenheiro de software full stack com 9 anos de experiência em bancos, fintechs e seguros. Angular, React, Node.js, arquitetura de sistemas e IA aplicada. Aberto a novas oportunidades.",
+  keywords: "software engineer, desenvolvedor, full stack, arquitetura, ia, angular, react, nodejs, typescript, javascript, são paulo",
   authors: [{ name: "Glauco Vaz" }],
   openGraph: {
-    title: "Glauco Vaz - Desenvolvedor Full Stack",
-    description: "Desenvolvedor Full Stack com 9 anos de experiência em projetos web de alta complexidade.",
+    title: "Glauco Vaz - Software Engineer Full Stack",
+    description: "Engenheiro de software full stack com 9 anos de experiência em bancos, fintechs e seguros. Aberto a novas oportunidades.",
     type: "website",
   },
 }
@@ -60,6 +61,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${firaCode.className} ${firaCode.variable}`}>
+        <ClickTracker />
         <Header />
         <RouteTransition>
           <Link href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[99999] focus:bg-black focus:text-white focus:px-4 focus:py-2 focus:rounded">

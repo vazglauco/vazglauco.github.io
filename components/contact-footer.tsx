@@ -6,7 +6,7 @@ import { ArrowUpRight, ArrowDown } from "lucide-react"
 const LINKS = [
   { label: "E-mail", href: "mailto:vazz.glauco@gmail.com", external: false, download: false },
   { label: "WhatsApp", href: "https://wa.me/5511983701618?text=Ol%C3%A1%20Glauco%21%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar%20sobre%20oportunidades.", external: true, download: false },
-  { label: "LinkedIn", href: "https://linkedin.com/in/vazglauco", external: true, download: false },
+  { label: "LinkedIn", href: "https://linkedin.com/in/glaucovaz", external: true, download: false },
   { label: "GitHub", href: "https://github.com/vazglauco", external: true, download: false },
   { label: "Currículo", href: "/curriculo-glauco-vaz.pdf", external: false, download: true },
 ]

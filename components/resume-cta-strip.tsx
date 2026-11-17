@@ -55,7 +55,7 @@ export function ResumeCTAStrip() {
             <span className="text-red-600">.</span>
           </h2>
           <span className="font-mono text-[0.58rem] text-neutral-400 tracking-widest">
-            glauco-vaz-2025.pdf
+            curriculo-glauco-vaz.pdf
           </span>
         </div>
 

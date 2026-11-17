@@ -30,7 +30,7 @@ const PROJECTS: Project[] = [
     description:
       "Site pessoal com design interativo, scroll horizontal e animações fluídas. Construído com Next.js, GSAP e TailwindCSS.",
     stack: ["Next.js", "TypeScript", "GSAP", "TailwindCSS"],
-    url: "https://vazglauco.github.io",
+    url: "https://glauko.dev",
     label: "Visitar",
     categories: ["Portfolio", "Landing page"],
     image: null,

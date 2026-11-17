@@ -208,39 +208,42 @@ export function SplitHome() {
 
 						<div className='font-mono text-xs text-neutral-400 leading-relaxed'>
 							<p>
-								<span className='text-neutral-300'>{'// '}</span>construo sistemas,
-								sites e aplicativos
+								<span className='text-neutral-300'>{'// '}</span>interfaces, APIs e
+								arquitetura
 							</p>
 							<p>
-								<span className='text-neutral-300'>{'// '}</span>do planejamento ao
-								deploy
+								<span className='text-neutral-300'>{'// '}</span>da ideia ao deploy
 							</p>
 						</div>
 
 						<div className='flex flex-col gap-3 mt-1'>
+							<p className='font-mono text-[11px] text-neutral-400 flex items-center gap-2'>
+								<span className='inline-block h-2 w-2 rounded-full bg-emerald-500' aria-hidden />
+								aberto a oportunidades · full stack sênior
+							</p>
 							<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
-								{BLOG_ENABLED && (
-									<a
-										href='/blog'
-										className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
-									>
-										✦ Leia meu blog
-									</a>
-								)}
 								<a
-									href='mailto:ext.glaucobaptista@mentesnotaveis.com.br'
+									href='/curriculo-glauco-vaz.pdf'
+									download='Curriculo-Glauco-Vaz.pdf'
+									className='inline-block bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
+								>
+									↓ Currículo (.pdf)
+								</a>
+								<a
+									href='mailto:vazz.glauco@gmail.com'
 									className='inline-block border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
 								>
 									Mensagem →
 								</a>
+								{BLOG_ENABLED && (
+									<a
+										href='/blog'
+										className='inline-block border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-xs font-bold tracking-widest uppercase px-5 py-3 transition-colors'
+									>
+										✦ Leia meu blog
+									</a>
+								)}
 							</div>
-							<a
-								href='/curriculo-glauco-vaz.pdf'
-								download='Curriculo-Glauco-Vaz.pdf'
-								className='inline-block text-neutral-400 hover:text-neutral-200 text-[10px] font-mono tracking-wide transition-colors'
-							>
-								↓ baixar currículo (.pdf)
-							</a>
 						</div>
 					</div>
 				</div>
@@ -261,7 +264,7 @@ export function SplitHome() {
 						{/* Stats */}
 						<div className='flex gap-5 justify-end mb-2'>
 							{[
-								{ value: '10', label: 'ANOS' },
+								{ value: '9', label: 'ANOS' },
 								{ value: '25+', label: 'PROJETOS' },
 								{ value: '∞', label: 'COMMITS' },
 							].map(({ value, label }) => (
@@ -363,32 +366,33 @@ export function SplitHome() {
 					</h1>
 
 					<div className='mt-7 flex flex-col gap-4'>
+						<p className='font-mono text-sm text-neutral-400 flex items-center gap-2'>
+							<span className='inline-block h-2 w-2 rounded-full bg-emerald-500' aria-hidden />
+							aberto a oportunidades · full stack sênior
+						</p>
 						<div className='flex flex-col items-start gap-3 min-[1500px]:flex-row'>
-							{BLOG_ENABLED && (
-								<a
-									href='/blog'
-									className='whitespace-nowrap bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
-								>
-									✦ Leia meu blog
-								</a>
-							)}
 							<a
-								href='mailto:ext.glaucobaptista@mentesnotaveis.com.br'
+								href='/curriculo-glauco-vaz.pdf'
+								download='Curriculo-Glauco-Vaz.pdf'
+								className='whitespace-nowrap bg-[rgb(200,30,20)] hover:bg-[rgb(165,20,12)] text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
+							>
+								↓ Baixar currículo
+							</a>
+							<a
+								href='mailto:vazz.glauco@gmail.com'
 								className='whitespace-nowrap border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
 							>
 								Me mande uma mensagem →
 							</a>
+							{BLOG_ENABLED && (
+								<a
+									href='/blog'
+									className='whitespace-nowrap border border-neutral-500 hover:border-white text-neutral-300 hover:text-white text-sm font-bold tracking-widest uppercase px-6 py-3 transition-colors'
+								>
+									✦ Leia meu blog
+								</a>
+							)}
 						</div>
-						<a
-							href='/curriculo-glauco-vaz.pdf'
-							download='Curriculo-Glauco-Vaz.pdf'
-							className='whitespace-nowrap inline-flex items-center gap-2 font-mono text-sm text-neutral-400 hover:text-neutral-200 transition-colors group'
-						>
-							<span className='text-[rgb(200,30,20)]'>↓</span>
-							<span className='underline underline-offset-4 decoration-neutral-600 group-hover:decoration-neutral-400 transition-colors'>
-								baixar currículo (.pdf)
-							</span>
-						</a>
 					</div>
 				</div>
 
@@ -417,7 +421,7 @@ export function SplitHome() {
 					{/* Stats */}
 					<div className='flex gap-6 xl:gap-8 justify-end mb-8 lg:mb-10'>
 						{[
-							{ value: '10', label: 'ANOS' },
+							{ value: '9', label: 'ANOS' },
 							{ value: '25+', label: 'PROJETOS' },
 							{ value: '∞', label: 'COMMITS' },
 						].map(({ value, label }) => (
@@ -453,8 +457,8 @@ export function SplitHome() {
 						className='font-mono text-neutral-600 leading-relaxed -ml-16 text-right'
 						style={{ fontSize: 'clamp(0.82rem, 1.4vw, 1.1rem)' }}
 					>
-						<div><span className='text-[rgb(200,30,20)]'>// </span>construo sistemas, sites e aplicativos</div>
-						<div><span className='text-[rgb(200,30,20)]'>// </span>do planejamento ao deploy</div>
+						<div><span className='text-[rgb(200,30,20)]'>// </span>interfaces, APIs e arquitetura</div>
+						<div><span className='text-[rgb(200,30,20)]'>// </span>da ideia ao deploy</div>
 					</div>
 				</div>
 			</div>
